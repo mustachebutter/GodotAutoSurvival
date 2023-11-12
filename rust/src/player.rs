@@ -5,8 +5,9 @@ use godot::prelude::*;
 #[class(base=Node2D)]
 struct Player 
 {
+    health: f64,
     #[base]
-    node2d: Base<Node2D>
+    node2d: Base<Node2D>,
 }
 
 use godot::{engine::Node2DVirtual, prelude::Node2D};
@@ -17,7 +18,11 @@ impl Node2DVirtual for Player
     fn init(node2d: Base<Node2D>) -> Self 
     {
         godot_print!("Created Player node!");
-    Self { node2d }
+        Self 
+        { 
+            health: 100.0,
+            node2d
+        }
     }
 
     fn process(&mut self, delta: f64) 
@@ -42,7 +47,7 @@ impl Node2DVirtual for Player
             velocity.x += 1.0;
         }
 
-        let mut pos = self.node2d.get_position();
+        let pos = self.node2d.get_position();
         self.node2d.set_position(pos + velocity)
     }
 }
