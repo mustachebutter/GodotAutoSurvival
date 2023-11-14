@@ -1,4 +1,5 @@
 use std::str::FromStr;
+use godot::engine::{AnimationTree, AnimationNodeStateMachinePlayback};
 use godot::prelude::*;
 
 #[derive(GodotClass)]
@@ -46,6 +47,46 @@ impl Node2DVirtual for Player
         {
             velocity.x += 1.0;
         }
+
+
+        let anim_tree_path = match NodePath::from_str("CharacterBody2D/AnimationTree")
+        {
+            Ok(node) => node,
+            Err(err) => {
+                godot_error!("Failed to parse node from path: {:?}", err);
+                return;
+            }
+        };
+        let mut animation_tree = self.node2d.get_node(anim_tree_path)
+            .expect("Anim Tree node not found");
+
+        let playback_variant = animation_tree.get(StringName::from_str("parameters/playback").unwrap());
+
+        let playback: Result<AnimationNodeStateMachinePlayback, VariantConversionError> = playback_variant.try_to();
+        
+        match playback {
+            Ok(mut playback) => 
+            {
+                if velocity == Vector2::ZERO
+                {
+                    playback.travel(StringName::from_str("Idle").unwrap());
+                }
+                else
+                {
+                    playback.travel(StringName::from_str("Walk").unwrap());
+                    animation_tree
+                        .set(StringName::from_str("parameters/Idle/blend_position").unwrap(), velocity.to_variant());
+        
+                    animation_tree
+                        .set(StringName::from_str("parameters/Walk/blend_position").unwrap(), velocity.to_variant());
+                }        
+            },
+            Err(err) =>
+            {
+                godot_error!("Failed to convert playback from variant");
+            }
+        }
+
 
         let pos = self.node2d.get_position();
         self.node2d.set_position(pos + velocity)
