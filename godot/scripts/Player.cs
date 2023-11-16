@@ -5,10 +5,25 @@ public partial class Player : CharacterBody2D
 {
 	[Export]
 	public const float Speed = 100.0f;
+	[Export]
+	public float Health { get; set; }
+	[Export]
+	public float Damage { get; set; }
+
+
+	public Player()
+	{
+		// Initiate player stats
+		Health = 100.0f;
+		Damage = 10.0f;
+	}
 
 	public override void _PhysicsProcess(double delta)
 	{
 		Vector2 velocity = new Vector2();
+		Label _healthLabel = GetNode<Label>("Label");
+		_healthLabel.Text = Health.ToString();
+
 
 		if (Input.IsActionPressed("Up"))
 		{
@@ -31,10 +46,10 @@ public partial class Player : CharacterBody2D
 		}
 
 		var animationTree = GetNode<AnimationTree>("AnimationTree");
-		var stateMachine = (AnimationNodeStateMachinePlayback) animationTree.Get("parameters/playback");
+		var stateMachine = (AnimationNodeStateMachinePlayback)animationTree.Get("parameters/playback");
 
 		if (velocity == Vector2.Zero)
-		{	
+		{
 			// stateMachine.Travel("Idle");
 			animationTree.Set("parameters/conditions/idle", true);
 			animationTree.Set("parameters/conditions/isWalking", false);
@@ -47,11 +62,22 @@ public partial class Player : CharacterBody2D
 			animationTree.Set("parameters/Idle/blend_position", velocity);
 			animationTree.Set("parameters/Walk/blend_position", velocity);
 		}
-		
+
 
 		// Normalized the Vector
 		velocity = velocity.Normalized() * Speed;
 		Velocity = velocity;
 		MoveAndSlide();
+	}
+
+	public void Start(Vector2 position)
+	{
+		Position = position;
+
+	}
+
+	public void _ready()
+	{
+
 	}
 }
