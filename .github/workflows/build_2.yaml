@@ -24,7 +24,7 @@ jobs:
           ls -la /root/.local/share/godot/templates/
           mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/templates/${GODOT_VERSION}.stable.mono
       - name: Build
-        run: godot -v --export-release "Windows Desktop" ./build/windows/$EXPORT_NAME_windows.exe
+        run: godot -v --headless --export-release "Windows Desktop" ./build/windows/$EXPORT_NAME_windows.exe
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
