@@ -33,7 +33,9 @@ jobs:
           godot \
             -v \
             --headless \
-            --export-release "Windows Desktop" ./build/windows/$EXPORT_NAME_windows.exe
+            --export-release "Windows Desktop" ./build/windows/$EXPORT_NAME_windows.exe \
+            --path godot/ \
+            --build-solutions
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
