@@ -18,6 +18,10 @@ jobs:
         uses: actions/checkout@v3
         with:
           lfs: true
+      - name: .NET installation
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "6.0.x"
       - name: Setup
         run: |
           mkdir -v -p build/linux build/windows build/mac build/web ~/.local/share/godot/templates
