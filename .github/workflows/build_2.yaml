@@ -1,5 +1,4 @@
 name: Build-Godot-CI
-
 on:
   push:
     tags:
