@@ -1,0 +1,45 @@
+name: Build-Godot-CI
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+env:
+  GODOT_VERSION: 4.1.3
+  EXPORT_NAME: auto-survival
+  PROJECT_PATH: godot
+jobs:
+  build-windows:
+    name: Windows Export
+    runs-on: ubuntu-latest
+    container:
+      image: docker://barichello/godot-ci:mono-3.2.1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup
+        run: |
+          mkdir -v -p build/linux build/windows build/mac build/web ~/.local/share/godot/templates
+          mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/templates/${GODOT_VERSION}.stable.mono
+      - name: Build
+        run: godot -v --export "Windows Desktop" ./build/windows/$EXPORT_NAME_windows.exe
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows
+          path: ./build/windows/
+  upload:
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      matrix:
+        # platform: [linux, windows, mac]
+        platform: [windows]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ matrix.platform }}
+          path: ./build/${{ matrix.platform }}
