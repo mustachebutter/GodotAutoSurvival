@@ -25,14 +25,12 @@ jobs:
           dotnet-version: "6.0.x"
       - name: Setup
         run: |
-          ls -la
           mkdir -v -p builds/linux builds/windows builds/mac builds/web ~/.local/share/godot/export_templates
-          ls -la /root/.local/share/godot/templates/
           mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
       - name: Copy export templates
         run: |
-          ls -la
-          ls -la ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
+          ls -la builds/
+          ls -la builds/windows
           # cp -r godot/export_templates ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
       - name: Build
         run: |
