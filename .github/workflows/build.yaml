@@ -34,11 +34,12 @@ jobs:
           # cp -r godot/export_templates ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
       - name: Build
         run: |
+          cd godot
           godot \
             -v \
             --headless \
-            --export-release "Windows Desktop" builds/windows/$EXPORT_NAME_windows.exe \
-            --path godot/ \
+            --export-release "Windows Desktop" ../builds/windows/$EXPORT_NAME_windows.exe \
+            # --path godot/ \
             --build-solutions
           ls -la builds/windows
       - name: Upload
