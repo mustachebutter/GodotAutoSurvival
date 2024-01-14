@@ -39,7 +39,7 @@ jobs:
           godot \
             -v \
             --headless \
-            --export-release "Windows Desktop" ./build/windows/$EXPORT_NAME_windows.exe \
+            --export-release "Windows Desktop" builds/windows/$EXPORT_NAME_windows.exe \
             --path godot/ \
             --build-solutions
           ls -la builds/windows
