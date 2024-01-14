@@ -41,6 +41,7 @@ jobs:
             --export-release "Windows Desktop" ../builds/windows/$EXPORT_NAME_windows.exe \
             # --path godot/ \
             # --build-solutions
+          cd ~
           ls -la builds/windows
       - name: Upload
         uses: actions/upload-artifact@v3
