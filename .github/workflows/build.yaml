@@ -9,6 +9,9 @@ env:
   EXPORT_NAME: auto-survival
   PROJECT_PATH: godot
   BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+  ITCHIO_USERNAME: ${{ secrets.ITCHIO_USERNAME }}
+  ITCHIO_GAME: ${{ secrets.ITCHIO_GAME }}
+  TAG_VERSION: ${{ github.ref_name }}
 jobs:
   build-windows:
     name: Windows Export
@@ -34,8 +37,10 @@ jobs:
           godot \
             -v \
             --headless \
-            --export-release "Windows Desktop" ../builds/windows/${EXPORT_NAME}_windows.exe
+            --export-release "Windows Desktop" ../builds/windows/${EXPORT_NAME}_${TAG_VERSION}_windows.exe
           cd ..
+      # - name: Zip build
+      #   run: zip -r ${EXPORT_NAME}_${TAG_VERSION}_windows.zip builds/windows
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
@@ -59,4 +64,5 @@ jobs:
       - name: Upload Itch.IO
         run: |
           ls -la 
-          ls -la builds/windows
+          ls -la builds/${{ matrix.platform }}
+          butler push builds/${{ matrix.platform }} ${ITCHIO_USERNAME}/${ITCHIO_GAME}:${{ matrix.platform }}
