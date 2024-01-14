@@ -28,12 +28,12 @@ jobs:
           ls -la
           mkdir -v -p build/linux build/windows build/mac build/web ~/.local/share/godot/templates
           ls -la /root/.local/share/godot/templates/
-          mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/templates/${GODOT_VERSION}.stable.mono
+          mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
       - name: Copy export templates
         run: |
           ls -la
-          ls -la ~/.local/share/godot/templates/${GODOT_VERSION}.stable.mono
-          cp -r godot/export_templates ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
+          ls -la ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
+          # cp -r godot/export_templates ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
       - name: Build
         run: |
           godot \
