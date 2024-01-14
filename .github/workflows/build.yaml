@@ -19,7 +19,9 @@ jobs:
     steps:
       - name: Get version
         run: | 
-          echo "TAG_VERSION=${GITHUB_REF#refs/tags/}" | cut -c 2- >> $GITHUB_ENV
+          echo "TAG_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          echo "TAG_VERSION=$TAG_VERSION | cut -c 2-" >> $GITHUB_ENV
+          echo ${TAG_VERSION}
       - name: Checkout
         uses: actions/checkout@v3
         with:
