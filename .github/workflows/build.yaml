@@ -47,8 +47,11 @@ jobs:
           name: windows
           path: builds/windows
   upload:
+    name: Itch.IO Upload
     runs-on: ubuntu-latest
     needs: build-windows
+    container:
+      image: docker://barichello/godot-ci:mono-4.1.3
     strategy:
       matrix:
         # platform: [linux, windows, mac]
