@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Get version
         run: | 
-          echo "TAG_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          echo "TAG_VERSION=${GITHUB_REF#refs/tags/}" | cut -c 2- >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -38,7 +38,7 @@ jobs:
           godot \
             -v \
             --headless \
-            --export-release "Windows Desktop" ../builds/windows/${EXPORT_NAME}_${TAG_VERSION:1}_windows.exe
+            --export-release "Windows Desktop" ../builds/windows/${EXPORT_NAME}_${TAG_VERSION}_windows.exe
           cd ..
       - name: Upload
         uses: actions/upload-artifact@v3
@@ -67,4 +67,4 @@ jobs:
         run: |
           ls -la
           ls -la builds/${{ matrix.platform }}
-          butler push builds/${{ matrix.platform }} ${ITCHIO_USERNAME}/${ITCHIO_GAME}:${{ matrix.platform }} --userversion ${TAG_VERSION:1}
+          butler push builds/${{ matrix.platform }} ${ITCHIO_USERNAME}/${ITCHIO_GAME}:${{ matrix.platform }} --userversion ${TAG_VERSION}
