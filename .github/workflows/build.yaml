@@ -20,8 +20,8 @@ jobs:
       - name: Get version
         run: | 
           echo "TAG_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-          SUBSTRING=${TAG_VERSION:1}
-          echo "TAG_VERSION=$SUBSTRING" > $GITHUB_ENV
+          SUBSTRING=$(echo "$TAG_VERSION" | cut -c 2-)
+          echo "TAG_VERSION=$SUBSTRING" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v3
         with:
