@@ -1,9 +1,9 @@
 name: Build-Godot-CI
-# on:
-#   push:
-#     tags:
-#       - 'v*.*.*'
-on: push
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+# on: push
 env:
   GODOT_VERSION: 4.1.3
   EXPORT_NAME: auto-survival
