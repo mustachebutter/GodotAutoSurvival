@@ -19,8 +19,7 @@ jobs:
     steps:
       - name: Get version
         run: | 
-          echo "TAG_VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-          SUBSTRING=$(echo "$TAG_VERSION" | cut -c 2-)
+          SUBSTRING=$(echo "${GITHUB_REF#refs/tags/}" | cut -c 2-)
           echo "TAG_VERSION=$SUBSTRING" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v3
@@ -69,4 +68,4 @@ jobs:
         run: |
           ls -la
           ls -la builds/${{ matrix.platform }}
-          butler push builds/${{ matrix.platform }} ${ITCHIO_USERNAME}/${ITCHIO_GAME}:${{ matrix.platform }} --userversion ${TAG_VERSION}
+          butler push builds/${{ matrix.platform }} ${ITCHIO_USERNAME}/${ITCHIO_GAME}:${{ matrix.platform }} --userversion ${{ env.TAG_VERSION }}
