@@ -1,0 +1,87 @@
+name: Build-Godot-CI
+on:
+  push:
+    tags:
+      - v*.*.*
+env:
+  GODOT_VERSION: 4.1.3
+  EXPORT_NAME: auto-survival
+  PROJECT_PATH: godot
+  BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+  ITCHIO_USERNAME: ${{ secrets.ITCHIO_USERNAME }}
+  ITCHIO_GAME: ${{ secrets.ITCHIO_GAME }}
+jobs:
+  build:
+    name: Godot Build
+    runs-on: ubuntu-latest
+    container:
+      image: docker://barichello/godot-ci:mono-4.1.3
+    steps:
+      - name: Get version
+        run: | 
+          SUBSTRING=$(echo "${GITHUB_REF#refs/tags/}" | cut -c 2-)
+          echo "TAG_VERSION=$SUBSTRING" >> $GITHUB_ENV
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+      - name: .NET installation
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Setup
+        run: |
+          mkdir -v -p builds/windows builds/linux ~/.local/share/godot/export_templates
+          mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
+      - name: Build Windows
+        run: |
+          cd godot
+          godot \
+            -v \
+            --headless \
+            --export-release "Windows Desktop" ../builds/windows/${EXPORT_NAME}_${TAG_VERSION}_windows.exe
+          cd ..
+      - name: Build Linux
+        run: |
+          cd godot
+          godot \
+            -v \
+            --headless \
+            --export-release "Linux/X11" ../builds/linux/${EXPORT_NAME}_${TAG_VERSION}_linux.x86_64
+          cd ..
+      - name: Upload Windows
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows
+          path: builds/windows
+      - name: Upload Windows
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux
+          path: builds/linux
+  upload:
+    name: Itch.IO Upload
+    runs-on: ubuntu-latest
+    needs: build
+    container:
+      image: docker://barichello/godot-ci:mono-4.1.3
+    strategy:
+      matrix:
+        platform: [windows, linux]
+    steps:
+      - name: Get version
+        run: | 
+          SUBSTRING=$(echo "${GITHUB_REF#refs/tags/}" | cut -c 2-)
+          echo "TAG_VERSION=$SUBSTRING" >> $GITHUB_ENV
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ matrix.platform }}
+          path: builds/${{ matrix.platform }}
+      - name: Upload Itch.IO
+        run: |
+          ls -la
+          ls -la builds/${{ matrix.platform }}
+          butler push builds/${{ matrix.platform }} ${ITCHIO_USERNAME}/${ITCHIO_GAME}:${{ matrix.platform }} --userversion ${TAG_VERSION}
