@@ -11,8 +11,8 @@ env:
   ITCHIO_USERNAME: ${{ secrets.ITCHIO_USERNAME }}
   ITCHIO_GAME: ${{ secrets.ITCHIO_GAME }}
 jobs:
-  build-windows:
-    name: Windows Export
+  build:
+    name: Godot Build
     runs-on: ubuntu-latest
     container:
       image: docker://barichello/godot-ci:mono-4.1.3
@@ -31,9 +31,9 @@ jobs:
           dotnet-version: 6.0.x
       - name: Setup
         run: |
-          mkdir -v -p builds/linux builds/windows builds/mac builds/web ~/.local/share/godot/export_templates
+          mkdir -v -p builds/windows builds/linux ~/.local/share/godot/export_templates
           mv /root/.local/share/godot/templates/${GODOT_VERSION}.stable.mono ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable.mono
-      - name: Build
+      - name: Build Windows
         run: |
           cd godot
           godot \
@@ -41,21 +41,34 @@ jobs:
             --headless \
             --export-release "Windows Desktop" ../builds/windows/${EXPORT_NAME}_${TAG_VERSION}_windows.exe
           cd ..
-      - name: Upload
+      - name: Build Linux
+        run: |
+          cd godot
+          godot \
+            -v \
+            --headless \
+            --export-release "Linux/X11" ../builds/linux/${EXPORT_NAME}_${TAG_VERSION}_linux.x86_64
+          cd ..
+      - name: Upload Windows
         uses: actions/upload-artifact@v3
         with:
           name: windows
           path: builds/windows
+      - name: Upload Windows
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux
+          path: builds/linux
   upload:
     name: Itch.IO Upload
     runs-on: ubuntu-latest
-    needs: build-windows
+    needs: build
     container:
       image: docker://barichello/godot-ci:mono-4.1.3
     strategy:
       matrix:
         platform:
-          - windows
+          - windows, linux
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -68,4 +81,4 @@ jobs:
         run: |
           ls -la
           ls -la builds/${{ matrix.platform }}
-          butler push builds/${{ matrix.platform }} ${ITCHIO_USERNAME}/${ITCHIO_GAME}:${{ matrix.platform }} --userversion ${{ env.TAG_VERSION }}
+          butler push builds/${{ matrix.platform }} ${ITCHIO_USERNAME}/${ITCHIO_GAME}:${{ matrix.platform }} --userversion ${TAG_VERSION}
