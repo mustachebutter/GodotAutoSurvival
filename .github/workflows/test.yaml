@@ -13,3 +13,8 @@ jobs:
           SUBSTRING=$(echo "$TAG_VERSION" | cut -c 2-)
           echo "TAG_VERSION=$SUBSTRING" >> $GITHUB_ENV
           echo $TAG_VERSION
+          echo ${TAG_VERSION}
+          echo ${{ env.TAG_VERSION }}
+          echo "abcxyz/${TAG_VERSION}"
+          echo "abcxyz/${{ env.TAG_VERSION }}"
+
