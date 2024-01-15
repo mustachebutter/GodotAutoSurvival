@@ -80,4 +80,6 @@ jobs:
         run: |
           ls -la
           ls -la builds/${{ matrix.platform }}
+          echo ${TAG_VERSION}
+          echo ${{ env.TAG_VERSION }}
           butler push builds/${{ matrix.platform }} ${ITCHIO_USERNAME}/${ITCHIO_GAME}:${{ matrix.platform }} --userversion ${TAG_VERSION}
