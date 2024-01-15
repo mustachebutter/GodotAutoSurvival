@@ -9,10 +9,7 @@ jobs:
     steps:
       - name: Get version
         run: |
+          TAG_VERSION=v0.0.0.1
           SUBSTRING=$(echo "$TAG_VERSION" | cut -c 2-)
           echo "TAG_VERSION=$SUBSTRING" >> $GITHUB_ENV
-          echo $SUBSTRING
-
-          SUBSTRING=$(echo $TAG_VERSION | cut -c 2-)
-          echo "TAG_VERSION=$SUBSTRING" >> $GITHUB_ENV
-          echo $SUBSTRING
+          echo $TAG_VERSION
