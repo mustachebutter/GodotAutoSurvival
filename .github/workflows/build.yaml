@@ -21,6 +21,7 @@ jobs:
         run: | 
           SUBSTRING=$(echo "${GITHUB_REF#refs/tags/}" | cut -c 2-)
           echo "TAG_VERSION=$SUBSTRING" >> $GITHUB_ENV
+          echo "::set-output name=version::$TAG_VERSION"
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -80,6 +81,4 @@ jobs:
         run: |
           ls -la
           ls -la builds/${{ matrix.platform }}
-          echo ${TAG_VERSION}
-          echo ${{ env.TAG_VERSION }}
-          butler push builds/${{ matrix.platform }} ${ITCHIO_USERNAME}/${ITCHIO_GAME}:${{ matrix.platform }} --userversion ${TAG_VERSION}
+          butler push builds/${{ matrix.platform }} ${ITCHIO_USERNAME}/${ITCHIO_GAME}:${{ matrix.platform }} --userversion ${{ needs.build.outputs.version }}
