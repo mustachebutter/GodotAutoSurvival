@@ -1,10 +1,20 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class Player : CharacterBody2D
 {
 	[Export]
 	public const float Speed = 100.0f;
+
+	public float Range = 500.0f;
+
+	public float AttackTimer = 2.0f;
+
+	public override void _Ready()
+	{
+		
+	}
 
 	public override void _PhysicsProcess(double delta)
 	{
@@ -53,5 +63,11 @@ public partial class Player : CharacterBody2D
 		velocity = velocity.Normalized() * Speed;
 		Velocity = velocity;
 		MoveAndSlide();
+
+		if (Input.IsActionJustPressed("Action"))
+		{
+			GD.Print($"PLAYER - {Position}");
+		}
+
 	}
 }

@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://dndk734dkrbd"]
+
+[ext_resource type="Script" path="res://scripts/Projectile.cs" id="1_6fc67"]
+[ext_resource type="SpriteFrames" uid="uid://d3aufqsmxp4er" path="res://assets/sprite_frames/Projectiles.tres" id="1_slh5x"]
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+script = ExtResource("1_6fc67")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+rotation = -3.14159
+sprite_frames = ExtResource("1_slh5x")
+animation = &"Fireball"
+frame = 24
+frame_progress = 0.582573
