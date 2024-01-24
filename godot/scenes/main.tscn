@@ -1,58 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://cr752cyhod5wg"]
+[gd_scene load_steps=2 format=3 uid="uid://cr752cyhod5wg"]
 
 [ext_resource type="Script" path="res://scripts/Main.cs" id="1_byp4v"]
-[ext_resource type="Texture2D" uid="uid://cwr5vawlkhwbv" path="res://assets/Char_Base.png" id="2_ntlmi"]
 
 [node name="Node2D" type="Node2D"]
-position = Vector2(256, 130)
 script = ExtResource("1_byp4v")
 
 [node name="Timer" type="Timer" parent="."]
-
-[node name="Enemy2" type="CharacterBody2D" parent="."]
-position = Vector2(564, 84)
-
-[node name="Sprite2D" type="Sprite2D" parent="Enemy2"]
-texture_filter = 1
-position = Vector2(-32, -32)
-texture = ExtResource("2_ntlmi")
-centered = false
-hframes = 8
-vframes = 8
-frame = 24
-
-[node name="Enemy3" type="CharacterBody2D" parent="."]
-position = Vector2(449, 407)
-
-[node name="Sprite2D" type="Sprite2D" parent="Enemy3"]
-texture_filter = 1
-position = Vector2(-32, -32)
-texture = ExtResource("2_ntlmi")
-centered = false
-hframes = 8
-vframes = 8
-frame = 24
-
-[node name="Enemy4" type="CharacterBody2D" parent="."]
-position = Vector2(67, -60)
-
-[node name="Sprite2D" type="Sprite2D" parent="Enemy4"]
-texture_filter = 1
-position = Vector2(-32, -32)
-texture = ExtResource("2_ntlmi")
-centered = false
-hframes = 8
-vframes = 8
-frame = 24
-
-[node name="Enemy5" type="CharacterBody2D" parent="."]
-position = Vector2(-62, 79)
-
-[node name="Sprite2D" type="Sprite2D" parent="Enemy5"]
-texture_filter = 1
-position = Vector2(-32, -32)
-texture = ExtResource("2_ntlmi")
-centered = false
-hframes = 8
-vframes = 8
-frame = 24

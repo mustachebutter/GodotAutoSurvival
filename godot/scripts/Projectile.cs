@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public partial class Projectile : CharacterBody2D
@@ -6,6 +7,9 @@ public partial class Projectile : CharacterBody2D
 	private string _animationName = "Fireball";
 
 	private Vector2 _projectileVelocity = new Vector2(0, 0);
+
+	public delegate void OnEnemyKilledHandler(Enemy enemy);
+	public event OnEnemyKilledHandler OnEnemyKilledEvent;
 	
 	[Export]
 	public float Speed = 500.0f;
@@ -27,6 +31,10 @@ public partial class Projectile : CharacterBody2D
 		KinematicCollision2D collision = MoveAndCollide(Velocity * (float) delta);
 		if (collision != null)
 		{
+			Enemy enemy = (Enemy) collision.GetCollider();
+			GD.Print(enemy.Name);
+			enemy.QueueFree();
+			OnEnemyKilledEvent.Invoke(enemy);
 		}
 	}
 

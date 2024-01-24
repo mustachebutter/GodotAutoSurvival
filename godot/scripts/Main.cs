@@ -10,24 +10,25 @@ public partial class Main : Node2D
 	private Projectile _projectile;
 	private PackedScene _playerScene = (PackedScene) GD.Load("res://scenes/player.tscn");
 	private Player _player;
-	private List<CharacterBody2D> dummies = new List<CharacterBody2D>();
+	private PackedScene _enemyScene = (PackedScene) GD.Load("res://scenes/enemy.tscn");
+	private List<Enemy> dummies = new List<Enemy>();
+
+	// TEMP
+	private int number = 11;
 
 	public override void _Ready()
 	{
 		_timer = GetNode<Timer>("Timer");
-		for (int i = 2; i <= 5; i++)
+		for (int i = 0; i < number; i++)
 		{
-			var tempNode = GetNodeOrNull<CharacterBody2D>($"Enemy{i}");
-			if(tempNode != null)
-			{
-				GD.Print(tempNode.Name);
-			}
-			else
-			{
-				GD.Print("Failed to retrieve node");
-			}
-			dummies.Add(tempNode);
+			Vector2 randomPosition = new Vector2((float) GD.RandRange(0.0f, 800.0f), (float) GD.RandRange(000.0f, 600.0f));
+			var enemyNode = _enemyScene.Instantiate();
 			
+			AddChild(enemyNode);
+			var enemy = (Enemy) enemyNode;
+			enemy.Position = randomPosition;
+
+			dummies.Add(enemy);
 		}
 
 		_player = (Player) _playerScene.Instantiate();
@@ -43,14 +44,15 @@ public partial class Main : Node2D
 
 	private void StartTimer(float seconds = 0.0f)
 	{
+		GD.Print(IsInstanceValid(_projectile));
 		if (seconds > 0)
 		{
 			_projectile = (Projectile) _projectileScene.Instantiate();
-			_projectile.AnimationName = "Fireball";
+			_projectile.AnimationName = "CrissCross";
+			_projectile.OnEnemyKilledEvent += HandleEnemyDead;
 			AddChild(_projectile);
 			_projectile.Position = _player.Position;
 			_projectile.ShootAtTarget(_player.Position, dummies[0].Position);
-			GD.Print($"MAINT - {_player.Position}");
 
 			_timer.WaitTime = seconds;
 			_timer.OneShot = true;
@@ -61,7 +63,16 @@ public partial class Main : Node2D
 
 	private void OnTimerTimeout()
 	{
+		GD.Print(IsInstanceValid(_projectile));
 		_projectile.QueueFree();
 		StartTimer(2);
+	}
+
+	private void HandleEnemyDead(Enemy enemy)
+	{
+		if (dummies.Contains(enemy))
+		{
+			GD.Print(dummies.Remove(enemy));
+		}
 	}
 }
