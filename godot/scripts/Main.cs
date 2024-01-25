@@ -34,7 +34,7 @@ public partial class Main : Node2D
 		_player = (Player) _playerScene.Instantiate();
 		AddChild(_player);
 		
-		StartTimer(2);
+		StartTimer(1 / _player.AttackSpeed);
 	}
 
 	public override void _Process(double delta)
@@ -46,28 +46,32 @@ public partial class Main : Node2D
 	{
 		GD.Print(IsInstanceValid(_projectile));
 		if (seconds > 0)
-		{
-			_projectile = (Projectile) _projectileScene.Instantiate();
-			_projectile.AnimationName = "CrissCross";
-			_projectile.OnEnemyKilledEvent += HandleEnemyDead;
-			AddChild(_projectile);
-			_projectile.Position = _player.Position;
-			_projectile.ShootAtTarget(_player.Position, dummies[0].Position);
-
+		{	
+			CreateProjectile();
 			_timer.WaitTime = seconds;
-			_timer.OneShot = true;
-			_timer.Start();
+			_timer.OneShot = false;
 			_timer.Connect("timeout", new Callable(this, "OnTimerTimeout"));
+
+			_timer.Start();
+
 		}
 	}
 
 	private void OnTimerTimeout()
 	{
-		GD.Print(IsInstanceValid(_projectile));
-		_projectile.QueueFree();
-		StartTimer(2);
+		GD.Print("Timer time out");
+		CreateProjectile();
 	}
 
+	private void CreateProjectile()
+	{
+		_projectile = (Projectile) _projectileScene.Instantiate();
+		_projectile.AnimationName = "CrissCross";
+		_projectile.OnEnemyKilledEvent += HandleEnemyDead;
+		AddChild(_projectile);
+		// _projectile.Position = _player.Position;
+		_projectile.ShootAtTarget(_player.Position, dummies[0].Position, _player.AttackRange);
+	}
 	private void HandleEnemyDead(Enemy enemy)
 	{
 		if (dummies.Contains(enemy))

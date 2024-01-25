@@ -7,6 +7,9 @@ public partial class Projectile : CharacterBody2D
 	private string _animationName = "Fireball";
 
 	private Vector2 _projectileVelocity = new Vector2(0, 0);
+	private float _distanceTravelled = 0;
+	private Vector2 _previousPosition = new Vector2(0, 0);
+	private float _playerRange = 0;
 
 	public delegate void OnEnemyKilledHandler(Enemy enemy);
 	public event OnEnemyKilledHandler OnEnemyKilledEvent;
@@ -22,8 +25,9 @@ public partial class Projectile : CharacterBody2D
 
 	public override void _Ready()
 	{
-		GD.Print(AnimationName);
 		_animatedSprite = GetNode<AnimatedSprite2D>("Sprite");
+		// _previousPosition = Position;
+		GD.PrintErr($"Projectile - {Position}");
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -35,11 +39,24 @@ public partial class Projectile : CharacterBody2D
 			GD.Print(enemy.Name);
 			enemy.QueueFree();
 			OnEnemyKilledEvent.Invoke(enemy);
+			QueueFree();
+		}
+
+		_distanceTravelled += (Position - _previousPosition).Length();
+		_previousPosition = Position;
+		GD.Print(_distanceTravelled);
+		if (_distanceTravelled >= _playerRange)
+		{
+			QueueFree();
 		}
 	}
 
-	public void ShootAtTarget(Vector2 sourcePosition, Vector2 targetPosition)
+	public void ShootAtTarget(Vector2 sourcePosition, Vector2 targetPosition, float playerRange)
 	{
+		// This is set so that the projectile can shoot from the player
+		Position = sourcePosition;
+		_previousPosition = Position;
+		_playerRange = playerRange;
 		// Determine the direction (look at rotation)
 		Vector2 direction = (targetPosition - sourcePosition).Normalized();
 		LookAt(GlobalPosition + direction);

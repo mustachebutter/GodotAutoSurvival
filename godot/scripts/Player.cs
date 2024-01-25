@@ -10,6 +10,8 @@ public partial class Player : CharacterBody2D
 	public float Range = 500.0f;
 
 	public float AttackTimer = 2.0f;
+	public float AttackSpeed = 1.0f;
+	public float AttackRange = 500.0f;
 
 	public override void _Ready()
 	{
