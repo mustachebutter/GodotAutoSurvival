@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://djts0v7e7gbt2"]
+[gd_scene load_steps=29 format=3 uid="uid://djts0v7e7gbt2"]
 
 [ext_resource type="Script" path="res://scripts/Player.cs" id="1_qfkuu"]
 [ext_resource type="Texture2D" uid="uid://cwr5vawlkhwbv" path="res://assets/Char_Base.png" id="2_klivf"]
@@ -234,6 +234,9 @@ states/Walk/position = Vector2(628, 100)
 transitions = ["Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_wd7r3"), "Walk", "Idle", SubResource("AnimationNodeStateMachineTransition_twi1o"), "Start", "Idle", SubResource("AnimationNodeStateMachineTransition_a35ep")]
 graph_offset = Vector2(76, -11)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_7ofal"]
+radius = 36.0555
+
 [node name="CharacterBody2D" type="CharacterBody2D"]
 scale = Vector2(2, 2)
 script = ExtResource("1_qfkuu")
@@ -267,3 +270,11 @@ parameters/Idle/blend_position = Vector2(-0.256, -0.152838)
 parameters/Walk/blend_position = Vector2(-0.0288, -0.0917031)
 
 [node name="Node2D" type="Node2D" parent="."]
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_7ofal")
+debug_color = Color(0.980392, 0, 0, 0.376471)

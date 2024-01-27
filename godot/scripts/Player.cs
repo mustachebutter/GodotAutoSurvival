@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public partial class Player : CharacterBody2D
 {
+	private Area2D _area2D;
 	[Export]
 	public const float Speed = 100.0f;
 
@@ -15,7 +16,9 @@ public partial class Player : CharacterBody2D
 
 	public override void _Ready()
 	{
-		
+		_area2D = GetNode<Area2D>("Area2D");
+		var circle = (CircleShape2D) _area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
+		circle.Radius = 100;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -71,5 +74,27 @@ public partial class Player : CharacterBody2D
 			GD.Print($"PLAYER - {Position}");
 		}
 
+	}
+
+	public Enemy FireProjectileAtTarget()
+	{
+		var enemyNodes = _area2D.GetOverlappingBodies();
+		if (enemyNodes == null) return null;
+
+
+		Node2D closestNode = null;
+		float closestDistance = 0.0f;
+		foreach (var e in enemyNodes)
+		{
+			float distance = Position.DistanceTo(e.Position);
+			if (closestNode == null || distance < closestDistance)
+			{
+				closestDistance = distance;
+				closestNode = e;
+			}
+		}
+		GD.Print($"Closest Distance - {closestDistance}");
+		// GD.Print($"Closest Node - {closestNode.Name}");
+		return (Enemy) closestNode;
 	}
 }

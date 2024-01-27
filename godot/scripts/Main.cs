@@ -18,6 +18,10 @@ public partial class Main : Node2D
 
 	public override void _Ready()
 	{
+		// !!!!!! DEBUG ONLY
+		GetTree().DebugCollisionsHint = true;
+		// !!!!!! DEBUG ONLY
+		
 		_timer = GetNode<Timer>("Timer");
 		for (int i = 0; i < number; i++)
 		{
@@ -70,7 +74,9 @@ public partial class Main : Node2D
 		_projectile.OnEnemyKilledEvent += HandleEnemyDead;
 		AddChild(_projectile);
 		// _projectile.Position = _player.Position;
-		_projectile.ShootAtTarget(_player.Position, dummies[0].Position, _player.AttackRange);
+		Enemy target = _player.FireProjectileAtTarget();
+		if (target != null)
+			_projectile.ShootAtTarget(_player.Position, target.Position, _player.AttackRange);
 	}
 	private void HandleEnemyDead(Enemy enemy)
 	{
