@@ -17,11 +17,15 @@ public partial class Projectile : CharacterBody2D
 	[Export]
 	public float Speed = 500.0f;
 	[Export]
+	public float Damage = 10.0f;
+	[Export]
 	public string AnimationName
 	{
 		get { return _animationName; }
 		set { _animationName = value; }
 	}
+
+	public virtual void HandleProjectileEffect() { }
 
 	public override void _Ready()
 	{
@@ -36,15 +40,24 @@ public partial class Projectile : CharacterBody2D
 		if (collision != null)
 		{
 			Enemy enemy = (Enemy) collision.GetCollider();
-			GD.Print(enemy.Name);
-			enemy.QueueFree();
-			OnEnemyKilledEvent.Invoke(enemy);
+			
+
+			// This is where the projectile should deal damage or apply an effect
+
+			if (enemy.DealDamageTo(Damage))
+			{
+				OnEnemyKilledEvent.Invoke(enemy);
+				enemy.QueueFree();
+
+			}
+
+			HandleProjectileEffect();
 			QueueFree();
 		}
 
 		_distanceTravelled += (Position - _previousPosition).Length();
 		_previousPosition = Position;
-		GD.Print(_distanceTravelled);
+
 		if (_distanceTravelled >= _playerRange)
 		{
 			QueueFree();

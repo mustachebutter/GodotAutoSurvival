@@ -63,20 +63,15 @@ public partial class Main : Node2D
 
 	private void OnTimerTimeout()
 	{
-		GD.Print("Timer time out");
 		CreateProjectile();
 	}
 
 	private void CreateProjectile()
 	{
 		_projectile = (Projectile) _projectileScene.Instantiate();
-		_projectile.AnimationName = "CrissCross";
 		_projectile.OnEnemyKilledEvent += HandleEnemyDead;
 		AddChild(_projectile);
-		// _projectile.Position = _player.Position;
-		Enemy target = _player.FireProjectileAtTarget();
-		if (target != null)
-			_projectile.ShootAtTarget(_player.Position, target.Position, _player.AttackRange);
+		_player.FireProjectileAtTarget(_projectile);			
 	}
 	private void HandleEnemyDead(Enemy enemy)
 	{

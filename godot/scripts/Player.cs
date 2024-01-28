@@ -12,13 +12,13 @@ public partial class Player : CharacterBody2D
 
 	public float AttackTimer = 2.0f;
 	public float AttackSpeed = 1.0f;
-	public float AttackRange = 500.0f;
+	public float AttackRange = 300.0f;
 
 	public override void _Ready()
 	{
 		_area2D = GetNode<Area2D>("Area2D");
 		var circle = (CircleShape2D) _area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
-		circle.Radius = 100;
+		circle.Radius = AttackRange / 2;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -76,7 +76,7 @@ public partial class Player : CharacterBody2D
 
 	}
 
-	public Enemy FireProjectileAtTarget()
+	public Enemy FireProjectileAtTarget(Projectile projectile)
 	{
 		var enemyNodes = _area2D.GetOverlappingBodies();
 		if (enemyNodes == null) return null;
@@ -93,8 +93,13 @@ public partial class Player : CharacterBody2D
 				closestNode = e;
 			}
 		}
-		GD.Print($"Closest Distance - {closestDistance}");
-		// GD.Print($"Closest Node - {closestNode.Name}");
+
+		projectile.AnimationName = "Zap";
+
+		if (closestNode == null) return null;
+
+		projectile.ShootAtTarget(Position, closestNode.Position, AttackRange);
+
 		return (Enemy) closestNode;
 	}
 }
