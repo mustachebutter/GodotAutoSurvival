@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://cbigttm4m6c36"]
+
+[ext_resource type="PackedScene" uid="uid://dndk734dkrbd" path="res://scenes/projectile.tscn" id="1_qiql8"]
+[ext_resource type="Script" path="res://scripts/Zap.cs" id="2_7utdn"]
+
+[node name="CharacterBody2D" instance=ExtResource("1_qiql8")]
+script = ExtResource("2_7utdn")

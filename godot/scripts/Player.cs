@@ -76,30 +76,13 @@ public partial class Player : CharacterBody2D
 
 	}
 
-	public Enemy FireProjectileAtTarget(Projectile projectile)
+	public void FireProjectileAtTarget(Projectile projectile, string projectileType)
 	{
-		var enemyNodes = _area2D.GetOverlappingBodies();
-		if (enemyNodes == null) return null;
+		Node2D closestNode = Utils.FindClosestTarget(Position, _area2D);
 
+		if (closestNode == null) return;
 
-		Node2D closestNode = null;
-		float closestDistance = 0.0f;
-		foreach (var e in enemyNodes)
-		{
-			float distance = Position.DistanceTo(e.Position);
-			if (closestNode == null || distance < closestDistance)
-			{
-				closestDistance = distance;
-				closestNode = e;
-			}
-		}
-
-		projectile.AnimationName = "Zap";
-
-		if (closestNode == null) return null;
-
+		projectile.AnimationName = projectileType;
 		projectile.ShootAtTarget(Position, closestNode.Position, AttackRange);
-
-		return (Enemy) closestNode;
 	}
 }

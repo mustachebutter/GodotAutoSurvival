@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public partial class Main : Node2D
 {
 	private Timer _timer;
-	private PackedScene _projectileScene = (PackedScene) GD.Load("res://scenes/projectile.tscn");
+	private PackedScene _projectileScene = (PackedScene) GD.Load(Scenes.ProjectileZap);
 	private Projectile _projectile;
 	private PackedScene _playerScene = (PackedScene) GD.Load("res://scenes/player.tscn");
 	private Player _player;
@@ -48,7 +48,6 @@ public partial class Main : Node2D
 
 	private void StartTimer(float seconds = 0.0f)
 	{
-		GD.Print(IsInstanceValid(_projectile));
 		if (seconds > 0)
 		{	
 			CreateProjectile();
@@ -68,16 +67,16 @@ public partial class Main : Node2D
 
 	private void CreateProjectile()
 	{
-		_projectile = (Projectile) _projectileScene.Instantiate();
+		_projectile = (Zap) _projectileScene.Instantiate();
 		_projectile.OnEnemyKilledEvent += HandleEnemyDead;
 		AddChild(_projectile);
-		_player.FireProjectileAtTarget(_projectile);			
+		_player.FireProjectileAtTarget(_projectile, ProjectileTypes.Zap);			
 	}
 	private void HandleEnemyDead(Enemy enemy)
 	{
 		if (dummies.Contains(enemy))
 		{
-			GD.Print(dummies.Remove(enemy));
+			GD.Print($"Removed enemy: {dummies.Remove(enemy)}, {enemy.Name}");
 		}
 	}
 }
