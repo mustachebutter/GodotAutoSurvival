@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 
 public partial class Projectile : CharacterBody2D
 {
 	protected AnimatedSprite2D _animatedSprite;
 	protected CollisionShape2D _collisionShape2D;
+	protected Area2D _bulletHeadArea2D;
 	private string _animationName = "Fireball";
 
 	private Vector2 _projectileVelocity = new Vector2(0, 0);
@@ -12,6 +14,7 @@ public partial class Projectile : CharacterBody2D
 	private Vector2 _previousPosition = new Vector2(0, 0);
 	private float _playerRange = 0;
 	protected bool _shouldDestroyProjectile = false;
+	protected List<Enemy> _bouncedEnemies = new List<Enemy>();
 
 	public delegate void OnEnemyKilledHandler(Enemy enemy);
 	public event OnEnemyKilledHandler OnEnemyKilledEvent;
@@ -19,7 +22,7 @@ public partial class Projectile : CharacterBody2D
 	[Export]
 	public float Speed = 500.0f;
 	[Export]
-	public float Damage = 10.0f;
+	public float Damage = 1.0f;
 	[Export]
 	public string AnimationName
 	{
@@ -28,29 +31,46 @@ public partial class Projectile : CharacterBody2D
 	}
 
 	public virtual void HandleProjectileEffect() { }
+	public virtual void HandleProjectileEffect(Enemy hitEnemy) { }
 
 	public override void _Ready()
 	{
 		_animatedSprite = GetNode<AnimatedSprite2D>("Sprite");
 		_collisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");
+		_bulletHeadArea2D = GetNode<Area2D>("BulletHeadArea2D");
 	}
 
-	public override void _PhysicsProcess(double delta)
+	public override void _Process(double delta)
 	{
-		KinematicCollision2D collision = MoveAndCollide(Velocity * (float) delta);
-		if (collision != null)
-		{
-			Enemy enemy = (Enemy) collision.GetCollider();
-			
-			// This is where the projectile should deal damage or apply an effect
-			if (enemy.DealDamageTo(Damage))
-			{
-				OnEnemyKilledEvent.Invoke(enemy);
-				enemy.QueueFree();
-				_shouldDestroyProjectile = true;
-			}
+		// KinematicCollision2D collision = MoveAndCollide(Velocity * (float) delta);
+		Position += Velocity * (float) delta;
 
-			HandleProjectileEffect();
+		var hitBodies = _bulletHeadArea2D.GetOverlappingBodies();
+		
+		if (hitBodies != null && hitBodies.Count > 0)
+		{
+			// Enemy enemy = (Enemy) collision.GetCollider();
+			Enemy enemy = (Enemy) hitBodies[0];
+			if(!_bouncedEnemies.Contains(enemy))
+			{
+				_bouncedEnemies.Add(enemy);
+				// !!!!DEBUG: Be extremely careful with this
+				// It might not work on higher attack speed
+				enemy.SetCollisionLayerValue(5, true);
+				enemy.SetCollisionLayerValue(3, false);
+
+				// !!!!DEBUG
+
+				// This is where the projectile should deal damage or apply an effect
+				if (enemy.DealDamageTo(Damage))
+				{
+					OnEnemyKilledEvent.Invoke(enemy);
+					enemy.QueueFree();
+					_shouldDestroyProjectile = true;
+				}
+
+				HandleProjectileEffect(enemy);
+			}
 		}
 
 		_distanceTravelled += (Position - _previousPosition).Length();
@@ -63,16 +83,33 @@ public partial class Projectile : CharacterBody2D
 			QueueFree();
 	}
 
+	public override void _ExitTree()
+	{
+		base._ExitTree();
+		foreach(var e in _bouncedEnemies)
+		{
+			if (IsInstanceValid(e))
+			{
+				e.SetCollisionLayerValue(5, false);
+				e.SetCollisionLayerValue(3, true);
+			}
+		}
+	}
+
 	public void ShootAtTarget(Vector2 sourcePosition, Vector2 targetPosition, float playerRange)
 	{
 		// This is set so that the projectile can shoot from the player
 		Position = sourcePosition;
 		_previousPosition = Position;
 		_playerRange = playerRange;
+
+		// Reset some variables
+		_distanceTravelled = 0.0f;
+
 		// Determine the direction (look at rotation)
 		Vector2 direction = (targetPosition - sourcePosition).Normalized();
 		LookAt(GlobalPosition + direction);
-		
+		// LookAt(Vector2.Left);
 		Velocity = direction * Speed;
 		// Play the animation
 		_animatedSprite.Play(AnimationName);

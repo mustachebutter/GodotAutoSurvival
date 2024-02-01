@@ -26,14 +26,13 @@ public partial class Main : Node2D
 		for (int i = 0; i < number; i++)
 		{
 			Vector2 randomPosition = new Vector2((float) GD.RandRange(0.0f, 800.0f), (float) GD.RandRange(000.0f, 600.0f));
-			var enemyNode = _enemyScene.Instantiate();
-			
-			AddChild(enemyNode);
-			var enemy = (Enemy) enemyNode;
-			enemy.Position = randomPosition;
-
-			dummies.Add(enemy);
+			dummies.Add(Utils.CreateDummy(randomPosition, _enemyScene, this));
 		}
+		
+		dummies.Add(Utils.CreateDummy(new Vector2(371, 329), _enemyScene, this));
+		dummies.Add(Utils.CreateDummy(new Vector2(435, 264), _enemyScene, this));
+		dummies.Add(Utils.CreateDummy(new Vector2(455, 396), _enemyScene, this));
+		dummies.Add(Utils.CreateDummy(new Vector2(504, 312), _enemyScene, this));
 
 		_player = (Player) _playerScene.Instantiate();
 		AddChild(_player);
@@ -70,7 +69,7 @@ public partial class Main : Node2D
 		_projectile = (Zap) _projectileScene.Instantiate();
 		_projectile.OnEnemyKilledEvent += HandleEnemyDead;
 		AddChild(_projectile);
-		_player.FireProjectileAtTarget(_projectile, ProjectileTypes.Zap);			
+		_player.FireProjectileAtTarget(_projectile, ProjectileTypes.Zap);
 	}
 	private void HandleEnemyDead(Enemy enemy)
 	{
