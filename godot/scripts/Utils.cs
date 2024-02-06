@@ -3,9 +3,10 @@ using Godot;
 
 public static class Utils
 {
-    public static Node2D FindClosestTarget(Vector2 sourcePosition, Area2D area2D)
-    {
+	public static Node2D FindClosestTarget(Vector2 sourcePosition, Area2D area2D)
+	{
 		var enemyNodes = area2D.GetOverlappingBodies();
+		GD.PrintRich($"[color=yellow]{enemyNodes.Count}[/color]");
 		if (enemyNodes == null) return null;
 
 
@@ -18,14 +19,16 @@ public static class Utils
 			{
 				closestDistance = distance;
 				closestNode = e;
+				GD.Print($"Should be in here - {closestNode.Name}\n");
 			}
 		}
 
-        return closestNode;
-    }
+		GD.Print($"Should be the closest - {closestNode?.Name}\n");
+		return closestNode;
+	}
 
 	public static Node2D FindClosestTarget(Vector2 sourcePosition, Area2D area2D, Enemy enemyToIgnore)
-    {
+	{
 		var enemyNodes = area2D.GetOverlappingBodies();
 		if (enemyNodes == null) return null;
  
@@ -33,20 +36,21 @@ public static class Utils
 		float closestDistance = 0.0f;
 		foreach (var e in enemyNodes)
 		{
-			GD.Print($"Hit - {e.Name}");
+			float distance = sourcePosition.DistanceTo(e.Position);
+			GD.Print($"Hit - {e.Name} - {distance} - {enemyToIgnore.Name} - {closestNode == null || distance < closestDistance}");
 			if ((Enemy) e != enemyToIgnore)
 			{
-				float distance = sourcePosition.DistanceTo(e.Position);
 				if (closestNode == null || distance < closestDistance)
 				{
+					GD.Print("In here");
 					closestDistance = distance;
 					closestNode = e;
 				}
 			}
 		} 
 
-        return closestNode;
-    }
+		return closestNode;
+	}
 	
 	// !!!!!! DEBUG ONLY
 	public static Enemy CreateDummy(Vector2 position, PackedScene enemyScene, Main main)

@@ -4,20 +4,19 @@ using System.Collections.Generic;
 
 public partial class Player : CharacterBody2D
 {
-	private Area2D _area2D;
+	public Area2D Area2D;
 	[Export]
 	public const float Speed = 100.0f;
 
 	public float Range = 500.0f;
 
-	public float AttackTimer = 2.0f;
-	public float AttackSpeed = 1.0f;
+	public float AttackSpeed = .5f;
 	public float AttackRange = 300.0f;
 
 	public override void _Ready()
 	{
-		_area2D = GetNode<Area2D>("Area2D");
-		var circle = (CircleShape2D) _area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
+		Area2D = GetNode<Area2D>("Area2D");
+		var circle = (CircleShape2D) Area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
 		circle.Radius = AttackRange / 2;
 	}
 
@@ -76,13 +75,11 @@ public partial class Player : CharacterBody2D
 
 	}
 
-	public void FireProjectileAtTarget(Projectile projectile, string projectileType)
+	public void FireProjectileAtTarget(Node2D closestTarget, Projectile projectile, string projectileType)
 	{
-		Node2D closestNode = Utils.FindClosestTarget(Position, _area2D);
-
-		if (closestNode == null) return;
+		GD.PrintRich("[color=green]HERE![/color]");
 
 		projectile.AnimationName = projectileType;
-		projectile.ShootAtTarget(Position, closestNode.Position, AttackRange);
+		projectile.ShootAtTarget(Position, closestTarget.Position, AttackRange);
 	}
 }

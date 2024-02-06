@@ -1,21 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://cr752cyhod5wg"]
+[gd_scene load_steps=2 format=3 uid="uid://cr752cyhod5wg"]
 
 [ext_resource type="Script" path="res://scripts/Main.cs" id="1_byp4v"]
-[ext_resource type="PackedScene" uid="uid://cqafwyf6svfis" path="res://scenes/enemy.tscn" id="2_g7hgo"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_byp4v")
 
 [node name="Timer" type="Timer" parent="."]
-
-[node name="Enemy" parent="." instance=ExtResource("2_g7hgo")]
-position = Vector2(435, 264)
-
-[node name="Enemy2" parent="." instance=ExtResource("2_g7hgo")]
-position = Vector2(504, 312)
-
-[node name="Enemy3" parent="." instance=ExtResource("2_g7hgo")]
-position = Vector2(455, 396)
-
-[node name="Enemy4" parent="." instance=ExtResource("2_g7hgo")]
-position = Vector2(371, 329)

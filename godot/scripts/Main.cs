@@ -23,11 +23,11 @@ public partial class Main : Node2D
 		// !!!!!! DEBUG ONLY
 		
 		_timer = GetNode<Timer>("Timer");
-		for (int i = 0; i < number; i++)
-		{
-			Vector2 randomPosition = new Vector2((float) GD.RandRange(0.0f, 800.0f), (float) GD.RandRange(000.0f, 600.0f));
-			dummies.Add(Utils.CreateDummy(randomPosition, _enemyScene, this));
-		}
+		// for (int i = 0; i < number; i++)
+		// {
+		// 	Vector2 randomPosition = new Vector2((float) GD.RandRange(0.0f, 800.0f), (float) GD.RandRange(000.0f, 600.0f));
+		// 	dummies.Add(Utils.CreateDummy(randomPosition, _enemyScene, this));
+		// }
 		
 		dummies.Add(Utils.CreateDummy(new Vector2(371, 329), _enemyScene, this));
 		dummies.Add(Utils.CreateDummy(new Vector2(435, 264), _enemyScene, this));
@@ -66,10 +66,15 @@ public partial class Main : Node2D
 
 	private void CreateProjectile()
 	{
+		Node2D closestTarget = Utils.FindClosestTarget(Position, _player.Area2D);
+		GD.PrintRich("[color=orange]HA![/color]");
+
+		if (closestTarget == null) return;
+
 		_projectile = (Zap) _projectileScene.Instantiate();
 		_projectile.OnEnemyKilledEvent += HandleEnemyDead;
 		AddChild(_projectile);
-		_player.FireProjectileAtTarget(_projectile, ProjectileTypes.Zap);
+		_player.FireProjectileAtTarget(closestTarget, _projectile, ProjectileTypes.Zap);
 	}
 	private void HandleEnemyDead(Enemy enemy)
 	{

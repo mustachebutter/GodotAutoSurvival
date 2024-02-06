@@ -25,3 +25,12 @@ frame = 24
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -4)
 shape = SubResource("CapsuleShape2D_q78gm")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -19.0
+offset_top = -64.0
+offset_right = 21.0
+offset_bottom = -38.0
+text = "Test"
+horizontal_alignment = 1
+vertical_alignment = 1

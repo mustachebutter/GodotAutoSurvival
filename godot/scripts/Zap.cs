@@ -14,7 +14,9 @@ public partial class Zap : Projectile
 	{
 		base._Ready();
 		_area2D = GetNode<Area2D>("Area2D");
-
+		// Find closest enemy and bounce to it
+		CircleShape2D circle = (CircleShape2D) _area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
+		circle.Radius = _bounceRadius;
 	}
 	public override void HandleProjectileEffect(Enemy hitEnemy)
 	{
@@ -22,33 +24,32 @@ public partial class Zap : Projectile
 		// _bouncedEnemies.Add(hitEnemy);
 		// _collisionShape2D.SetDeferred("disabled", true);
 		
-		// Find closest enemy and bounce to it
-		CircleShape2D circle = (CircleShape2D) _area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
-		circle.Radius = _bounceRadius;
-
 		Enemy closestEnemy = null;
-		if (_bouncedEnemies.Count == 0)
-			closestEnemy = (Enemy) Utils.FindClosestTarget(Position, _area2D);
-		else
-			closestEnemy = (Enemy) Utils.FindClosestTarget(Position, _area2D, _bouncedEnemies?.Last());
-		GD.Print($"Name - {closestEnemy?.Name}");
-		GD.Print($"Health - {closestEnemy?.Health}");
-		GD.Print($"Damage - {Damage}\n\n");
+		// if (_bouncedEnemies.Count == 1)
+		// 	closestEnemy = (Enemy) Utils.FindClosestTarget(Position, _area2D);
+		// else
+		closestEnemy = (Enemy) Utils.FindClosestTarget(Position, _area2D, _bouncedEnemies?.Last());
 
-		if (_numberOfBounces < 0)
+		if (_numberOfBounces <= 0)
 			_shouldDestroyProjectile = true;
 
 		if(closestEnemy != null)
 		{
-			_bouncedEnemies.Add(closestEnemy);
+			// _bouncedEnemies.Add(closestEnemy);
+			GD.Print($"Bounce!!! - {closestEnemy.Name} - {_numberOfBounces}");
+			GD.Print($"Health - {closestEnemy?.Health}");
+			GD.Print($"Damage - {Damage}\n\n");
+
 			// !!!!DEBUG: Be extremely careful with this
 			// It might not work on higher attack speed
-			closestEnemy.SetCollisionLayerValue(5, true);
-			closestEnemy.SetCollisionLayerValue(3, false);
+			// closestEnemy.SetCollisionLayerValue(5, true);
+			// closestEnemy.SetCollisionLayerValue(3, false);
 			// !!!!DEBUG
 
-			ShootAtTarget(Position, closestEnemy.Position, _bounceRadius);
+			ShootAtTarget(Position, closestEnemy.Position, _playerRange);
 			_numberOfBounces--;
+			GD.Print($"Bounce - {_numberOfBounces}");
+
 			// Deal reduced X% damage to Y enemies
 			Damage *= (1 - _damageReduction);
 		}

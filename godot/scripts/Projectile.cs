@@ -8,19 +8,19 @@ public partial class Projectile : CharacterBody2D
 	protected CollisionShape2D _collisionShape2D;
 	protected Area2D _bulletHeadArea2D;
 	private string _animationName = "Fireball";
-
 	private Vector2 _projectileVelocity = new Vector2(0, 0);
 	protected float _distanceTravelled = 0;
 	private Vector2 _previousPosition = new Vector2(0, 0);
-	private float _playerRange = 0;
+	protected float _playerRange = 0;
 	protected bool _shouldDestroyProjectile = false;
+	protected bool _shouldDamageEnemy = false;
 	protected List<Enemy> _bouncedEnemies = new List<Enemy>();
 
 	public delegate void OnEnemyKilledHandler(Enemy enemy);
 	public event OnEnemyKilledHandler OnEnemyKilledEvent;
 	
 	[Export]
-	public float Speed = 500.0f;
+	public float Speed = 200.0f;
 	[Export]
 	public float Damage = 1.0f;
 	[Export]
@@ -37,20 +37,21 @@ public partial class Projectile : CharacterBody2D
 	{
 		_animatedSprite = GetNode<AnimatedSprite2D>("Sprite");
 		_collisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");
-		_bulletHeadArea2D = GetNode<Area2D>("BulletHeadArea2D");
 	}
 
 	public override void _Process(double delta)
 	{
-		// KinematicCollision2D collision = MoveAndCollide(Velocity * (float) delta);
-		Position += Velocity * (float) delta;
+		KinematicCollision2D collision = MoveAndCollide(Velocity * (float) delta);
+		// Position += Velocity * (float) delta;
 
-		var hitBodies = _bulletHeadArea2D.GetOverlappingBodies();
+		// var hitBodies = _bulletHeadArea2D.GetOverlappingBodies();
 		
-		if (hitBodies != null && hitBodies.Count > 0)
+		// if (hitBodies != null && hitBodies.Count > 0)
+		if (collision != null && _shouldDamageEnemy)
 		{
-			// Enemy enemy = (Enemy) collision.GetCollider();
-			Enemy enemy = (Enemy) hitBodies[0];
+			Enemy enemy = (Enemy) collision.GetCollider();
+			GD.PrintRich($"[color=black]{enemy.Name} - {collision != null && _shouldDamageEnemy}[/color]");
+			// Enemy enemy = (Enemy) hitBodies[0];
 			if(!_bouncedEnemies.Contains(enemy))
 			{
 				_bouncedEnemies.Add(enemy);
@@ -69,6 +70,7 @@ public partial class Projectile : CharacterBody2D
 					_shouldDestroyProjectile = true;
 				}
 
+				_shouldDamageEnemy = false;
 				HandleProjectileEffect(enemy);
 			}
 		}
@@ -94,6 +96,7 @@ public partial class Projectile : CharacterBody2D
 				e.SetCollisionLayerValue(3, true);
 			}
 		}
+		_bouncedEnemies.Clear();
 	}
 
 	public void ShootAtTarget(Vector2 sourcePosition, Vector2 targetPosition, float playerRange)
@@ -103,9 +106,6 @@ public partial class Projectile : CharacterBody2D
 		_previousPosition = Position;
 		_playerRange = playerRange;
 
-		// Reset some variables
-		_distanceTravelled = 0.0f;
-
 		// Determine the direction (look at rotation)
 		Vector2 direction = (targetPosition - sourcePosition).Normalized();
 		LookAt(GlobalPosition + direction);
@@ -113,5 +113,9 @@ public partial class Projectile : CharacterBody2D
 		Velocity = direction * Speed;
 		// Play the animation
 		_animatedSprite.Play(AnimationName);
+
+		// Reset some variables
+		_distanceTravelled = 0.0f;
+		_shouldDamageEnemy = true;
 	}
 }
