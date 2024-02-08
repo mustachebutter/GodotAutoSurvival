@@ -63,7 +63,7 @@ public partial class Projectile : CharacterBody2D
 				// !!!!DEBUG
 
 				// This is where the projectile should deal damage or apply an effect
-				if (enemy.DealDamageTo(Damage))
+				if (enemy.DealDamageToCharacter(Damage))
 				{
 					OnEnemyKilledEvent.Invoke(enemy);
 					enemy.QueueFree();

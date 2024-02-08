@@ -55,6 +55,7 @@ public partial class Player : BaseCharacter
 
 		// Normalized the Vector
 		velocity = velocity.Normalized() * Speed;
+
 		Velocity = velocity;
 		MoveAndSlide();
 

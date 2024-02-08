@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://cqafwyf6svfis"]
+[gd_scene load_steps=5 format=3 uid="uid://cqafwyf6svfis"]
 
 [ext_resource type="Script" path="res://scripts/Enemy.cs" id="1_5rjk2"]
 [ext_resource type="Texture2D" uid="uid://cwr5vawlkhwbv" path="res://assets/Char_Base.png" id="1_dqapf"]
@@ -6,6 +6,9 @@
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_q78gm"]
 radius = 13.0
 height = 60.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s6dbe"]
+radius = 36.0555
 
 [node name="Enemy" type="CharacterBody2D"]
 collision_layer = 4
@@ -34,3 +37,10 @@ offset_bottom = -38.0
 text = "Test"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_s6dbe")
+debug_color = Color(0.627451, 0.513726, 0, 0.184314)

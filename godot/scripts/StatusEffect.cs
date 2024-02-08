@@ -24,13 +24,17 @@ public class StatusEffect
         // Currently there is no stackable status effect yet
         // So we're doing it this way
         // Find out if the status effect is already applied
-        var status = target.StatusEffectList.Find(x => x.GetId() == x.Name);
-        if ()
+        var status = target.StatusEffectList.Find(x => x.StatusEffectName == StatusEffectName);
+        if (status != null)
         {
             if (IsStackable)
             {
-                target.StatusEffectList[0] = this;
+                status.NumberOfStacks++;
             }
+        }
+        else
+        {
+            target.StatusEffectList.Add(this);
         }
     }
 }
