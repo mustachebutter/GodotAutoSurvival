@@ -1,6 +1,6 @@
 [gd_scene load_steps=29 format=3 uid="uid://djts0v7e7gbt2"]
 
-[ext_resource type="Script" path="res://scripts/Player.cs" id="1_qfkuu"]
+[ext_resource type="Script" path="res://scripts/Characters/Player.cs" id="1_qfkuu"]
 [ext_resource type="Texture2D" uid="uid://cwr5vawlkhwbv" path="res://assets/Char_Base.png" id="2_klivf"]
 
 [sub_resource type="Animation" id="Animation_pw51j"]
@@ -240,7 +240,6 @@ radius = 36.0555
 [node name="CharacterBody2D" type="CharacterBody2D"]
 scale = Vector2(2, 2)
 script = ExtResource("1_qfkuu")
-_health = 100.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../Sprite2D")

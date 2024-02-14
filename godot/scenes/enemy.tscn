@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://cqafwyf6svfis"]
 
-[ext_resource type="Script" path="res://scripts/Enemy.cs" id="1_5rjk2"]
+[ext_resource type="Script" path="res://scripts/Characters/Enemy.cs" id="1_5rjk2"]
 [ext_resource type="Texture2D" uid="uid://cwr5vawlkhwbv" path="res://assets/Char_Base.png" id="1_dqapf"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_q78gm"]

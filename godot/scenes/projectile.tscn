@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dndk734dkrbd"]
 
-[ext_resource type="Script" path="res://scripts/Projectile.cs" id="1_6fc67"]
+[ext_resource type="Script" path="res://scripts/Projectiles/Projectile.cs" id="1_4n05f"]
 [ext_resource type="SpriteFrames" uid="uid://d3aufqsmxp4er" path="res://assets/sprite_frames/Projectiles.tres" id="1_slh5x"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1oc1p"]
@@ -12,7 +12,7 @@ radius = 10.198
 [node name="CharacterBody2D" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 4
-script = ExtResource("1_6fc67")
+script = ExtResource("1_4n05f")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 rotation = -3.14159
