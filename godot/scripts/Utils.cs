@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -52,6 +53,25 @@ public static class Utils
 		return closestNode;
 	}
 	
+	public static Timer CreateTimer(Node2D parentNode, Action function, float seconds = 0.0f, bool isOneShot = true)
+	{
+		if (seconds <= 0) return null;
+
+		Timer timer = new Timer();
+		parentNode?.AddChild(timer);
+		timer.WaitTime = seconds;
+		timer.OneShot = isOneShot;
+		timer.Connect("timeout", Callable.From(function));
+
+		return timer;
+	}
+
+	public static void DestroyTimer(Timer timer)
+	{
+		timer.Stop();
+		timer.QueueFree();
+	}
+
 	// !!!!!! DEBUG ONLY
 	public static Enemy CreateDummy(Vector2 position, PackedScene enemyScene, Main main)
 	{

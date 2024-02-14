@@ -22,7 +22,6 @@ public partial class Main : Node2D
 		GetTree().DebugCollisionsHint = true;
 		// !!!!!! DEBUG ONLY
 		
-		_timer = GetNode<Timer>("Timer");
 		// for (int i = 0; i < number; i++)
 		// {
 		// 	Vector2 randomPosition = new Vector2((float) GD.RandRange(0.0f, 800.0f), (float) GD.RandRange(000.0f, 600.0f));
@@ -50,11 +49,8 @@ public partial class Main : Node2D
 		if (seconds > 0)
 		{	
 			CreateProjectile();
-			_timer.WaitTime = seconds;
-			_timer.OneShot = false;
-			_timer.Connect("timeout", new Callable(this, "OnTimerTimeout"));
-
-			_timer.Start();
+			_timer = Utils.CreateTimer(this, OnTimerTimeout, seconds, false);
+			_timer?.Start();
 
 		}
 	}
