@@ -15,11 +15,9 @@ public partial class BaseCharacter : CharacterBody2D
 
     private bool _isDead = false;
     private List<StatusEffect> _statusEffectList = new List<StatusEffect>();
-
+    private DamageNumberComponent damageNumberComponent;
 
 	public Area2D Area2D;
-
-
 
     public bool IsDead
     {
@@ -41,13 +39,18 @@ public partial class BaseCharacter : CharacterBody2D
         Area2D = GetNode<Area2D>("Area2D");
 		var circle = (CircleShape2D) Area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
 		circle.Radius = AttackRange / 2;
+
+        damageNumberComponent = GetNode<DamageNumberComponent>("DamageNumberComponent");
     }
 
     public bool DealDamageToCharacter(float damage = 0.0f)
     {
         if (damage > 0)
+        {
 			Health -= damage;
-
+            damageNumberComponent.UpdateText(damage.ToString());
+        }
+        
         return IsDead;
     }
 }

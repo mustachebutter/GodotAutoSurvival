@@ -24,6 +24,10 @@ window/size/viewport_height=900
 
 project/assembly_name="RustAutoSurvival"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/UI/plugin.cfg")
+
 [input]
 
 Up={
