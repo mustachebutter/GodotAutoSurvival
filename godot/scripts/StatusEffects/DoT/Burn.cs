@@ -1,8 +1,8 @@
 using Godot;
 
-public class Aflame : DotStatusEffect
+public class Burn : DotStatusEffect
 {
-    public Aflame(
+    public Burn(
         Node2D source,
         string statusEffectId,
         string statusEffectName,
@@ -11,6 +11,7 @@ public class Aflame : DotStatusEffect
         int numberOfStacks,
         float duration,
         float damage,
+        DamageTypes damageType,
         float tickPerSec
     ) : base (
         source,
@@ -21,6 +22,7 @@ public class Aflame : DotStatusEffect
         numberOfStacks,
         duration,
         damage,
+        damageType,
         tickPerSec
     )
     {    }

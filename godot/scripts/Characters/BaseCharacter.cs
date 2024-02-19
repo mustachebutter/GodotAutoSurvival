@@ -14,7 +14,7 @@ public partial class BaseCharacter : CharacterBody2D
     public float Speed { get; private set; } = 100.0f;
 
     private bool _isDead = false;
-    private List<StatusEffect> _statusEffectList = new List<StatusEffect>();
+    public List<StatusEffect> StatusEffectList { get; private set; } = new List<StatusEffect>();
     private DamageNumberComponent damageNumberComponent;
 
 	public Area2D Area2D;
@@ -31,8 +31,6 @@ public partial class BaseCharacter : CharacterBody2D
         private set { _isDead = value; }
     }
 
-    public List<StatusEffect> StatusEffectList { get; set; }
-
     public override void _Ready()
     {
         base._Ready();
@@ -43,14 +41,44 @@ public partial class BaseCharacter : CharacterBody2D
         damageNumberComponent = GetNode<DamageNumberComponent>("DamageNumberComponent");
     }
 
-    public bool DealDamageToCharacter(float damage = 0.0f)
+    public bool DealDamageToCharacter(float damage = 0.0f, DamageTypes damageType = DamageTypes.Normal)
     {
         if (damage > 0)
         {
 			Health -= damage;
-            damageNumberComponent.UpdateText(damage.ToString());
+            damageNumberComponent.UpdateText(damage.ToString(), damageType);
         }
         
         return IsDead;
+    }
+
+    public void ApplyEffectToCharacter(StatusEffect effect)
+    {
+        effect.Target = this;
+        // Should do custom logic here
+        // eg. Stackable status
+        if (StatusEffectList == null) return;
+
+        // Currently there is no stackable status effect yet
+        // So we're doing it this way
+        // Find out if the status effect is already applied
+        var status = StatusEffectList.Find(x => x.StatusEffectName == effect.StatusEffectName);
+        if (status != null)
+        {
+            // if (IsStackable)
+            // {
+            //     status.NumberOfStacks++;
+            // }
+        }
+        else
+        {
+            StatusEffectList.Add(effect);
+            effect.StartStatusEffect(this);
+        }
+
+        GD.PrintErr(StatusEffectList[0]);
+        
+        // This is the main timer for the buff/debuff
+        effect.StartMainTimer();
     }
 }

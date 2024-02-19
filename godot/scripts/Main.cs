@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public partial class Main : Node2D
 {
 	private Timer _timer;
-	private PackedScene _projectileScene = (PackedScene) GD.Load(Scenes.ProjectileZap);
+	private PackedScene _projectileScene = (PackedScene) GD.Load(Scenes.ProjectileFireball);
 	private Projectile _projectile;
 	private PackedScene _playerScene = (PackedScene) GD.Load("res://scenes/player.tscn");
 	private Player _player;
@@ -67,10 +67,10 @@ public partial class Main : Node2D
 
 		if (closestTarget == null) return;
 
-		_projectile = (Zap) _projectileScene.Instantiate();
+		_projectile = (Fireball) _projectileScene.Instantiate();
 		_projectile.OnEnemyKilledEvent += HandleEnemyDead;
 		AddChild(_projectile);
-		_player.FireProjectileAtTarget(closestTarget, _projectile, ProjectileTypes.Zap);
+		_player.FireProjectileAtTarget(closestTarget, _projectile, ProjectileTypes.Fireball);
 	}
 	private void HandleEnemyDead(Enemy enemy)
 	{

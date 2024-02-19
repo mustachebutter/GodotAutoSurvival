@@ -5,7 +5,8 @@ using Godot;
 [Tool]
 public partial class DamageNumberComponent : Node2D
 {
-	// public Label Label { get; private set; }
+	private LabelSettings defaultLabelSettings = Utils.CreateLabelSettings(Colors.WHITE, Colors.BLACK, 20);
+	private LabelSettings critLabelSettings = Utils.CreateLabelSettings(Colors.RED, Colors.BLACK, 20);
 	public AnimationPlayer AnimationPlayer { get; private set; }
 	public List<Label> labels = new List<Label>();
 
@@ -16,6 +17,29 @@ public partial class DamageNumberComponent : Node2D
 		AnimationPlayer.AnimationFinished += OnFinishedAnimation;
 	}
 
+	public void UpdateText(string text, DamageTypes damageType)
+	{
+		Label label = new Label();
+		labels.Add(label);
+
+		Color fontColor = damageType switch
+		{
+			DamageTypes.Fire => Colors.RED,
+			DamageTypes.Electric => Colors.YELLOW,
+			DamageTypes.Normal => Colors.WHITE,
+			_ => Colors.WHITE
+		};
+
+		// If normal damage then this color
+		label.LabelSettings = defaultLabelSettings;
+		label.LabelSettings.FontColor = fontColor;
+		//TODO: If crits then change to critLabelSettings
+		label.Text = text;
+
+		AddChild(label);
+		AnimationPlayer.Play("text_start");
+	}
+
 	private void OnFinishedAnimation(StringName animName)
 	{
 		GD.Print("Finished animation");
@@ -23,12 +47,4 @@ public partial class DamageNumberComponent : Node2D
 		labels.RemoveAt(0);
 	}
 
-	public void UpdateText(string text)
-	{
-		labels.Add(new Label());
-		labels[0].Text = text;
-
-		AddChild(labels[0]);
-		AnimationPlayer.Play("text_start");
-	}
 }

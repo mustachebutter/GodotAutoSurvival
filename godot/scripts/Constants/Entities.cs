@@ -10,10 +10,18 @@ public static class ProjectileTypes
     public static string Fireball = "Fireball";
 }
 
+public enum DamageTypes
+{
+    Fire,
+    Electric,
+    Normal,
+}
+
 public static class Scenes
 {
     public static string Projectile = "res://scenes/projectile.tscn";
     public static string ProjectileZap = "res://scenes/projectile_zap.tscn";
+    public static string ProjectileFireball = "res://scenes/projectile_fireball.tscn";
     public static string Player = "res://scenes/projectile.tscn";
     public static string Enemy = "res://scenes/projectile.tscn";
 }

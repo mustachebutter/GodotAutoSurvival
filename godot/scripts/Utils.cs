@@ -4,6 +4,7 @@ using Godot;
 
 public static class Utils
 {
+	public static Font font = GD.Load<Font>("res://assets/fonts/VCR_OSD_MONO_1.001.ttf");
 	public static Node2D FindClosestTarget(Vector2 sourcePosition, Area2D area2D)
 	{
 		var enemyNodes = area2D.GetOverlappingBodies();
@@ -72,6 +73,19 @@ public static class Utils
 		timer.QueueFree();
 	}
 
+	public static LabelSettings CreateLabelSettings(Color color, Color outlineColor, int fontSize = 10, int outlineSize = 3)
+	{		
+		LabelSettings labelSettings = new LabelSettings();
+		labelSettings.Font = font;
+
+		labelSettings.FontColor = color;
+		labelSettings.FontSize = fontSize;
+
+		labelSettings.OutlineColor = outlineColor;
+		labelSettings.OutlineSize = outlineSize;
+
+		return labelSettings;
+	}
 	// !!!!!! DEBUG ONLY
 	public static Enemy CreateDummy(Vector2 position, PackedScene enemyScene, Main main)
 	{
