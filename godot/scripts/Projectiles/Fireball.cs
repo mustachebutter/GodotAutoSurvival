@@ -7,8 +7,8 @@ public partial class Fireball : Projectile
 		StatusEffect = new Burn(
 			this,
 			"Status_DOT_Burn", "Burn", "Burns the target, ticks damage every x seconds",
-			false, 0, 1.0f,
-			1.0f, DamageTypes.Fire, 0.1f
+			false, 0, 3.0f,
+			1.0f, DamageTypes.Fire, 0.3f
 		);
 	}
 

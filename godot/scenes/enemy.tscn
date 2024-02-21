@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/Characters/Enemy.cs" id="1_5rjk2"]
 [ext_resource type="Texture2D" uid="uid://cwr5vawlkhwbv" path="res://assets/Char_Base.png" id="1_dqapf"]
 [ext_resource type="Script" path="res://scripts/Components/DamageNumberComponent.cs" id="3_377bk"]
-[ext_resource type="LabelSettings" path="res://assets/label_settings/" id="4_hjvca"]
+[ext_resource type="Animation" uid="uid://dtgdfkwcfxre3" path="res://assets/animations/text_start.res" id="4_wav0v"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_q78gm"]
 radius = 13.0
@@ -39,48 +39,15 @@ tracks/1/keys = {
 "values": [Color(1, 1, 1, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_2jc7w"]
-resource_name = "text_start"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(35, 0), Vector2(35, -60)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Label:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.8, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath(".")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
-"values": []
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6x52y"]
 _data = {
 "RESET": SubResource("Animation_wqtft"),
-"text_start": SubResource("Animation_2jc7w")
+"text_start": ExtResource("4_wav0v")
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rtoxd"]
+_data = {
+"text_start": ExtResource("4_wav0v")
 }
 
 [node name="Enemy" type="CharacterBody2D"]
@@ -124,7 +91,8 @@ script = ExtResource("3_377bk")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="DamageNumberComponent"]
 libraries = {
-"": SubResource("AnimationLibrary_6x52y")
+"": SubResource("AnimationLibrary_6x52y"),
+"UI": SubResource("AnimationLibrary_rtoxd")
 }
 
 [node name="Label" type="Label" parent="DamageNumberComponent"]
@@ -136,6 +104,5 @@ offset_right = 21.0
 offset_bottom = 13.0
 theme_override_font_sizes/font_size = 20
 text = "10"
-label_settings = ExtResource("4_hjvca")
 horizontal_alignment = 1
 vertical_alignment = 1

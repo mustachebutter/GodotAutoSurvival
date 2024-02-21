@@ -52,8 +52,9 @@ public class DotStatusEffect : StatusEffect
 	public override void OnStatusEffectEnd()
 	{
 		base.OnStatusEffectEnd();
+		GD.PrintRich("[color=red] End Status effect [/color]");
 		// IF oneshot then I don't think we need to do this
 		// Utils.DestroyTimer(MainTimer);
-		Utils.DestroyTimer(_tickTimer);
+		// Utils.DestroyTimer(_tickTimer);
 	}
 }

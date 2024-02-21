@@ -70,7 +70,7 @@ public static class Utils
 	public static void DestroyTimer(Timer timer)
 	{
 		timer.Stop();
-		timer.QueueFree();
+		// timer.QueueFree();
 	}
 
 	public static LabelSettings CreateLabelSettings(Color color, Color outlineColor, int fontSize = 10, int outlineSize = 3)
@@ -86,6 +86,7 @@ public static class Utils
 
 		return labelSettings;
 	}
+
 	// !!!!!! DEBUG ONLY
 	public static Enemy CreateDummy(Vector2 position, PackedScene enemyScene, Main main)
 	{
