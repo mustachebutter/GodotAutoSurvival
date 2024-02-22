@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://cqafwyf6svfis"]
+[gd_scene load_steps=11 format=3 uid="uid://cqafwyf6svfis"]
 
 [ext_resource type="Script" path="res://scripts/Characters/Enemy.cs" id="1_5rjk2"]
 [ext_resource type="Texture2D" uid="uid://cwr5vawlkhwbv" path="res://assets/Char_Base.png" id="1_dqapf"]
 [ext_resource type="Script" path="res://scripts/Components/DamageNumberComponent.cs" id="3_377bk"]
 [ext_resource type="Animation" uid="uid://dtgdfkwcfxre3" path="res://assets/animations/text_start.res" id="4_wav0v"]
+[ext_resource type="SpriteFrames" uid="uid://c7yenip1an2se" path="res://assets/sprite_frames/Effects.tres" id="5_pu6l4"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_q78gm"]
 radius = 13.0
@@ -106,3 +107,8 @@ theme_override_font_sizes/font_size = 20
 text = "10"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="VFXSlot" type="AnimatedSprite2D" parent="."]
+position = Vector2(0.500001, -10.5)
+scale = Vector2(0.78125, 1.34375)
+sprite_frames = ExtResource("5_pu6l4")

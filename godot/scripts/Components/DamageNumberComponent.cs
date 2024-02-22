@@ -43,10 +43,10 @@ public partial class DamageNumberComponent : Node2D
 		AnimationPlayer animPlayer = new AnimationPlayer();
 		AnimationPlayers.Add(animPlayer);
 		animPlayer.AnimationFinished += OnFinishedAnimation;
-		Animation animation = CreateAnimation(AnimationTypes.UI_DamageNumber);
+		// Animation animation = CreateAnimation(AnimationTypes.UI_DamageNumber);
 		AnimationLibrary animLibrary = new AnimationLibrary();
 
-		animLibrary.AddAnimation("text_start", animation);
+		animLibrary.AddAnimation("text_start", test);
 		animPlayer.AddAnimationLibrary("UI", animLibrary);
 
 		AddChild(animPlayer);

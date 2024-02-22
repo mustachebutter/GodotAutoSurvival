@@ -3,36 +3,19 @@ using Godot;
 
 public class StatusEffect
 {
-    private Node2D _source;
     public BaseCharacter Target { get; set; }
     public Timer MainTimer { get; private set; }
-    public string StatusEffectId { get; private set; } = "";
-    public string StatusEffectName { get; private set; } = "";
-    public string StatusEffectDesc { get; private set; } = "";
+    public Node2D Source { get; protected set; }
+    public string StatusEffectId { get; protected set; } = "";
+    public string StatusEffectName { get; protected set; } = "";
+    public string StatusEffectDesc { get; protected set; } = "";
+    public string VisualEffectName { get; protected set; } = "default";
 
-    public bool IsStackable { get; private set; } = false;
-    public int NumberOfStacks { get; private set; } = 0;
+    public bool IsStackable { get; protected set; } = false;
+    public int NumberOfStacks { get; protected set; } = 0;
 
-    public float Duration { get; private set; } = 0.0f;
+    public float Duration { get; protected set; } = 0.0f;
 
-    public StatusEffect(
-        Node2D source,
-        string statusEffectId,
-        string statusEffectName,
-        string statusEffectDesc,
-        bool isStackable,
-        int numberOfStacks,
-        float duration
-    )
-    {
-        _source = source;
-        StatusEffectId = statusEffectId;
-        StatusEffectName = statusEffectName;
-        StatusEffectDesc = statusEffectDesc;
-        IsStackable = isStackable;
-        NumberOfStacks = numberOfStacks;
-        Duration = duration;
-    }
     public virtual void StartStatusEffect (BaseCharacter target) { }
     public virtual void HandleStatusEffect () { }
     public virtual void OnStatusEffectEnd () { }
