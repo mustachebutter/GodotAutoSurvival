@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Godot;
 
 public static class ProjectileTypes
 {
@@ -19,9 +20,10 @@ public enum DamageTypes
 
 public static class Scenes
 {
-    public static string Projectile = "res://scenes/projectile.tscn";
-    public static string ProjectileZap = "res://scenes/projectile_zap.tscn";
-    public static string ProjectileFireball = "res://scenes/projectile_fireball.tscn";
-    public static string Player = "res://scenes/projectile.tscn";
-    public static string Enemy = "res://scenes/projectile.tscn";
+    public static PackedScene Projectile = (PackedScene) GD.Load("res://scenes/projectiles/projectile.tscn");
+    public static PackedScene ProjectileZap = (PackedScene) GD.Load("res://scenes/projectiles/projectile_zap.tscn");
+    public static PackedScene ProjectileFireball = (PackedScene) GD.Load("res://scenes/projectiles/projectile_fireball.tscn");
+    public static PackedScene Player = (PackedScene) GD.Load("res://scenes/characters/player.tscn");
+    public static PackedScene Enemy = (PackedScene) GD.Load("res://scenes/characters/enemy.tscn");
+    public static PackedScene UiDamageNumber = (PackedScene) GD.Load("res://scenes/ui/damage_number_component.tscn");
 }

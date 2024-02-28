@@ -6,11 +6,11 @@ using System.Collections.Generic;
 public partial class Main : Node2D
 {
 	private Timer _timer;
-	private PackedScene _projectileScene = (PackedScene) GD.Load(Scenes.ProjectileFireball);
+	private PackedScene _projectileScene = Scenes.ProjectileFireball;
 	private Projectile _projectile;
-	private PackedScene _playerScene = (PackedScene) GD.Load("res://scenes/player.tscn");
+	private PackedScene _playerScene = Scenes.Player;
 	private Player _player;
-	private PackedScene _enemyScene = (PackedScene) GD.Load("res://scenes/enemy.tscn");
+	private PackedScene _enemyScene = Scenes.Enemy;
 	private List<Enemy> dummies = new List<Enemy>();
 
 	// TEMP

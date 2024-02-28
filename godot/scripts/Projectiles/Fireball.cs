@@ -15,7 +15,7 @@ public partial class Fireball : Projectile
 	public override void HandleProjectileEffect(Enemy enemy)
 	{
 		base.HandleProjectileEffect(enemy);
-		enemy.ApplyEffectToCharacter(StatusEffect);
+		enemy.StatusEffectComponent.ApplyEffectToCharacter(StatusEffect);
 		
 	}
 }

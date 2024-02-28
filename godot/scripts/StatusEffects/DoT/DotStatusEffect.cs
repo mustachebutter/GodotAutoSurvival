@@ -28,9 +28,8 @@ public class DotStatusEffect : StatusEffect
 	{
 		GD.PrintRich("[color=red] End Status effect [/color]");
 		base.OnStatusEffectEnd();
-		// TODO: Should remove the effect from the target!
-		Target.ClearEffect(this);
-		Target.ClearVisualEffect();
+		Target.StatusEffectComponent.ClearEffect(this);
+		Target.VisualEffectComponent.ClearVisualEffect();
 		Target = null;
 		// IF oneshot then I don't think we need to do this
 		// Utils.DestroyTimer(MainTimer);

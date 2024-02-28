@@ -9,20 +9,18 @@ public partial class DamageNumberComponent : Node2D
 	private LabelSettings defaultLabelSettings = Utils.CreateLabelSettings(Colors.WHITE, Colors.BLACK, 20);
 	private LabelSettings critLabelSettings = Utils.CreateLabelSettings(Colors.RED, Colors.BLACK, 20);
 	public List<AnimationPlayer> AnimationPlayers { get; private set; } = new List<AnimationPlayer>();
-	public List<Label> Labels = new List<Label>();
-
-	Animation test;
-
-	public override void _Ready()
-	{
-		base._Ready();
-		test = GD.Load<Animation>("res://assets/animations/text_start.res");
-	}
+	Label _label;
+	AnimationPlayer _animationPlayer;
+	AnimatedLabel animatedLabel = new AnimatedLabel();
+	AnimationLibrary animationLibrary = GD.Load<AnimationLibrary>("res://assets/sprite_frames/UI_AnimationLibrary.res");
 
 	public void UpdateText(string text, DamageTypes damageType)
 	{
-		Label label = new Label();
-		Labels.Add(label);
+		// The reason that I have to this in here is because this is a "Tool" script and it won't call Ready unless you reload the scene
+		// And since the scene is being compiled first in Constants/Entities to quickly access. This is being done here.
+		// s: https://github.com/godotengine/godot/issues/16974
+		_label = GetNode<Label>("Label");
+		_animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 
 		Color fontColor = damageType switch
 		{
@@ -33,33 +31,20 @@ public partial class DamageNumberComponent : Node2D
 		};
 
 		// If normal damage then this color
-		label.LabelSettings = defaultLabelSettings;
-		label.LabelSettings.FontColor = fontColor;
+		_label.LabelSettings = defaultLabelSettings;
+		_label.LabelSettings.FontColor = fontColor;
 		//TODO: If crits then change to critLabelSettings
-		label.Text = text;
+		_label.Text = text;
 
-		AddChild(label);
-
-		AnimationPlayer animPlayer = new AnimationPlayer();
-		AnimationPlayers.Add(animPlayer);
-		animPlayer.AnimationFinished += OnFinishedAnimation;
-		// Animation animation = CreateAnimation(AnimationTypes.UI_DamageNumber);
-		AnimationLibrary animLibrary = new AnimationLibrary();
-
-		animLibrary.AddAnimation("text_start", test);
-		animPlayer.AddAnimationLibrary("UI", animLibrary);
-
-		AddChild(animPlayer);
-		animPlayer.Play("UI/text_start");
+		_animationPlayer.AnimationFinished += OnFinishedAnimation;
+		// _animationPlayer.AddAnimationLibrary("UI", animationLibrary);
+		_animationPlayer.Play("UI_AnimationLibrary/text_start");
 	}
 
 	private void OnFinishedAnimation(StringName animName)
 	{
 		GD.Print("Finished animation");
-		Labels[0].QueueFree();
-		Labels.RemoveAt(0);
-		AnimationPlayers[0].QueueFree();
-		AnimationPlayers.RemoveAt(0);
+		QueueFree();
 	}
 
 }

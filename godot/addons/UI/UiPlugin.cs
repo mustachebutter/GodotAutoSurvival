@@ -3,7 +3,7 @@ using Godot;
 using System;
 
 [Tool]
-public partial class DamageNumber : EditorPlugin
+public partial class UiPlugin : EditorPlugin
 {
 	public override void _EnterTree()
 	{
