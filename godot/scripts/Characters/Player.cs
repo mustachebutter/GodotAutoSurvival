@@ -1,10 +1,14 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
-public partial class Player : CharacterBody2D
+public partial class Player : BaseCharacter
 {
-	[Export]
-	public const float Speed = 100.0f;
+
+	public override void _Ready()
+	{
+		base._Ready();
+	}
 
 	public override void _PhysicsProcess(double delta)
 	{
@@ -51,7 +55,22 @@ public partial class Player : CharacterBody2D
 
 		// Normalized the Vector
 		velocity = velocity.Normalized() * Speed;
+
 		Velocity = velocity;
 		MoveAndSlide();
+
+		if (Input.IsActionJustPressed("Action"))
+		{
+			GD.Print($"PLAYER - {Position}");
+		}
+
+	}
+
+	public void FireProjectileAtTarget(Node2D closestTarget, Projectile projectile, string projectileType)
+	{
+		GD.PrintRich("[color=green]HERE![/color]");
+
+		projectile.AnimationName = projectileType;
+		projectile.ShootAtTarget(Position, closestTarget.Position, AttackRange);
 	}
 }
