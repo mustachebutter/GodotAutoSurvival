@@ -1,0 +1,108 @@
+[gd_scene load_steps=20 format=3 uid="uid://dbdnns350c6vs"]
+
+[ext_resource type="PackedScene" uid="uid://jlhhk6jfrg8f" path="res://scenes/characters/base_character.tscn" id="1_748nw"]
+[ext_resource type="Script" path="res://scripts/Characters/Player.cs" id="2_5kg0v"]
+[ext_resource type="AnimationLibrary" uid="uid://bs7h2pvx5kxn4" path="res://assets/sprite_frames/Player_AnimationLibrary.res" id="3_lslaa"]
+[ext_resource type="Texture2D" uid="uid://cwr5vawlkhwbv" path="res://assets/Char_Base.png" id="3_op5oa"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pbtwt"]
+size = Vector2(24, 58)
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vjk7e"]
+animation = &"Player_AnimationLibrary/idle_left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_lcxjj"]
+animation = &"Player_AnimationLibrary/idle_up"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_cnqbd"]
+animation = &"Player_AnimationLibrary/idle_down"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_flm8w"]
+animation = &"Player_AnimationLibrary/idle_right"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_80rvc"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_vjk7e")
+blend_point_0/pos = Vector2(-1, 0)
+blend_point_1/node = SubResource("AnimationNodeAnimation_lcxjj")
+blend_point_1/pos = Vector2(0, -1)
+blend_point_2/node = SubResource("AnimationNodeAnimation_cnqbd")
+blend_point_2/pos = Vector2(0, 1)
+blend_point_3/node = SubResource("AnimationNodeAnimation_flm8w")
+blend_point_3/pos = Vector2(1, 0)
+blend_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_w7w37"]
+animation = &"Player_AnimationLibrary/walk_left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_10p5d"]
+animation = &"Player_AnimationLibrary/walk_right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_w5bp6"]
+animation = &"Player_AnimationLibrary/walk_up"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ckoo7"]
+animation = &"Player_AnimationLibrary/walk_down"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_pxaio"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_w7w37")
+blend_point_0/pos = Vector2(-1, 0)
+blend_point_1/node = SubResource("AnimationNodeAnimation_10p5d")
+blend_point_1/pos = Vector2(1, 0)
+blend_point_2/node = SubResource("AnimationNodeAnimation_w5bp6")
+blend_point_2/pos = Vector2(0, -1)
+blend_point_3/node = SubResource("AnimationNodeAnimation_ckoo7")
+blend_point_3/pos = Vector2(0, 1)
+blend_mode = 1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2txs1"]
+switch_mode = 1
+advance_mode = 2
+advance_condition = &"isWalking"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_vvx55"]
+switch_mode = 1
+advance_mode = 2
+advance_condition = &"idle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_t3wc3"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_w7mxk"]
+states/Idle/node = SubResource("AnimationNodeBlendSpace2D_80rvc")
+states/Idle/position = Vector2(327, 100)
+states/Walk/node = SubResource("AnimationNodeBlendSpace2D_pxaio")
+states/Walk/position = Vector2(524, 101)
+transitions = ["Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_2txs1"), "Walk", "Idle", SubResource("AnimationNodeStateMachineTransition_vvx55"), "Start", "Idle", SubResource("AnimationNodeStateMachineTransition_t3wc3")]
+
+[node name="Player" instance=ExtResource("1_748nw")]
+script = ExtResource("2_5kg0v")
+AttackRange = 500.0
+
+[node name="Sprite2D (Preview)" parent="." index="0"]
+position = Vector2(0, 0)
+texture = ExtResource("3_op5oa")
+hframes = 8
+vframes = 8
+
+[node name="CollisionShape2D" parent="." index="4"]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_pbtwt")
+
+[node name="Area2D" parent="." index="5"]
+collision_layer = 8
+collision_mask = 4
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="6"]
+root_node = NodePath("../Sprite2D (Preview)")
+libraries = {
+"Player_AnimationLibrary": ExtResource("3_lslaa")
+}
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="7"]
+tree_root = SubResource("AnimationNodeStateMachine_w7mxk")
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/conditions/idle = false
+parameters/conditions/isWalking = false
+parameters/Idle/blend_position = Vector2(0.0601625, 0.151291)
+parameters/Walk/blend_position = Vector2(-0.108943, 0.549816)

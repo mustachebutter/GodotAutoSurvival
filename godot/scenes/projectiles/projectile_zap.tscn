@@ -1,13 +1,13 @@
 [gd_scene load_steps=4 format=3 uid="uid://cbigttm4m6c36"]
 
-[ext_resource type="PackedScene" uid="uid://dndk734dkrbd" path="res://scenes/projectile.tscn" id="1_qiql8"]
-[ext_resource type="Script" path="res://scripts/Projectiles/Zap.cs" id="2_7utdn"]
+[ext_resource type="PackedScene" uid="uid://dndk734dkrbd" path="res://scenes/projectiles/projectile.tscn" id="1_jivve"]
+[ext_resource type="Script" path="res://scripts/Projectiles/Zap.cs" id="2_h771y"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2ah64"]
 radius = 3.0
 
-[node name="CharacterBody2D" instance=ExtResource("1_qiql8")]
-script = ExtResource("2_7utdn")
+[node name="CharacterBody2D" instance=ExtResource("1_jivve")]
+script = ExtResource("2_h771y")
 
 [node name="Sprite" parent="." index="0"]
 animation = &"Zap"
