@@ -7,7 +7,7 @@ public partial class BaseCharacter : CharacterBody2D
 	[Export(PropertyHint.Range, "0, 1000, 1")]
 	public float Health { get; private set;} = 100.0f;
 	[Export(PropertyHint.Range, "0, 3, 0.1")]
-	public float AttackSpeed { get; private set; } = 0.5f;
+	public float AttackSpeed { get; set; } = 0.5f;
 	[Export(PropertyHint.Range, "0, 1000, 1")]
 	public float AttackRange { get; private set; } = 300.0f;
 	[Export(PropertyHint.Range, "0, 1000, 1")]
