@@ -43,7 +43,6 @@ public partial class DamageNumberComponent : Node2D
 
 	private void OnFinishedAnimation(StringName animName)
 	{
-		GD.Print("Finished animation");
 		QueueFree();
 	}
 

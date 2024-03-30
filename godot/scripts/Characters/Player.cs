@@ -13,7 +13,6 @@ public partial class Player : BaseCharacter
 	public override void _PhysicsProcess(double delta)
 	{
 		Vector2 velocity = new Vector2();
-
 		if (Input.IsActionPressed("Up"))
 		{
 			velocity.Y -= 1;
@@ -58,18 +57,10 @@ public partial class Player : BaseCharacter
 
 		Velocity = velocity;
 		MoveAndSlide();
-
-		if (Input.IsActionJustPressed("Action"))
-		{
-			GD.Print($"PLAYER - {Position}");
-		}
-
 	}
 
 	public void FireProjectileAtTarget(Node2D closestTarget, Projectile projectile, string projectileType)
 	{
-		GD.PrintRich("[color=green]HERE![/color]");
-
 		projectile.AnimationName = projectileType;
 		projectile.ShootAtTarget(Position, closestTarget.Position, AttackRange);
 	}

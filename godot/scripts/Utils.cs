@@ -8,7 +8,6 @@ public static class Utils
 	public static Node2D FindClosestTarget(Vector2 sourcePosition, Area2D area2D)
 	{
 		var enemyNodes = area2D.GetOverlappingBodies();
-		GD.PrintRich($"[color=yellow]{enemyNodes.Count}[/color]");
 		if (enemyNodes == null) return null;
 
 
@@ -21,11 +20,9 @@ public static class Utils
 			{
 				closestDistance = distance;
 				closestNode = e;
-				GD.Print($"Should be in here - {closestNode.Name}\n");
 			}
 		}
 
-		GD.Print($"Should be the closest - {closestNode?.Name}\n");
 		return closestNode;
 	}
 
@@ -39,12 +36,10 @@ public static class Utils
 		foreach (var e in enemyNodes)
 		{
 			float distance = sourcePosition.DistanceTo(e.Position);
-			GD.Print($"Hit - {e.Name} - {distance} - {enemyToIgnore.Name} - {closestNode == null || distance < closestDistance}");
 			if ((Enemy) e != enemyToIgnore)
 			{
 				if (closestNode == null || distance < closestDistance)
 				{
-					GD.Print("In here");
 					closestDistance = distance;
 					closestNode = e;
 				}
@@ -69,8 +64,18 @@ public static class Utils
 
 	public static void DestroyTimer(Timer timer)
 	{
-		timer.Stop();
-		timer.QueueFree();
+		try
+		{
+			ArgumentNullException.ThrowIfNull(timer);
+		}
+		catch
+		{
+			GD.PrintErr($"ERROR [{nameof(Utils)}]: Tried to destroy a null timer.");
+			throw;
+		}
+
+		timer?.Stop();
+		timer?.QueueFree();
 	}
 
 	public static LabelSettings CreateLabelSettings(Color color, Color outlineColor, int fontSize = 10, int outlineSize = 3)

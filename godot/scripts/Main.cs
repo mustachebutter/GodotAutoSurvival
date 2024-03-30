@@ -63,7 +63,6 @@ public partial class Main : Node2D
 	private void CreateProjectile()
 	{
 		Node2D closestTarget = Utils.FindClosestTarget(Position, _player.Area2D);
-		GD.PrintRich("[color=orange]HA![/color]");
 
 		if (closestTarget == null) return;
 

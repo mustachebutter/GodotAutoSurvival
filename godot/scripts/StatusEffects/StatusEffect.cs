@@ -22,10 +22,24 @@ public class StatusEffect
 
     //Entry point for Status Effect, which is invoked in Projectile or any source of damage.
 
-    public void StartMainTimer()
+    public void CreateMainTimer()
     {
         // This is the main timer for the buff/debuff
         MainTimer = Utils.CreateTimer(Target, OnStatusEffectEnd, Duration, true);
-        MainTimer?.Start();
     }
+
+    public void StartMainTimer()
+    {
+        try
+        {
+            ArgumentNullException.ThrowIfNull(MainTimer);
+        }
+        catch (ArgumentNullException e)
+        {
+            GD.PrintErr("ERROR: Main Timer is not created! Please create one before starting");
+            throw;
+        }   
+        
+        MainTimer?.Start();
+    } 
 }

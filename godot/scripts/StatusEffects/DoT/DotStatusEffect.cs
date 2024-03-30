@@ -21,12 +21,11 @@ public class DotStatusEffect : StatusEffect
 	{
 		// Tick damage
 		Target.DealDamageToCharacter(Damage, DamageTypes.Fire);
-		GD.PrintErr("Tick");
 	}
 
 	public override void OnStatusEffectEnd()
 	{
-		GD.PrintRich("[color=red] End Status effect [/color]");
+		GD.Print("This shouldn't be called if it should be refreshed");
 		base.OnStatusEffectEnd();
 		Target.StatusEffectComponent.ClearEffect(this);
 		Target.VisualEffectComponent.ClearVisualEffect();
