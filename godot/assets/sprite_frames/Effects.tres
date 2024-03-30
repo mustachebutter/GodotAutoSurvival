@@ -1,6 +1,7 @@
-[gd_resource type="SpriteFrames" load_steps=14 format=3 uid="uid://c7yenip1an2se"]
+[gd_resource type="SpriteFrames" load_steps=27 format=3 uid="uid://c7yenip1an2se"]
 
 [ext_resource type="Texture2D" uid="uid://dv8q1051h48yp" path="res://assets/sprite_frames/05.png" id="1_45ml8"]
+[ext_resource type="Texture2D" uid="uid://br0d0ww8hojjf" path="res://assets/VFX_Ground_Fire_Explosion.png" id="2_rqvbw"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qw6kt"]
 atlas = ExtResource("1_45ml8")
@@ -50,6 +51,54 @@ region = Rect2(128, 32, 32, 32)
 atlas = ExtResource("1_45ml8")
 region = Rect2(160, 32, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_qs4u0"]
+atlas = ExtResource("2_rqvbw")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i5w8a"]
+atlas = ExtResource("2_rqvbw")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_safc0"]
+atlas = ExtResource("2_rqvbw")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nluel"]
+atlas = ExtResource("2_rqvbw")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_haiem"]
+atlas = ExtResource("2_rqvbw")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3ousn"]
+atlas = ExtResource("2_rqvbw")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lecmk"]
+atlas = ExtResource("2_rqvbw")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mdr37"]
+atlas = ExtResource("2_rqvbw")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b7b6y"]
+atlas = ExtResource("2_rqvbw")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lvrb2"]
+atlas = ExtResource("2_rqvbw")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dxull"]
+atlas = ExtResource("2_rqvbw")
+region = Rect2(128, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xsu6k"]
+atlas = ExtResource("2_rqvbw")
+region = Rect2(160, 32, 32, 32)
+
 [resource]
 animations = [{
 "frames": [],
@@ -97,4 +146,45 @@ animations = [{
 "loop": true,
 "name": &"vfx_burn",
 "speed": 60.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qs4u0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i5w8a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_safc0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nluel")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_haiem")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3ousn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lecmk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mdr37")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b7b6y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lvrb2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dxull")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xsu6k")
+}],
+"loop": true,
+"name": &"vfx_burn_explosion",
+"speed": 15.0
 }]
