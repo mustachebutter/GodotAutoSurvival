@@ -21,6 +21,7 @@ public class DotStatusEffect : StatusEffect
 	{
 		// Tick damage
 		Target.DealDamageToCharacter(Damage, DamageTypes.Fire);
+		Target.OnCharacterDeadEvent += OnTargetDied;
 	}
 
 	public override void OnStatusEffectEnd()

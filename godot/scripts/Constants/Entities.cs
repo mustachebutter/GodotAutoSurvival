@@ -26,4 +26,5 @@ public static class Scenes
     public static PackedScene Player = (PackedScene) GD.Load("res://scenes/characters/player.tscn");
     public static PackedScene Enemy = (PackedScene) GD.Load("res://scenes/characters/enemy.tscn");
     public static PackedScene UiDamageNumber = (PackedScene) GD.Load("res://scenes/ui/damage_number_component.tscn");
+    public static PackedScene VfxBurnExplosion = (PackedScene) GD.Load("res://scenes/vfx/vfx_burn_explosion.tscn");
 }

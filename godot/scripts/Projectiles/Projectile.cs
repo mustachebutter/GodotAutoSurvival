@@ -15,10 +15,9 @@ public partial class Projectile : CharacterBody2D
 	protected bool _shouldDestroyProjectile = false;
 	protected bool _shouldDamageEnemy = false;
 	protected List<Enemy> _bouncedEnemies = new List<Enemy>();
-
 	public delegate void OnEnemyKilledHandler(Enemy enemy);
 	public event OnEnemyKilledHandler OnEnemyKilledEvent;
-	
+
 	[Export]
 	public float Speed = 200.0f;
 	[Export]
@@ -42,37 +41,39 @@ public partial class Projectile : CharacterBody2D
 	public override void _Process(double delta)
 	{
 		KinematicCollision2D collision = MoveAndCollide(Velocity * (float) delta);
-		// Position += Velocity * (float) delta;
 
-		// var hitBodies = _bulletHeadArea2D.GetOverlappingBodies();
-		
-		// if (hitBodies != null && hitBodies.Count > 0)
-		if (collision != null && _shouldDamageEnemy)
+		if (collision != null)
 		{
 			Enemy enemy = (Enemy) collision.GetCollider();
-			GD.PrintRich($"[color=black]{enemy.Name} - {collision != null && _shouldDamageEnemy}[/color]");
-			// Enemy enemy = (Enemy) hitBodies[0];
-			if(!_bouncedEnemies.Contains(enemy))
-			{
-				_bouncedEnemies.Add(enemy);
-				// !!!!DEBUG: Be extremely careful with this
-				// It might not work on higher attack speed
-				enemy.SetCollisionLayerValue(5, true);
-				enemy.SetCollisionLayerValue(3, false);
 
-				// !!!!DEBUG
+			enemy.DealDamageToCharacter(Damage);
+			enemy.OnCharacterDeadEvent += () => HandleTargetDead(enemy);
+			
+			HandleProjectileEffect(enemy);
+			// When the projectile hits, destroy itself
+			QueueFree();
 
-				// This is where the projectile should deal damage or apply an effect
-				if (enemy.DealDamageToCharacter(Damage))
-				{
-					OnEnemyKilledEvent.Invoke(enemy);
-					enemy.QueueFree();
-					_shouldDestroyProjectile = true;
-				}
+			// if(!_bouncedEnemies.Contains(enemy))
+			// {
+			// 	_bouncedEnemies.Add(enemy);
+			// 	// !!!!DEBUG: Be extremely careful with this
+			// 	// It might not work on higher attack speed
+			// 	enemy.SetCollisionLayerValue(5, true);
+			// 	enemy.SetCollisionLayerValue(3, false);
 
-				_shouldDamageEnemy = false;
-				HandleProjectileEffect(enemy);
-			}
+			// 	// !!!!DEBUG
+
+			// 	// This is where the projectile should deal damage or apply an effect
+			// 	if (enemy.DealDamageToCharacter(Damage))
+			// 	{
+			// 		OnEnemyKilledEvent.Invoke(enemy);
+			// 		enemy.QueueFree();
+			// 		_shouldDestroyProjectile = true;
+			// 	}
+
+			// 	_shouldDamageEnemy = false;
+			// 	HandleProjectileEffect(enemy);
+			// }
 		}
 
 		_distanceTravelled += (Position - _previousPosition).Length();
@@ -117,5 +118,11 @@ public partial class Projectile : CharacterBody2D
 		// Reset some variables
 		_distanceTravelled = 0.0f;
 		_shouldDamageEnemy = true;
+	}
+
+	public void HandleTargetDead(Enemy enemy)
+	{
+		OnEnemyKilledEvent.Invoke(enemy);
+		_shouldDestroyProjectile = true;
 	}
 }

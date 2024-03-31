@@ -10,6 +10,7 @@ public partial class StatusEffectComponent : Node2D
 	public void ApplyEffectToCharacter(StatusEffect currentStatusEffect)
 	{
 		currentStatusEffect.Target = Target;
+		currentStatusEffect.CreateMainTimer();
 		// Should do custom logic here
 		// eg. Stackable status
 		if (StatusEffectList == null) return;
@@ -18,22 +19,35 @@ public partial class StatusEffectComponent : Node2D
 		// So we're doing it this way
 		// Find out if the status effect is already applied
 		var status = StatusEffectList.Find(x => x.StatusEffectId == currentStatusEffect.StatusEffectId);
+
+		// If there's already a status effect with that name in the list
 		if (status != null)
 		{
+			GD.Print($"If - {status.StatusEffectName}");
+
 			// if (IsStackable)
 			// {
 			//     status.NumberOfStacks++;
 			// }
+
+			// If not stackable then just refresh the status effect
+			if (!status.IsStackable)
+			{
+				// Refresh the timer, I'm not sure if this is needed or not
+				// currentStatusEffect.StartMainTimer();
+			}
 		}
 		else
 		{
+			GD.Print($"Else - {currentStatusEffect.StatusEffectName}");
 			StatusEffectList.Add(currentStatusEffect);
-			currentStatusEffect.StartStatusEffect(Target);
+			Target.VisualEffectComponent.PlayVisualEffect(currentStatusEffect.VisualEffectName);
 		}
-		
-		Target.VisualEffectComponent.PlayVisualEffect(currentStatusEffect.VisualEffectName);
+
+		currentStatusEffect.StartStatusEffect(Target);
 		// This is the main timer for the buff/debuff
 		currentStatusEffect.StartMainTimer();
+
 	}
 
 	public void ClearEffect(StatusEffect currentStatusEffect)

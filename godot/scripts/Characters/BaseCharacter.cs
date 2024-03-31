@@ -15,6 +15,9 @@ public partial class BaseCharacter : CharacterBody2D
 
 	private float _textOffset = 0.0f;
 	private bool _isDead = false;
+	public delegate void OnCharacterDeadHandler();
+	public event OnCharacterDeadHandler OnCharacterDeadEvent;
+
 	public DamageNumberComponent DamageNumberComponent { get; private set; }
 	public StatusEffectComponent StatusEffectComponent { get; private set; }
 	public VisualEffectComponent VisualEffectComponent { get; private set; }
@@ -47,7 +50,7 @@ public partial class BaseCharacter : CharacterBody2D
 		StatusEffectComponent.Target = this;
 	}
 
-	public bool DealDamageToCharacter(float damage = 0.0f, DamageTypes damageType = DamageTypes.Normal)
+	public void DealDamageToCharacter(float damage = 0.0f, DamageTypes damageType = DamageTypes.Normal)
 	{
 		if (damage > 0)
 		{
@@ -61,6 +64,10 @@ public partial class BaseCharacter : CharacterBody2D
 			DamageNumberComponent.UpdateText(damage.ToString(), damageType);
 		}
 		
-		return IsDead;
+		if(IsDead)
+		{
+			OnCharacterDeadEvent.Invoke();
+			QueueFree();
+		}
 	}
 }

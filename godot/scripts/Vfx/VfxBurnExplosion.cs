@@ -16,7 +16,7 @@ public partial class VfxBurnExplosion : Node2D
         CollisionShape2D = Area2D.GetNode<CollisionShape2D>("CollisionShape2D");
     }
 
-    public List<Enemy> ScanForEnemies()
+    public List<Enemy> ScanForEnemies(BaseCharacter ignoredCharacter)
     {
         List<Enemy> enemies = new List<Enemy>();
         var overlappedNodes = Area2D.GetOverlappingBodies();
@@ -28,8 +28,11 @@ public partial class VfxBurnExplosion : Node2D
 
         foreach (var node in overlappedNodes)
         {
-            enemies.Add((Enemy) node);
-            GD.Print($"Found enemy - {node.Name}");
+            if (node != ignoredCharacter)
+            {
+                enemies.Add((Enemy) node);
+                GD.Print($"Found enemy - {node.Name}");
+            }
         }
 
         return enemies;

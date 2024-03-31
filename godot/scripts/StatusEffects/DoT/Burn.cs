@@ -34,6 +34,23 @@ public class Burn : DotStatusEffect
     {
         base.OnTargetDied();
         // When the target died, spread to other closeby targets
+        //Add to tree
+        VfxBurnExplosion vfxBurnExplosion = (VfxBurnExplosion) Scenes.VfxBurnExplosion.Instantiate();
+        Target.AddChild(vfxBurnExplosion);
+        vfxBurnExplosion.PlayVisualEffects();
+        // Scan for nearby targets
+        var enemies = vfxBurnExplosion.ScanForEnemies(Target);
+        GD.Print(enemies);
+        if (enemies.Count > 0)
+        {
+            foreach (var enemy in enemies)
+            {
+                // Deals damage to nearby targets
+                // Apply debuffs to nearby targets
+                enemy.StatusEffectComponent.ApplyEffectToCharacter(this);
+                enemy.DealDamageToCharacter(Damage, DamageTypes.Normal);
+            }
+        }
     }
 
 }
