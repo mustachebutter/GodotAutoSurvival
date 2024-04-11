@@ -29,6 +29,7 @@ script = ExtResource("3_ac2co")
 
 [node name="VisualEffectComponent" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("4_7m177")
+animation = &"vfx_burn_explosion"
 script = ExtResource("4_dgpnq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

@@ -71,11 +71,17 @@ public partial class Main : Node2D
 		AddChild(_projectile);
 		_player.FireProjectileAtTarget(closestTarget, _projectile, ProjectileTypes.Fireball);
 	}
+	
 	private void HandleEnemyDead(Enemy enemy)
 	{
 		if (dummies.Contains(enemy))
 		{
 			GD.Print($"Removed enemy: {dummies.Remove(enemy)}, {enemy.Name}");
 		}
+	}
+
+	public void SpawnNode(Node2D node)
+	{
+		AddChild(node);
 	}
 }

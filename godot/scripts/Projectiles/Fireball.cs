@@ -1,3 +1,5 @@
+using Godot;
+
 public partial class Fireball : Projectile
 {
 	public StatusEffect StatusEffect { get; private set; }
@@ -16,6 +18,6 @@ public partial class Fireball : Projectile
 	{
 		base.HandleProjectileEffect(enemy);
 		enemy.StatusEffectComponent.ApplyEffectToCharacter(StatusEffect);
-		
 	}
+
 }

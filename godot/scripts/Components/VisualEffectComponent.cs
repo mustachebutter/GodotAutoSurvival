@@ -8,9 +8,10 @@ public partial class VisualEffectComponent : AnimatedSprite2D
 		base._Ready();
 	}
 
-	public void PlayVisualEffect(string animationName)
+	public void PlayVisualEffect(string animationName, bool isLooping)
 	{
 		Animation = animationName;
+		SpriteFrames.SetAnimationLoop(Animation, isLooping);
 		Play();
 	}
 

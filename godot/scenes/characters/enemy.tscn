@@ -6,7 +6,7 @@
 
 [node name="Enemy" instance=ExtResource("1_su55c")]
 collision_layer = 4
-collision_mask = 3
+collision_mask = 19
 script = ExtResource("2_4v0qc")
 AttackRange = 100.0
 
@@ -16,6 +16,10 @@ texture = ExtResource("3_0dnh7")
 hframes = 8
 vframes = 8
 
+[node name="VisualEffectComponent" parent="." index="3"]
+frame = 8
+frame_progress = 0.938892
+
 [node name="CollisionShape2D" parent="." index="4"]
 position = Vector2(0, -5)
 
@@ -23,7 +27,7 @@ position = Vector2(0, -5)
 collision_layer = 8
 
 [node name="CollisionShape2D" parent="Area2D" index="0"]
-debug_color = Color(0.643137, 0.521569, 0, 0.419608)
+debug_color = Color(0.643137, 0.521569, 0, 0.129412)
 
 [node name="Label" type="Label" parent="." index="6"]
 offset_left = -20.0

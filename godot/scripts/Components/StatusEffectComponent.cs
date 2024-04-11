@@ -41,7 +41,7 @@ public partial class StatusEffectComponent : Node2D
 		{
 			GD.Print($"Else - {currentStatusEffect.StatusEffectName}");
 			StatusEffectList.Add(currentStatusEffect);
-			Target.VisualEffectComponent.PlayVisualEffect(currentStatusEffect.VisualEffectName);
+			Target.VisualEffectComponent.PlayVisualEffect(currentStatusEffect.VisualEffectName, true);
 		}
 
 		currentStatusEffect.StartStatusEffect(Target);

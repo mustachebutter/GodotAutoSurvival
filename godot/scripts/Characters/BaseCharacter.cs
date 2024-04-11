@@ -15,6 +15,7 @@ public partial class BaseCharacter : CharacterBody2D
 
 	private float _textOffset = 0.0f;
 	private bool _isDead = false;
+	private bool _hasTriggeredOnDead = false;
 	public delegate void OnCharacterDeadHandler();
 	public event OnCharacterDeadHandler OnCharacterDeadEvent;
 
@@ -64,10 +65,19 @@ public partial class BaseCharacter : CharacterBody2D
 			DamageNumberComponent.UpdateText(damage.ToString(), damageType);
 		}
 		
-		if(IsDead)
+		if(IsDead && !_hasTriggeredOnDead)
 		{
 			OnCharacterDeadEvent.Invoke();
-			QueueFree();
+			_hasTriggeredOnDead = true;
+			//Instead of straight up dying, this should:
+			// Disable the sprite / hitbox
+			// 
 		}
+	}
+
+	public void DestroyCharacter()
+	{
+		GD.Print("Does this get called?");
+		QueueFree();
 	}
 }

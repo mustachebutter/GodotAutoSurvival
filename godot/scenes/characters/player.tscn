@@ -76,7 +76,7 @@ transitions = ["Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_
 
 [node name="Player" instance=ExtResource("1_748nw")]
 script = ExtResource("2_5kg0v")
-AttackSpeed = 2.247
+AttackSpeed = 1.0
 AttackRange = 500.0
 
 [node name="Sprite2D (Preview)" parent="." index="0"]
@@ -85,6 +85,10 @@ texture = ExtResource("3_op5oa")
 hframes = 8
 vframes = 8
 
+[node name="VisualEffectComponent" parent="." index="3"]
+frame = 10
+frame_progress = 0.282081
+
 [node name="CollisionShape2D" parent="." index="4"]
 position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_pbtwt")
@@ -92,6 +96,9 @@ shape = SubResource("RectangleShape2D_pbtwt")
 [node name="Area2D" parent="." index="5"]
 collision_layer = 8
 collision_mask = 4
+
+[node name="CollisionShape2D" parent="Area2D" index="0"]
+debug_color = Color(1, 0, 0, 0.129412)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="6"]
 root_node = NodePath("../Sprite2D (Preview)")

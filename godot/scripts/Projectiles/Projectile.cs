@@ -119,6 +119,11 @@ public partial class Projectile : CharacterBody2D
 		_distanceTravelled = 0.0f;
 		_shouldDamageEnemy = true;
 	}
+	public void SpawnNodeInMain(Node2D node)
+	{
+		var mainNode = (Main) GetParent();
+		mainNode.SpawnNode(node);
+	}
 
 	public void HandleTargetDead(Enemy enemy)
 	{
