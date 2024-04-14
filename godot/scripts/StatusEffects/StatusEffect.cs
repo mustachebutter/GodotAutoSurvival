@@ -12,7 +12,7 @@ public class StatusEffect
     public string VisualEffectName { get; protected set; } = "default";
 
     public bool IsStackable { get; protected set; } = false;
-    public int NumberOfStacks { get; protected set; } = 0;
+    public int NumberOfStacks { get; set; } = 0;
 
     public float Duration { get; protected set; } = 0.0f;
 

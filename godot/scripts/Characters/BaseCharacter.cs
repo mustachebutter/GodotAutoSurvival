@@ -66,7 +66,8 @@ public partial class BaseCharacter : CharacterBody2D
 		
 		if(IsDead && !_hasTriggeredOnDead)
 		{
-			OnCharacterDeadEvent.Invoke();
+			GD.Print("Should be called once on death");
+			OnCharacterDeadEvent?.Invoke();
 			_hasTriggeredOnDead = true;
 		}
 	}

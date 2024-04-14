@@ -40,7 +40,7 @@ public partial class VfxBurnExplosion : Node2D
 				foreach (var node in overlappedNodes)
 				{
 					var enemy = node as Enemy;
-					if (enemy != _ignoredEnemy)
+					if (enemy != _ignoredEnemy && !enemies.Contains(enemy))
 						enemies.Add(enemy);		
 				}
 			}

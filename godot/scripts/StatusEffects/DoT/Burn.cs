@@ -60,9 +60,10 @@ public class Burn : DotStatusEffect
         {
             foreach (var enemy in enemies)
             {
+                GD.Print(enemy.Name);
                 // Deals damage to nearby targets
                 // Apply debuffs to nearby targets
-                // enemy.StatusEffectComponent.ApplyEffectToCharacter(this);
+                enemy.StatusEffectComponent.ApplyEffectToCharacter(this);
                 enemy.DealDamageToCharacter(Damage, DamageTypes.Normal);
             }
         }
