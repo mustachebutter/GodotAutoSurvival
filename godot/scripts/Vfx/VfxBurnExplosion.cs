@@ -32,16 +32,8 @@ public partial class VfxBurnExplosion : Node2D
 	public override void _PhysicsProcess(double delta)
 	{
 		base._PhysicsProcess(delta);
-		if (_shouldPhysicsProcess && _frameCount == 2)
+		if (_shouldPhysicsProcess)
 		{
-			// for (int i = 0; i < ShapeCast2D.GetCollisionCount(); i++)
-			// {
-			// 	var enemy = (Enemy) ShapeCast2D.GetCollider(i);
-			// 	if (!enemies.Contains(enemy) && enemy != _ignoredEnemy)
-			// 		GD.Print($"[{GetType().Name}] Enemy - {ShapeCast2D.GetCollider(i)}");
-			// 		enemies.Add(enemy);
-			// }
-
 			var overlappedNodes = Area2D.GetOverlappingBodies();
 			if (overlappedNodes != null)
 			{
@@ -49,15 +41,14 @@ public partial class VfxBurnExplosion : Node2D
 				{
 					var enemy = node as Enemy;
 					if (enemy != _ignoredEnemy)
-						GD.Print("Enemy: ", enemy);
 						enemies.Add(enemy);		
 				}
 			}
 				
 
-
+			// We want to make sure that it runs for at least 10 frames
+			// Give or take this might not needed but just to make sure everything works.
 			_frameCount++;
-			GD.Print("Frame: ", _frameCount);
 			if (_frameCount > _totalFramesToRun)
 			{
 				_shouldPhysicsProcess = false;
@@ -66,13 +57,11 @@ public partial class VfxBurnExplosion : Node2D
 		}
 	}
 
-	public OnScannedEnemiesHandler ScanForEnemies(BaseCharacter ignoredCharacter)
+	public void ScanForEnemies(BaseCharacter ignoredCharacter)
 	{
 		_shouldPhysicsProcess = true;
 		_frameCount = 0;
 		_ignoredEnemy = (Enemy) ignoredCharacter;
-
-		return ReportEnemies;
 	}
 
 	public override void _ExitTree()

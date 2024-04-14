@@ -32,6 +32,7 @@ public class Burn : DotStatusEffect
 
         // Initialize Explosion
         _burnExplosion = (VfxBurnExplosion) Scenes.VfxBurnExplosion.Instantiate();
+        _burnExplosion.ReportEnemies += AffectSideTargets;
     }
 
     public override void OnTargetDied()
@@ -39,7 +40,6 @@ public class Burn : DotStatusEffect
         base.OnTargetDied();
         // When the target died, spread to other closeby targets
         //Add to tree
-        // Target.AddChild(_burnExplosion);
         Target.GetTree().Root.AddChild(_burnExplosion);
         _burnExplosion.Position = Target.Position;
         
@@ -50,24 +50,19 @@ public class Burn : DotStatusEffect
         explosionAnimatedSprite.Play();
 
         // Scan for nearby targets
-        var handler = _burnExplosion.ScanForEnemies(Target);
-        handler += AffectSideTargets;
-        
+        _burnExplosion.ScanForEnemies(Target);        
         // Should theoretically clean up status effect when the target dies
-    
     }
 
     public void AffectSideTargets(List<Enemy> enemies)
     {
-        GD.Print(enemies);
         if (enemies.Count > 0)
         {
             foreach (var enemy in enemies)
             {
                 // Deals damage to nearby targets
                 // Apply debuffs to nearby targets
-                GD.Print(enemy);
-                enemy.StatusEffectComponent.ApplyEffectToCharacter(this);
+                // enemy.StatusEffectComponent.ApplyEffectToCharacter(this);
                 enemy.DealDamageToCharacter(Damage, DamageTypes.Normal);
             }
         }

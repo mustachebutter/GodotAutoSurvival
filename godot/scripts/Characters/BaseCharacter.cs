@@ -45,7 +45,6 @@ public partial class BaseCharacter : CharacterBody2D
 		circle.Radius = AttackRange / 2;
 
 		StatusEffectComponent = GetNode<StatusEffectComponent>("StatusEffectComponent");
-		// damageNumberComponent = GetNode<DamageNumberComponent>("DamageNumberComponent");
 		VisualEffectComponent = GetNode<VisualEffectComponent>("VisualEffectComponent");
 
 		StatusEffectComponent.Target = this;
@@ -69,15 +68,11 @@ public partial class BaseCharacter : CharacterBody2D
 		{
 			OnCharacterDeadEvent.Invoke();
 			_hasTriggeredOnDead = true;
-			//Instead of straight up dying, this should:
-			// Disable the sprite / hitbox
-			// 
 		}
 	}
 
 	public void DestroyCharacter()
 	{
-		GD.Print("Does this get called?");
 		QueueFree();
 	}
 }

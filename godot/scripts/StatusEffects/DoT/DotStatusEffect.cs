@@ -26,7 +26,6 @@ public class DotStatusEffect : StatusEffect
 
 	public override void OnStatusEffectEnd()
 	{
-		GD.Print("This shouldn't be called if it should be refreshed");
 		base.OnStatusEffectEnd();
 		Target.StatusEffectComponent.ClearEffect(this);
 		Target.VisualEffectComponent.ClearVisualEffect();
