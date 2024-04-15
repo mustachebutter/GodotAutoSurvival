@@ -30,8 +30,7 @@ public class DotStatusEffect : StatusEffect
 		Target.StatusEffectComponent.ClearEffect(this);
 		Target.VisualEffectComponent.ClearVisualEffect();
 		Target = null;
-		// IF oneshot then I don't think we need to do this
-		// Utils.DestroyTimer(MainTimer);
+		Utils.DestroyTimer(MainTimer);
 		Utils.DestroyTimer(_tickTimer);
 	}
 }

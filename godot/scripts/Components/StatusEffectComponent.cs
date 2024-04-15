@@ -36,10 +36,11 @@ public partial class StatusEffectComponent : Node2D
 			// Do logic of the status effect. Only DOT has special logic for now.
 			// Realistically, we want to do this once!
 			currentStatusEffect.StartStatusEffect(Target);
+			status = currentStatusEffect;
 		}
 
 		// This is the main timer for the buff/debuff
-		currentStatusEffect.StartMainTimer();
+		status.StartMainTimer();
 
 	}
 
