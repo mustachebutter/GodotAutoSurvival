@@ -6,3 +6,7 @@
 script = ExtResource("1_byp4v")
 
 [node name="Timer" type="Timer" parent="."]
+
+[node name="CharactersParentNode" type="Node2D" parent="."]
+
+[node name="VFXParentNode" type="Node2D" parent="."]
