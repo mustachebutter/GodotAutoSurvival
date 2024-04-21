@@ -35,7 +35,7 @@ public partial class StatusEffectComponent : Node2D
 			Target.VisualEffectComponent.PlayVisualEffect(currentStatusEffect.VisualEffectName, true);
 			// Do logic of the status effect. Only DOT has special logic for now.
 			// Realistically, we want to do this once!
-			currentStatusEffect.StartStatusEffect(Target);
+			currentStatusEffect.StartStatusEffect();
 			status = currentStatusEffect;
 		}
 

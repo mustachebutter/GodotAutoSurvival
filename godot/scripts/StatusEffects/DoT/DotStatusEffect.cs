@@ -8,20 +8,21 @@ public class DotStatusEffect : StatusEffect
 	public float TickPerEverySecond { get; protected set; } = 0.0f;
 
 	public virtual void OnTargetDied() { }
-	public override void StartStatusEffect(BaseCharacter target)
+	public override void StartStatusEffect()
 	{
-		base.StartStatusEffect(target);
-		if (target.IsDead) return;
+		base.StartStatusEffect();
+		if (Target.IsDead) return;
 		
-		_tickTimer = Utils.CreateTimer(target, HandleStatusEffect, TickPerEverySecond, false);
+		_tickTimer = Utils.CreateTimer(Target, HandleStatusEffect, TickPerEverySecond, false);
 		_tickTimer?.Start();
+		
+		Target.OnCharacterDeadEvent += OnTargetDied;
 	}
 
 	public override void HandleStatusEffect()
 	{
 		// Tick damage
 		Target.DealDamageToCharacter(Damage, DamageTypes.Fire);
-		Target.OnCharacterDeadEvent += OnTargetDied;
 	}
 
 	public override void OnStatusEffectEnd()

@@ -16,7 +16,7 @@ public class StatusEffect
 
     public float Duration { get; protected set; } = 0.0f;
 
-    public virtual void StartStatusEffect (BaseCharacter target) { }
+    public virtual void StartStatusEffect () { }
     public virtual void HandleStatusEffect () { }
     public virtual void OnStatusEffectEnd () { }
 

@@ -13,7 +13,6 @@ public partial class BaseCharacter : CharacterBody2D
 	[Export(PropertyHint.Range, "0, 1000, 1")]
 	public float Speed { get; private set; } = 100.0f;
 
-	private float _textOffset = 0.0f;
 	private bool _isDead = false;
 	private bool _hasTriggeredOnDead = false;
 	public delegate void OnCharacterDeadHandler();
@@ -58,15 +57,13 @@ public partial class BaseCharacter : CharacterBody2D
 			DamageNumberComponent = (DamageNumberComponent) Scenes.UiDamageNumber.Instantiate();
 			AddChild(DamageNumberComponent);
 
-			DamageNumberComponent.Translate(new Vector2(_textOffset, 0.0f));
-			_textOffset += 5.0f;
+			DamageNumberComponent.OffsetText();
 
 			DamageNumberComponent.UpdateText(damage.ToString(), damageType);
 		}
 		
 		if(IsDead && !_hasTriggeredOnDead)
 		{
-			GD.Print("Should be called once on death");
 			OnCharacterDeadEvent?.Invoke();
 			_hasTriggeredOnDead = true;
 		}
