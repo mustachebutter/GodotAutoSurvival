@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 public static class ProjectileTypes
@@ -27,4 +28,33 @@ public static class Scenes
     public static PackedScene Enemy = (PackedScene) GD.Load("res://scenes/characters/enemy.tscn");
     public static PackedScene UiDamageNumber = (PackedScene) GD.Load("res://scenes/ui/damage_number_component.tscn");
     public static PackedScene VfxBurnExplosion = (PackedScene) GD.Load("res://scenes/vfx/vfx_burn_explosion.tscn");
+}
+
+public static class StatusEffectParsedData
+{
+    public static Dictionary<string, StatusEffectData> dictionary = new Dictionary<string, StatusEffectData>();
+    static StatusEffectParsedData()
+    {
+        var path  = "res://metadata/GodotAutoSurvival_Metadata_StatusEffect.txt";
+        var seList = StatusEffectDataParser.ParseData(path);
+        
+        foreach (var se in seList)
+        {
+            dictionary.Add(se.StatusEffectId, se);
+        }
+    }
+
+    public static StatusEffectData GetData(string key)
+    {
+        StatusEffectData statusEffectData;
+        if(dictionary.TryGetValue(key, out statusEffectData))
+        {
+            return statusEffectData;
+        }
+        else
+        {
+            GD.PrintErr("No status effect was found, applying the default status effect values!");
+            return dictionary["Status_Default"];
+        }
+    }
 }

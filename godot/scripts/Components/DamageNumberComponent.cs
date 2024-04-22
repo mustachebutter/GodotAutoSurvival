@@ -46,6 +46,7 @@ public partial class DamageNumberComponent : Node2D
 
 	public void OffsetText()
 	{
+		GD.Print(_textOffset);
 		Translate(new Vector2(_textOffset, 0.0f));
 		_textOffset += 2.0f;
 

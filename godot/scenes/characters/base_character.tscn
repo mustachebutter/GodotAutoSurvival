@@ -24,6 +24,12 @@ scale = Vector2(2, 2)
 [node name="DamageNumberComponent" type="Node2D" parent="."]
 script = ExtResource("2_0ub6m")
 
+[node name="Label" type="Label" parent="DamageNumberComponent"]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DamageNumberComponent"]
+
 [node name="StatusEffectComponent" type="Node2D" parent="."]
 script = ExtResource("3_ac2co")
 

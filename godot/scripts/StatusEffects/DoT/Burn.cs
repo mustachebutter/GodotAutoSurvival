@@ -6,29 +6,20 @@ public class Burn : DotStatusEffect
     private VfxBurnExplosion _burnExplosion;
     public Burn(
         Node2D source,
-        string statusEffectId,
-        string statusEffectName,
-        string statusEffectDesc,
-        string visualEffectName,
-        bool isStackable,
-        int numberOfStacks,
-        float duration,
-        float damage,
-        DamageTypes damageType,
-        float tickPerSec
+        StatusEffectData statusEffectData
     )
     {
         Source = source;
-        StatusEffectId = statusEffectId;
-        StatusEffectName = statusEffectName;
-        StatusEffectDesc = statusEffectDesc;
-        VisualEffectName = visualEffectName;
-        IsStackable = isStackable;
-        NumberOfStacks = numberOfStacks;
-        Duration = duration;
-        Damage = damage;
-		DamageType = damageType;
-		TickPerEverySecond = tickPerSec;
+        StatusEffectId = statusEffectData.StatusEffectId;
+        StatusEffectName = statusEffectData.StatusEffectName;
+        StatusEffectDesc = statusEffectData.StatusEffectDesc;
+        VisualEffectName = statusEffectData.VisualEffectName;
+        IsStackable = statusEffectData.IsStackable;
+        NumberOfStacks = statusEffectData.NumberOfStacks;
+        Duration = statusEffectData.Duration;
+        Damage = statusEffectData.Damage;
+		DamageType = statusEffectData.DamageType;
+		TickPerEverySecond = statusEffectData.TickPerEverySecond;
 
         // Initialize Explosion
         _burnExplosion = (VfxBurnExplosion) Scenes.VfxBurnExplosion.Instantiate();
@@ -63,15 +54,13 @@ public class Burn : DotStatusEffect
                 // Create new Burn instance
                 var burn = new Burn(
                     enemy,
-                    "Status_DOT_Burn", "Burn", "Burns the target, ticks damage every x seconds", "vfx_burn",
-                    false, 0, 3.0f,
-                    30.0f, DamageTypes.Fire, 0.3f
+                    StatusEffectParsedData.GetData("Status_DOT_Burn")
 		        );
 
                 // Deals damage to nearby targets
                 // Apply debuffs to nearby targets
                 enemy.StatusEffectComponent.ApplyEffectToCharacter(burn);
-                enemy.DealDamageToCharacter(Damage, DamageTypes.Normal);
+                enemy.DealDamageToCharacter(burn.Damage, DamageTypes.Normal);
             }
         }
 
