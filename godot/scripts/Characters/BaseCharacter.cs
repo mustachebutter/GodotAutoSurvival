@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Numerics;
 using Godot;
 
 public partial class BaseCharacter : CharacterBody2D
@@ -12,6 +13,7 @@ public partial class BaseCharacter : CharacterBody2D
 	public float AttackRange { get; private set; } = 300.0f;
 	[Export(PropertyHint.Range, "0, 1000, 1")]
 	public float Speed { get; private set; } = 100.0f;
+	private Godot.Vector2 _textOffset = new Godot.Vector2(0.0f, 0.0f);
 
 	private bool _isDead = false;
 	private bool _hasTriggeredOnDead = false;
@@ -57,7 +59,8 @@ public partial class BaseCharacter : CharacterBody2D
 			DamageNumberComponent = (DamageNumberComponent) Scenes.UiDamageNumber.Instantiate();
 			AddChild(DamageNumberComponent);
 
-			DamageNumberComponent.OffsetText();
+			DamageNumberComponent.OffsetText(_textOffset);
+			_textOffset.X += 2.0f;
 
 			DamageNumberComponent.UpdateText(damage.ToString(), damageType);
 		}

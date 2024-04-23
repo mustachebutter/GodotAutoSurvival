@@ -6,7 +6,6 @@ using static AnimationCreator;
 [Tool]
 public partial class DamageNumberComponent : Node2D
 {
-	private float _textOffset = 0.0f;
 	private float _maxTextOffset = 50.0f;
 
 	private LabelSettings defaultLabelSettings = Utils.CreateLabelSettings(Colors.WHITE, Colors.BLACK, 20);
@@ -44,16 +43,11 @@ public partial class DamageNumberComponent : Node2D
 		_animationPlayer.Play("UI_AnimationLibrary/text_start");
 	}
 
-	public void OffsetText()
+	public void OffsetText(Vector2 offset)
 	{
-		GD.Print(_textOffset);
-		Translate(new Vector2(_textOffset, 0.0f));
-		_textOffset += 2.0f;
-
-		if(_textOffset > _maxTextOffset)
-		{
-			_textOffset = 0.0f;
-		}
+		offset.X = (offset.X > _maxTextOffset) ? 0.0f : offset.X;
+		offset.Y = (offset.Y > _maxTextOffset) ? 0.0f : offset.Y;
+		Translate(offset);
 	}
 
 	private void OnFinishedAnimation(StringName animName)
