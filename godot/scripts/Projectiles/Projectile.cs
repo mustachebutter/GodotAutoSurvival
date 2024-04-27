@@ -17,6 +17,7 @@ public partial class Projectile : CharacterBody2D
 	protected List<Enemy> _bouncedEnemies = new List<Enemy>();
 	public delegate void OnEnemyKilledHandler(Enemy enemy);
 	public event OnEnemyKilledHandler OnEnemyKilledEvent;
+	public StatusEffect StatusEffect { get; protected set; }
 
 	[Export]
 	public float Speed = 200.0f;
@@ -53,27 +54,6 @@ public partial class Projectile : CharacterBody2D
 			// When the projectile hits, destroy itself
 			QueueFree();
 
-			// if(!_bouncedEnemies.Contains(enemy))
-			// {
-			// 	_bouncedEnemies.Add(enemy);
-			// 	// !!!!DEBUG: Be extremely careful with this
-			// 	// It might not work on higher attack speed
-			// 	enemy.SetCollisionLayerValue(5, true);
-			// 	enemy.SetCollisionLayerValue(3, false);
-
-			// 	// !!!!DEBUG
-
-			// 	// This is where the projectile should deal damage or apply an effect
-			// 	if (enemy.DealDamageToCharacter(Damage))
-			// 	{
-			// 		OnEnemyKilledEvent.Invoke(enemy);
-			// 		enemy.QueueFree();
-			// 		_shouldDestroyProjectile = true;
-			// 	}
-
-			// 	_shouldDamageEnemy = false;
-			// 	HandleProjectileEffect(enemy);
-			// }
 		}
 
 		_distanceTravelled += (Position - _previousPosition).Length();

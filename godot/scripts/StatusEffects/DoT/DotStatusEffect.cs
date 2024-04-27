@@ -8,6 +8,7 @@ public class DotStatusEffect : StatusEffect
 	public float TickPerEverySecond { get; protected set; } = 0.0f;
 
 	public virtual void OnTargetDied() { }
+
 	public override void StartStatusEffect()
 	{
 		base.StartStatusEffect();
@@ -22,7 +23,7 @@ public class DotStatusEffect : StatusEffect
 	public override void HandleStatusEffect()
 	{
 		// Tick damage
-		Target.DealDamageToCharacter(Damage, DamageTypes.Fire);
+		Target.DealDamageToCharacter(Damage, DamageType);
 	}
 
 	public override void OnStatusEffectEnd()

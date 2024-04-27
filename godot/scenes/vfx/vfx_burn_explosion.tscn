@@ -14,8 +14,7 @@ script = ExtResource("1_xhcse")
 texture_filter = 1
 scale = Vector2(5, 5)
 sprite_frames = ExtResource("1_i73ss")
-animation = &"vfx_burn_explosion"
-frame_progress = 0.605631
+animation = &"vfx_zap"
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_layer = 16

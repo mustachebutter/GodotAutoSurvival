@@ -2,7 +2,6 @@ using Godot;
 
 public partial class Fireball : Projectile
 {
-	public StatusEffect StatusEffect { get; private set; }
 	public override void _Ready()
 	{
 		base._Ready();

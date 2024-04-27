@@ -26,6 +26,22 @@ public class Burn : DotStatusEffect
         _burnExplosion.ReportEnemies += AffectSideTargets;
     }
 
+    public override void StartStatusEffect()
+    {
+        base.StartStatusEffect();
+    }
+
+    public override void HandleStatusEffect()
+	{
+        base.HandleStatusEffect();
+	}
+
+    public override void OnStatusEffectEnd()
+    {
+        base.OnStatusEffectEnd();
+
+    }
+
     public override void OnTargetDied()
     {
         base.OnTargetDied();
@@ -63,11 +79,6 @@ public class Burn : DotStatusEffect
                 enemy.DealDamageToCharacter(burn.Damage, DamageTypes.Normal);
             }
         }
-
-    }
-    public override void OnStatusEffectEnd()
-    {
-        base.OnStatusEffectEnd();
 
     }
 

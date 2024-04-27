@@ -27,6 +27,9 @@ public partial class StatusEffectComponent : Node2D
 			if (status.IsStackable)
 			{
 				status.NumberOfStacks++;
+				// !!!IMPORTANT
+				// If DOT DO NOT USE STACKABLE
+				status.StartStatusEffect();
 			}
 		}
 		else

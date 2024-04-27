@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 public static class Utils
@@ -48,6 +49,16 @@ public static class Utils
 
 		return closestNode;
 	}
+
+	public static List<Enemy> FindTargetsOrderedByDistance(Vector2 sourcePosition, Area2D area2D)
+	{
+		var overlappedNodes = area2D.GetOverlappingBodies();
+		if (overlappedNodes == null) return null;
+		var enemyNodes = overlappedNodes.Cast<Enemy>().ToList();
+
+		return enemyNodes.OrderBy(x => sourcePosition.DistanceTo(x.Position)).ToList();
+	}
+
 	
 	public static Timer CreateTimer(Node2D parentNode, Action function, float seconds = 0.0f, bool isOneShot = true)
 	{
