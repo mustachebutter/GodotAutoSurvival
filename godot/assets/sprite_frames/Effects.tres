@@ -309,7 +309,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"vfx_chain_lightning",
-"speed": 45.0
+"speed": 50.0
 }, {
 "frames": [{
 "duration": 1.0,

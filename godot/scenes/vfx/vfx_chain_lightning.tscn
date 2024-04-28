@@ -15,6 +15,8 @@ visible = false
 texture_filter = 1
 scale = Vector2(5, 5)
 sprite_frames = ExtResource("2_vafbs")
+animation = &"vfx_chain_lightning"
+frame_progress = 0.885161
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_layer = 16

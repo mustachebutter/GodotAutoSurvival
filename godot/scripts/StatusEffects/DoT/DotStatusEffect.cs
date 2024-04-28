@@ -29,10 +29,6 @@ public class DotStatusEffect : StatusEffect
 	public override void OnStatusEffectEnd()
 	{
 		base.OnStatusEffectEnd();
-		Target.StatusEffectComponent.ClearEffect(this);
-		Target.VisualEffectComponent.ClearVisualEffect();
-		Target = null;
-		Utils.DestroyTimer(MainTimer);
 		Utils.DestroyTimer(_tickTimer);
 	}
 }

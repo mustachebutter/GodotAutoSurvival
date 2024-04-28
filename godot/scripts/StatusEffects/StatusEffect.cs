@@ -18,7 +18,13 @@ public class StatusEffect
 
     public virtual void StartStatusEffect () { }
     public virtual void HandleStatusEffect () { }
-    public virtual void OnStatusEffectEnd () { }
+    public virtual void OnStatusEffectEnd () 
+    {
+        Target.StatusEffectComponent.ClearEffect(this);
+        Target.VisualEffectComponent.ClearVisualEffect();
+        Target = null;
+        Utils.DestroyTimer(MainTimer);
+    }
 
     //Entry point for Status Effect, which is invoked in Projectile or any source of damage.
 

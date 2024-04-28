@@ -29,10 +29,11 @@ public class Static : StatusEffect
     {
         base.StartStatusEffect();
         
-		if (NumberOfStacks == 3)
+		if (NumberOfStacks != 0 && NumberOfStacks % 3 == 0)
 		{
             _chainLightning.Position = Target.Position;
-            Target.GetTree().Root.GetNode("Node2D").GetNode("VFXParentNode").AddChild(_chainLightning);
+            if (_chainLightning.GetParent() == null)
+                Target.GetTree().Root.GetNode("Node2D").GetNode("VFXParentNode").AddChild(_chainLightning);
 			// Trigger the lightning strike
 			_chainLightning.ScanForEnemies();
 		}
@@ -47,7 +48,6 @@ public class Static : StatusEffect
     public override void OnStatusEffectEnd()
     {
         base.OnStatusEffectEnd();
-
     }
 
     public void LightningStrikeTargets(List<Enemy> enemies)
@@ -60,17 +60,29 @@ public class Static : StatusEffect
 
             var line = new Line2D();
             line.Points = new Vector2[] { currentEnemy.Position, nextEnemy.Position };
-            line.DefaultColor = new Color(0, 1, 1, 0.5f);
+            // line.DefaultColor = new Color(1, 1, 0, 0.5f);
+            line.DefaultColor = new Color(1, 1, 0, 0.0f);
             vfxRootNode.AddChild(line);
 
             var animatedSprite = new AnimatedSprite2D();
             animatedSprite.Position = (currentEnemy.Position + nextEnemy.Position) / 2;
-            line.AddChild(animatedSprite);
             animatedSprite.AnimationFinished += CleanUpLightningStrike;
             animatedSprite.SpriteFrames = _chainLightning.AnimatedSprite2D.SpriteFrames;
             animatedSprite.Animation = "vfx_chain_lightning";
             animatedSprite.SpriteFrames.SetAnimationLoop("vfx_chain_lightning", false);
+
+            // So from what I can understand
+            // This angle is between the 2 vectors has a starting point from origin
+            // and to get the rotation of the line between the 2 points you need to rotate by an extra 90 degrees (Pi/2)
+            var angle = currentEnemy.Position.AngleToPoint(nextEnemy.Position);
+            animatedSprite.Rotation = angle - (Mathf.Pi / 2);
+            vfxRootNode.AddChild(animatedSprite);
             animatedSprite.Play();
+
+            currentEnemy.DealDamageToCharacter(0.5f, DamageTypes.Electric);
+            // Also deal damage to the last character because there's no iteration for it
+            if (i == enemies.Count - 2)
+                nextEnemy.DealDamageToCharacter(0.5f, DamageTypes.Electric);
 
             _lightningStrikesToDispose.Add(line);
             _lightningStrikesToDispose.Add(animatedSprite);
@@ -82,9 +94,9 @@ public class Static : StatusEffect
         foreach (var element in _lightningStrikesToDispose)
         {
             element.QueueFree();
-            // _lightningStrikesToDispose.Remove(element);
-            GD.Print(_lightningStrikesToDispose.Count);
         }
+
+        _lightningStrikesToDispose.Clear();
     }
 
 }
