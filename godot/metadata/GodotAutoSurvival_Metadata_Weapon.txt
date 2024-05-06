@@ -1,0 +1,4 @@
+ID	Name	Description	Damage	DamageType
+Weapon_Default	Default	Default weapon. Deals a single instance of damage with no effect. This means some keys were entered wrong!	10	DamageTypes.Normal
+Weapon_Fireball	Fireball	Conjure a fireball towards the target location, applies Burn upon impact. When the target dies from the Burn, it will trigger an explosion for 100 units around the target and will spread Burn to surrounding enemies.	15	DamageTypes.Fire
+Weapon_Zap	Lightning Bolts	Shoot a lightning bolt at the target, applies Static effect to the target. Every 3 stacks will chain lightning to the surrounding targets in 100 units	12	DamageTypes.Electric

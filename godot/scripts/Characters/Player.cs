@@ -4,10 +4,11 @@ using System.Collections.Generic;
 
 public partial class Player : BaseCharacter
 {
-
+	public WeaponComponent WeaponComponent;
 	public override void _Ready()
 	{
 		base._Ready();
+		WeaponComponent = GetNode<WeaponComponent>("WeaponComponent");
 	}
 
 	public override void _PhysicsProcess(double delta)

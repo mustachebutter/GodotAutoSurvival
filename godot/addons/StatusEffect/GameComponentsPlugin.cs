@@ -15,7 +15,10 @@ public partial class GameComponentsPlugin : EditorPlugin
 		script = GD.Load<Script>("res://scripts/Components/VisualEffectComponent.cs");
 		texture = GD.Load<Texture2D>("res://assets/icons/Icon_VisualEffect.png");
 		AddCustomType("VisualEffectComponent", "AnimatedSprite2D", script, texture);
-
+		
+		script = GD.Load<Script>("res://scripts/Components/WeaponComponent.cs");
+		texture = GD.Load<Texture2D>("res://assets/icons/Icon_Weapon.png");
+		AddCustomType("WeaponComponent", "Node2D", script, texture);
 	}
 
 	public override void _ExitTree()
