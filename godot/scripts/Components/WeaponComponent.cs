@@ -5,12 +5,10 @@ using Godot;
 public partial class WeaponComponent : Node2D
 {
     private Timer _timer;
-
-    public string ProjectileName = "Default";
     public Projectile Projectile;
     private Player _player;
 	private Dictionary<string, ProjectileData> projectileData = new Dictionary<string, ProjectileData>();
-	string currentProjectile = "Weapon_Zap";
+	string currentProjectile = "Weapon_Fireball";
 
     public override void _Ready()
     {
@@ -21,11 +19,10 @@ public partial class WeaponComponent : Node2D
 
     private void CreateProjectile()
 	{
-		Node2D closestTarget = Utils.FindClosestTarget(Position, _player.Area2D);
+		Node2D closestTarget = Utils.FindClosestTarget(_player.Position, _player.Area2D);
 
 		if (closestTarget == null) return;
 
-		// _projectile = (Fireball) _projectileScene.Instantiate();
 		Projectile = currentProjectile switch
 		{
 			"Weapon_Zap" => (Zap) projectileData[currentProjectile].ProjectileScene.Instantiate(),
@@ -33,7 +30,10 @@ public partial class WeaponComponent : Node2D
 			_ => (Projectile) projectileData[currentProjectile].ProjectileScene.Instantiate()
 		};
 
+		Projectile.ProjectileData = projectileData[currentProjectile];
+		GD.Print(closestTarget.Name);
 		AddChild(Projectile);
+		Projectile.Position = _player.Position;
 		_player.FireProjectileAtTarget(closestTarget, Projectile);
 	}
 

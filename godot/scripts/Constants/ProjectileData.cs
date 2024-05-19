@@ -32,7 +32,7 @@ public static class ProjectileDataParser
             {
                 string[] content = file.GetCsvLine("\t");
                 GD.Print(content.Length);
-                if (content.Length == 0)
+                if (content.Length == 1)
                 {
                     continue;
                 }

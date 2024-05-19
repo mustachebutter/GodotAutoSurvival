@@ -34,7 +34,8 @@ public static class StatusEffectDataParser
             {
                 string[] content = file.GetCsvLine("\t");
                 
-                if (content.Length == 0)
+                GD.Print(content.Length);
+                if (content.Length == 1)
                 {
                     continue;
                 }
@@ -52,7 +53,6 @@ public static class StatusEffectDataParser
                     DamageType = Enum.Parse<DamageTypes>(content[8].Split(".")[1]),
                     TickPerEverySecond = float.Parse(content[9]),
                 };
-                GD.Print(statusEffectData.StatusEffectName);
                 statusEffects.Add(statusEffectData);
             }
 
