@@ -9,6 +9,7 @@ public partial class Player : BaseCharacter
 	{
 		base._Ready();
 		WeaponComponent = GetNode<WeaponComponent>("WeaponComponent");
+		WeaponComponent.StartTimer(1 / AttackSpeed);
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -60,9 +61,8 @@ public partial class Player : BaseCharacter
 		MoveAndSlide();
 	}
 
-	public void FireProjectileAtTarget(Node2D closestTarget, Projectile projectile, string projectileType)
+	public void FireProjectileAtTarget(Node2D closestTarget, Projectile projectile)
 	{
-		projectile.AnimationName = projectileType;
 		projectile.ShootAtTarget(Position, closestTarget.Position, AttackRange);
 	}
 }

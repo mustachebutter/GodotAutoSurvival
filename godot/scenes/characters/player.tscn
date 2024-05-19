@@ -1,9 +1,10 @@
-[gd_scene load_steps=20 format=3 uid="uid://dbdnns350c6vs"]
+[gd_scene load_steps=21 format=3 uid="uid://dbdnns350c6vs"]
 
 [ext_resource type="PackedScene" uid="uid://jlhhk6jfrg8f" path="res://scenes/characters/base_character.tscn" id="1_748nw"]
 [ext_resource type="Script" path="res://scripts/Characters/Player.cs" id="2_5kg0v"]
 [ext_resource type="AnimationLibrary" uid="uid://bs7h2pvx5kxn4" path="res://assets/sprite_frames/Player_AnimationLibrary.res" id="3_lslaa"]
 [ext_resource type="Texture2D" uid="uid://cwr5vawlkhwbv" path="res://assets/Char_Base.png" id="3_op5oa"]
+[ext_resource type="Script" path="res://scripts/Components/WeaponComponent.cs" id="4_stmua"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pbtwt"]
 size = Vector2(24, 58)
@@ -89,24 +90,27 @@ vframes = 8
 frame = 10
 frame_progress = 0.282081
 
-[node name="CollisionShape2D" parent="." index="4"]
+[node name="WeaponComponent" type="Node2D" parent="." index="4"]
+script = ExtResource("4_stmua")
+
+[node name="CollisionShape2D" parent="." index="5"]
 position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_pbtwt")
 
-[node name="Area2D" parent="." index="5"]
+[node name="Area2D" parent="." index="6"]
 collision_layer = 8
 collision_mask = 4
 
 [node name="CollisionShape2D" parent="Area2D" index="0"]
 debug_color = Color(1, 0, 0, 0.129412)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="6"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="7"]
 root_node = NodePath("../Sprite2D (Preview)")
 libraries = {
 "Player_AnimationLibrary": ExtResource("3_lslaa")
 }
 
-[node name="AnimationTree" type="AnimationTree" parent="." index="7"]
+[node name="AnimationTree" type="AnimationTree" parent="." index="8"]
 tree_root = SubResource("AnimationNodeStateMachine_w7mxk")
 anim_player = NodePath("../AnimationPlayer")
 active = true

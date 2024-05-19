@@ -21,9 +21,9 @@ public enum DamageTypes
 
 public static class Scenes
 {
-    public static PackedScene Projectile = (PackedScene) GD.Load("res://scenes/projectiles/projectile.tscn");
-    public static PackedScene ProjectileZap = (PackedScene) GD.Load("res://scenes/projectiles/projectile_zap.tscn");
-    public static PackedScene ProjectileFireball = (PackedScene) GD.Load("res://scenes/projectiles/projectile_fireball.tscn");
+    // public static PackedScene Projectile = (PackedScene) GD.Load("res://scenes/projectiles/projectile.tscn");
+    // public static PackedScene ProjectileZap = (PackedScene) GD.Load("res://scenes/projectiles/projectile_zap.tscn");
+    // public static PackedScene ProjectileFireball = (PackedScene) GD.Load("res://scenes/projectiles/projectile_fireball.tscn");
     public static PackedScene Player = (PackedScene) GD.Load("res://scenes/characters/player.tscn");
     public static PackedScene Enemy = (PackedScene) GD.Load("res://scenes/characters/enemy.tscn");
     public static PackedScene UiDamageNumber = (PackedScene) GD.Load("res://scenes/ui/damage_number_component.tscn");
@@ -57,5 +57,39 @@ public static class StatusEffectParsedData
             GD.PrintErr("No status effect was found, applying the default status effect values!");
             return dictionary["Status_Default"];
         }
+    }
+}
+
+public static class ProjectileParsedData
+{
+    public static Dictionary<string, ProjectileData> dictionary = new Dictionary<string, ProjectileData>();
+    static ProjectileParsedData()
+    {
+        var path  = "res://metadata/GodotAutoSurvival_Metadata_Weapon.txt";
+        var pList = ProjectileDataParser.ParseData(path);
+        
+        foreach (var p in pList)
+        {
+            dictionary.Add(p.ProjectileId, p);
+        }
+    }
+
+    public static ProjectileData GetData(string key)
+    {
+        ProjectileData projectileData;
+        if(dictionary.TryGetValue(key, out projectileData))
+        {
+            return projectileData;
+        }
+        else
+        {
+            GD.PrintErr("No projectile was found, applying the default projectile values!");
+            return dictionary["Weapon_Default"];
+        }
+    }
+
+    public static Dictionary<string, ProjectileData> GetAllData()
+    {
+        return dictionary;
     }
 }

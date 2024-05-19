@@ -7,7 +7,6 @@ public partial class Projectile : CharacterBody2D
 	protected AnimatedSprite2D _animatedSprite;
 	protected CollisionShape2D _collisionShape2D;
 	protected Area2D _bulletHeadArea2D;
-	private string _animationName = "Fireball";
 	private Vector2 _projectileVelocity = new Vector2(0, 0);
 	protected float _distanceTravelled = 0;
 	private Vector2 _previousPosition = new Vector2(0, 0);
@@ -15,20 +14,9 @@ public partial class Projectile : CharacterBody2D
 	protected bool _shouldDestroyProjectile = false;
 	protected bool _shouldDamageEnemy = false;
 	protected List<Enemy> _bouncedEnemies = new List<Enemy>();
-	public delegate void OnEnemyKilledHandler(Enemy enemy);
-	public event OnEnemyKilledHandler OnEnemyKilledEvent;
 	public StatusEffect StatusEffect { get; protected set; }
 
-	[Export]
-	public float Speed = 200.0f;
-	[Export]
-	public float Damage = 1.0f;
-	[Export]
-	public string AnimationName
-	{
-		get { return _animationName; }
-		set { _animationName = value; }
-	}
+	public ProjectileData ProjectileData { get; set;}
 
 	public virtual void HandleProjectileEffect() { }
 	public virtual void HandleProjectileEffect(Enemy hitEnemy) { }
@@ -47,7 +35,7 @@ public partial class Projectile : CharacterBody2D
 		{
 			Enemy enemy = (Enemy) collision.GetCollider();
 
-			enemy.DealDamageToCharacter(Damage);
+			enemy.DealDamageToCharacter(ProjectileData.Damage);
 			enemy.OnCharacterDeadEvent += () => HandleTargetDead(enemy);
 			
 			HandleProjectileEffect(enemy);
@@ -91,9 +79,9 @@ public partial class Projectile : CharacterBody2D
 		Vector2 direction = (targetPosition - sourcePosition).Normalized();
 		LookAt(GlobalPosition + direction);
 		// LookAt(Vector2.Left);
-		Velocity = direction * Speed;
+		Velocity = direction * ProjectileData.Speed;
 		// Play the animation
-		_animatedSprite.Play(AnimationName);
+		_animatedSprite.Play(ProjectileData.AnimationName);
 
 		// Reset some variables
 		_distanceTravelled = 0.0f;
@@ -107,7 +95,6 @@ public partial class Projectile : CharacterBody2D
 
 	public void HandleTargetDead(Enemy enemy)
 	{
-		OnEnemyKilledEvent.Invoke(enemy);
 		_shouldDestroyProjectile = true;
 	}
 }

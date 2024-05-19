@@ -10,9 +10,6 @@ public partial class Main : Node2D
 	private PackedScene _enemyScene = Scenes.Enemy;
 	private List<Enemy> dummies = new List<Enemy>();
 
-	// TEMP
-	private int number = 11;
-
 	public override void _Ready()
 	{
 		// !!!!!! DEBUG ONLY
@@ -24,10 +21,13 @@ public partial class Main : Node2D
 		dummies.Add(Utils.CreateDummy(new Vector2(455, 396), _enemyScene, this));
 		dummies.Add(Utils.CreateDummy(new Vector2(504, 312), _enemyScene, this));
 
+		foreach (var d in dummies)
+		{
+			d.OnCharacterDeadEvent += () => HandleEnemyDead(d);
+		}
+
 		_player = (Player) _playerScene.Instantiate();
-		AddChild(_player);
-		
-		StartTimer(1 / _player.AttackSpeed);
+		AddChild(_player);		
 	}
 
 	public override void _Process(double delta)

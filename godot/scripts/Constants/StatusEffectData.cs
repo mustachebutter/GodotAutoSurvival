@@ -26,7 +26,6 @@ public static class StatusEffectDataParser
         if(file == null)
             GD.PrintErr($"Failed to parse file {path}");
         
-        GD.Print(file);
         // Skip the first header line
         file.GetLine();
         try
@@ -34,7 +33,12 @@ public static class StatusEffectDataParser
             while(!file.EofReached())
             {
                 string[] content = file.GetCsvLine("\t");
-                GD.Print(content.Length);
+                
+                if (content.Length == 0)
+                {
+                    continue;
+                }
+
                 var statusEffectData = new StatusEffectData
                 {
                     StatusEffectId = content[0],
