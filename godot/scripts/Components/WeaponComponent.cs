@@ -8,7 +8,7 @@ public partial class WeaponComponent : Node2D
     public Projectile Projectile;
     private Player _player;
 	private Dictionary<string, ProjectileData> projectileData = new Dictionary<string, ProjectileData>();
-	string currentProjectile = "Weapon_Fireball";
+	string currentProjectile = "Weapon_Zap";
 
     public override void _Ready()
     {
@@ -31,8 +31,8 @@ public partial class WeaponComponent : Node2D
 		};
 
 		Projectile.ProjectileData = projectileData[currentProjectile];
-		GD.Print(closestTarget.Name);
-		AddChild(Projectile);
+		// Add the projectile to the main scene instead
+		GetTree().Root.GetNode("Node2D").GetNode("ProjectileParentNode").AddChild(Projectile);
 		Projectile.Position = _player.Position;
 		_player.FireProjectileAtTarget(closestTarget, Projectile);
 	}
