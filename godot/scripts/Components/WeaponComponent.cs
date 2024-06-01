@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 [Tool]
@@ -8,13 +9,15 @@ public partial class WeaponComponent : Node2D
     public Projectile Projectile;
     private Player _player;
 	private Dictionary<string, ProjectileData> projectileData = new Dictionary<string, ProjectileData>();
-	string currentProjectile = "Weapon_Zap";
+	private List<string> projectiles = new List<string>();
+	int index = 0;
 
     public override void _Ready()
     {
         base._Ready();
         _player = GetParent<Player>();
 		projectileData = ProjectileParsedData.GetAllData();
+		projectiles = projectileData.Keys.ToList();
     }
 
     private void CreateProjectile()
@@ -23,6 +26,7 @@ public partial class WeaponComponent : Node2D
 
 		if (closestTarget == null) return;
 
+		string currentProjectile = projectiles[index];
 		Projectile = currentProjectile switch
 		{
 			"Weapon_Zap" => (Zap) projectileData[currentProjectile].ProjectileScene.Instantiate(),
@@ -48,6 +52,17 @@ public partial class WeaponComponent : Node2D
 		}
 	}
 
+	public void SwitchNextWeapon()
+	{
+		if (index < projectiles.Count() - 1)
+		{
+			index++;
+		}
+		else
+		{
+			index = 0;
+		}
+	}
 	private void OnTimerTimeout()
 	{
 		CreateProjectile();

@@ -35,6 +35,11 @@ public partial class Player : BaseCharacter
 			velocity.X += 1;
 		}
 
+		if (Input.IsActionPressed("SwitchWeapon"))
+		{
+			WeaponComponent.SwitchNextWeapon();
+		}
+
 		var animationTree = GetNode<AnimationTree>("AnimationTree");
 		var stateMachine = (AnimationNodeStateMachinePlayback) animationTree.Get("parameters/playback");
 
