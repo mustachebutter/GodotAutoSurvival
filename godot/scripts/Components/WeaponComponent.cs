@@ -17,7 +17,7 @@ public partial class WeaponComponent : Node2D
         base._Ready();
         _player = GetParent<Player>();
 		projectileData = ProjectileParsedData.GetAllData();
-		projectiles = projectileData.Keys.ToList();
+		projectiles = projectileData.Keys.Where(x => x != "Weapon_Default").ToList();
     }
 
     private void CreateProjectile()
