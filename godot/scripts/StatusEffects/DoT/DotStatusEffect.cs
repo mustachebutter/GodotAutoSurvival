@@ -17,6 +17,7 @@ public class DotStatusEffect : StatusEffect
 		_tickTimer = Utils.CreateTimer(Target, HandleStatusEffect, TickPerEverySecond, false);
 		_tickTimer?.Start();
 		
+		Target.OnCharacterDeadEvent -= OnTargetDied;
 		Target.OnCharacterDeadEvent += OnTargetDied;
 	}
 

@@ -67,8 +67,10 @@ public partial class BaseCharacter : CharacterBody2D
 		
 		if(IsDead && !_hasTriggeredOnDead)
 		{
+			GD.Print("Dead event: ", _hasTriggeredOnDead);
 			OnCharacterDeadEvent?.Invoke();
 			_hasTriggeredOnDead = true;
+			GD.Print("Dead event - 2: ", _hasTriggeredOnDead);
 		}
 	}
 

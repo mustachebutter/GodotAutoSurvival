@@ -13,7 +13,6 @@ public partial class Projectile : CharacterBody2D
 	protected float _playerRange = 0;
 	protected bool _shouldDestroyProjectile = false;
 	protected bool _shouldDamageEnemy = false;
-	protected List<Enemy> _bouncedEnemies = new List<Enemy>();
 	public StatusEffect StatusEffect { get; protected set; }
 
 	public ProjectileData ProjectileData { get; set;}
@@ -36,7 +35,6 @@ public partial class Projectile : CharacterBody2D
 			Enemy enemy = (Enemy) collision.GetCollider();
 
 			enemy.DealDamageToCharacter(ProjectileData.Damage);
-			enemy.OnCharacterDeadEvent += () => HandleTargetDead(enemy);
 			
 			HandleProjectileEffect(enemy);
 			// When the projectile hits, destroy itself
@@ -52,20 +50,6 @@ public partial class Projectile : CharacterBody2D
 
 		if (_shouldDestroyProjectile)
 			QueueFree();
-	}
-
-	public override void _ExitTree()
-	{
-		base._ExitTree();
-		foreach(var e in _bouncedEnemies)
-		{
-			if (IsInstanceValid(e))
-			{
-				e.SetCollisionLayerValue(5, false);
-				e.SetCollisionLayerValue(3, true);
-			}
-		}
-		_bouncedEnemies.Clear();
 	}
 
 	public void ShootAtTarget(Vector2 sourcePosition, Vector2 targetPosition, float playerRange)
@@ -91,10 +75,5 @@ public partial class Projectile : CharacterBody2D
 	{
 		var mainNode = (Main) GetParent();
 		mainNode.SpawnNode(node);
-	}
-
-	public void HandleTargetDead(Enemy enemy)
-	{
-		_shouldDestroyProjectile = true;
 	}
 }

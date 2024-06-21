@@ -1,7 +1,17 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
+public static class UtilGetter
+{
+    public static SceneTree GetSceneTree()
+    {
+        var sceneTree = (SceneTree) Engine.GetMainLoop() ?? throw new InvalidOperationException($"ERROR [{nameof(UtilGetter)}] Could not get the Scene Tree");
+        
+        return sceneTree;
+    }
+}
 public static class ProjectileTypes
 {
     // DEBUG: Do this for quick test

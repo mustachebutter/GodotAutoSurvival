@@ -47,8 +47,7 @@ public class Burn : DotStatusEffect
         base.OnTargetDied();
         // When the target died, spread to other closeby targets
         //Add to tree
-        GD.Print(_burnExplosion.Name);
-        Target.GetTree().Root.GetNode("Node2D").GetNode("VFXParentNode").AddChild(_burnExplosion);
+        UtilGetter.GetSceneTree().Root.GetNode("Node2D").GetNode("VFXParentNode").AddChild(_burnExplosion);
         _burnExplosion.Position = Target.Position;
         
         var explosionAnimatedSprite = _burnExplosion.AnimatedSprite2D;

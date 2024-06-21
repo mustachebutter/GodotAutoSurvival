@@ -33,8 +33,10 @@ public class Static : StatusEffect
 		{
             _chainLightning.Position = Target.Position;
             if (_chainLightning.GetParent() == null)
-                Target.GetTree().Root.GetNode("Node2D").GetNode("VFXParentNode").AddChild(_chainLightning);
-			// Trigger the lightning strike
+            {
+                UtilGetter.GetSceneTree().Root.GetNode("Node2D").GetNode("VFXParentNode").AddChild(_chainLightning);
+            }
+            // Trigger the lightning strike
 			_chainLightning.ScanForEnemies();
 		}
 
@@ -52,7 +54,7 @@ public class Static : StatusEffect
 
     public void LightningStrikeTargets(List<Enemy> enemies)
     {
-        var vfxRootNode = Target.GetTree().Root.GetNode("Node2D").GetNode("VFXParentNode");
+        var vfxRootNode = UtilGetter.GetSceneTree().Root.GetNode("Node2D").GetNode("VFXParentNode");
         for (int i = 0; i < enemies.Count - 1; i++)
         {
             var currentEnemy = enemies[i];
