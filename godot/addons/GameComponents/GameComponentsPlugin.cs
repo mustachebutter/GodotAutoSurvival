@@ -26,6 +26,7 @@ public partial class GameComponentsPlugin : EditorPlugin
 		// Clean-up of the plugin goes here.
 		RemoveCustomType("StatusEffectComponent");
 		RemoveCustomType("VisualEffectComponent");
+		RemoveCustomType("WeaponComponent");
 	}
 }
 #endif

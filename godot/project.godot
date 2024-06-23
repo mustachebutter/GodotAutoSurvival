@@ -26,7 +26,7 @@ project/assembly_name="RustAutoSurvival"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/StatusEffect/plugin.cfg", "res://addons/UI/plugin.cfg")
+enabled=PackedStringArray("res://addons/GameComponents/plugin.cfg", "res://addons/UI/plugin.cfg")
 
 [input]
 
