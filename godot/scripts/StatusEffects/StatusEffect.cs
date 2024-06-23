@@ -21,6 +21,7 @@ public class StatusEffect : IDisposable
     public virtual void OnStatusEffectEnd () 
     {
         Target.StatusEffectComponent.ClearEffect(this);
+        Dispose();
         Target.VisualEffectComponent.ClearVisualEffect();
         Target = null;
         Utils.DestroyTimer(MainTimer);

@@ -57,7 +57,6 @@ public partial class StatusEffectComponent : Node2D
 		if (status != null)
 		{
 			StatusEffectList.Remove(currentStatusEffect);
-			currentStatusEffect.Dispose();
 		}
 	}
 
