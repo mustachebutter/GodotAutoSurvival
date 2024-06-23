@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://d4eqdlea6exhb"]
+
+[ext_resource type="SpriteFrames" uid="uid://c7yenip1an2se" path="res://assets/sprite_frames/Effects.tres" id="1_i73ss"]
+[ext_resource type="Script" path="res://scripts/Vfx/VfxBurnExplosion.cs" id="1_xhcse"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sobpj"]
+radius = 16.0312
+
+[node name="vfx_burn_explosion" type="Node2D"]
+scale = Vector2(3, 3)
+script = ExtResource("1_xhcse")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(5, 5)
+sprite_frames = ExtResource("1_i73ss")
+animation = &"vfx_burn_explosion"
+frame = 2
+frame_progress = 0.926266
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_sobpj")

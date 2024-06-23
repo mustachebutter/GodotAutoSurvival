@@ -1,15 +1,20 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
-public partial class Player : CharacterBody2D
+public partial class Player : BaseCharacter
 {
-	[Export]
-	public const float Speed = 100.0f;
+	public WeaponComponent WeaponComponent;
+	public override void _Ready()
+	{
+		base._Ready();
+		WeaponComponent = GetNode<WeaponComponent>("WeaponComponent");
+		WeaponComponent.StartTimer(1 / AttackSpeed);
+	}
 
 	public override void _PhysicsProcess(double delta)
 	{
 		Vector2 velocity = new Vector2();
-
 		if (Input.IsActionPressed("Up"))
 		{
 			velocity.Y -= 1;
@@ -28,6 +33,11 @@ public partial class Player : CharacterBody2D
 		if (Input.IsActionPressed("Right"))
 		{
 			velocity.X += 1;
+		}
+
+		if (Input.IsActionJustPressed("SwitchWeapon"))
+		{
+			WeaponComponent.SwitchNextWeapon();	
 		}
 
 		var animationTree = GetNode<AnimationTree>("AnimationTree");
@@ -51,7 +61,13 @@ public partial class Player : CharacterBody2D
 
 		// Normalized the Vector
 		velocity = velocity.Normalized() * Speed;
+
 		Velocity = velocity;
 		MoveAndSlide();
+	}
+
+	public void FireProjectileAtTarget(Node2D closestTarget, Projectile projectile)
+	{
+		projectile.ShootAtTarget(Position, closestTarget.Position, AttackRange);
 	}
 }

@@ -1,0 +1,4 @@
+ID	Name	Description	VfxName	IsStackable	NumberOfStacks	Duration	Damage	DamageType	TickPerEverySecond
+Status_Default	Default	Default status effect. Some keys were entered wrong!	vfx_default	FALSE	1	0.00	0.00	DamageTypes.Normal	0.00
+Status_DOT_Burn	Burn	Burns the target, ticks damage every x seconds	vfx_burn	TRUE	1	3.00	5.00	DamageTypes.Fire	0.30
+Status_Zap	Zap	Marks the target with a zap effect. After a while it launches another lighting bolt to the next target in range.	vfx_zap	TRUE	1	2.00	0.00	DamageTypes.Electric	0.00
