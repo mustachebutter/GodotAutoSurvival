@@ -1,0 +1,44 @@
+[gd_scene load_steps=3 format=3 uid="uid://bxswmkfhnml0w"]
+
+[ext_resource type="Script" path="res://scripts/UI/MainHUD.cs" id="1_p6omv"]
+[ext_resource type="FontFile" uid="uid://dubhyoykvvioh" path="res://assets/fonts/VCR_OSD_MONO_1.001.ttf" id="1_rihvd"]
+
+[node name="CanvasLayer" type="CanvasLayer"]
+follow_viewport_scale = 0.001
+script = ExtResource("1_p6omv")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -43.0
+offset_right = 184.0
+grow_vertical = 0
+
+[node name="Label" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_rihvd")
+theme_override_font_sizes/font_size = 40
+text = "Weapon_X"
+vertical_alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 25
+theme_override_font_sizes/bold_font_size = 25
+theme_override_font_sizes/italics_font_size = 25
+bbcode_enabled = true
+text = "[b][color=red]Damage[/color][/b]: 0
+[b][color=blue]Attack Speed[/color][/b]: 0.0
+"
+fit_content = true
+autowrap_mode = 0

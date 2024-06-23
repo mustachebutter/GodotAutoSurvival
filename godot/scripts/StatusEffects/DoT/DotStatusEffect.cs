@@ -32,4 +32,11 @@ public class DotStatusEffect : StatusEffect
 		base.OnStatusEffectEnd();
 		Utils.DestroyTimer(_tickTimer);
 	}
+
+	public override void Dispose()
+	{
+		base.Dispose();
+		GD.Print("[DEBUG] Disposing status effect");
+		Target.OnCharacterDeadEvent -= OnTargetDied;
+	}
 }

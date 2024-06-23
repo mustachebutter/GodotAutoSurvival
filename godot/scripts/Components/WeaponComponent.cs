@@ -11,6 +11,7 @@ public partial class WeaponComponent : Node2D
 	private Dictionary<string, ProjectileData> projectileData = new Dictionary<string, ProjectileData>();
 	private List<string> projectiles = new List<string>();
 	int index = 0;
+	MainHUD MainHUD { get; set; }
 
     public override void _Ready()
     {
@@ -18,6 +19,8 @@ public partial class WeaponComponent : Node2D
         _player = GetParent<Player>();
 		projectileData = ProjectileParsedData.GetAllData();
 		projectiles = projectileData.Keys.Where(x => x != "Weapon_Default").ToList();
+		MainHUD = UtilGetter.GetSceneTree().Root.GetNode<MainHUD>("Node2D/MainHUD");
+		MainHUD.SetDebugWeapon(projectileData[projectiles[index]]);
     }
 
     private void CreateProjectile()
@@ -62,6 +65,8 @@ public partial class WeaponComponent : Node2D
 		{
 			index = 0;
 		}
+
+		MainHUD.SetDebugWeapon(projectileData[projectiles[index]]);
 	}
 	private void OnTimerTimeout()
 	{

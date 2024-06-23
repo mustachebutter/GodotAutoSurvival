@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-public class StatusEffect
+public class StatusEffect : IDisposable
 {
     public BaseCharacter Target { get; set; }
     public Timer MainTimer { get; private set; }
@@ -47,5 +47,7 @@ public class StatusEffect
         }   
         
         MainTimer?.Start();
-    } 
+    }
+
+    public virtual void Dispose() { }
 }

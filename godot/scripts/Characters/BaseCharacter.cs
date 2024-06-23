@@ -68,6 +68,7 @@ public partial class BaseCharacter : CharacterBody2D
 		if(IsDead && !_hasTriggeredOnDead)
 		{
 			GD.Print("Dead event: ", _hasTriggeredOnDead);
+			StatusEffectComponent.StatusEffectList.ForEach(x => GD.Print("SEL: ", x));
 			OnCharacterDeadEvent?.Invoke();
 			_hasTriggeredOnDead = true;
 			GD.Print("Dead event - 2: ", _hasTriggeredOnDead);

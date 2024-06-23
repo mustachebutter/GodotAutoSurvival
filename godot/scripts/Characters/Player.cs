@@ -35,9 +35,9 @@ public partial class Player : BaseCharacter
 			velocity.X += 1;
 		}
 
-		if (Input.IsActionPressed("SwitchWeapon"))
+		if (Input.IsActionJustPressed("SwitchWeapon"))
 		{
-			WeaponComponent.SwitchNextWeapon();
+			WeaponComponent.SwitchNextWeapon();	
 		}
 
 		var animationTree = GetNode<AnimationTree>("AnimationTree");
