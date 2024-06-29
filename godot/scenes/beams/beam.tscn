@@ -1,0 +1,34 @@
+[gd_scene load_steps=4 format=3 uid="uid://cm1uou65cpx5e"]
+
+[ext_resource type="Texture2D" uid="uid://bfq1ttdr5186q" path="res://assets/Solid_White.png" id="1_d5i53"]
+[ext_resource type="Script" path="res://scripts/Projectiles/Beam.cs" id="1_igmbx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f72bx"]
+size = Vector2(128, 128)
+
+[node name="beam" type="Node2D"]
+script = ExtResource("1_igmbx")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_f72bx")
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D/CollisionShape2D"]
+visible = false
+modulate = Color(1, 1, 1, 0.501961)
+position = Vector2(0, -64)
+texture = ExtResource("1_d5i53")
+offset = Vector2(0, 64)
+
+[node name="ColorRect" type="ColorRect" parent="Area2D/CollisionShape2D"]
+modulate = Color(1, 1, 1, 0.501961)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 64.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
