@@ -27,6 +27,13 @@ public enum DamageTypes
     Fire,
     Electric,
     Normal,
+    Light,
+}
+
+public enum WeaponTypes
+{
+    Projectile,
+    Beam,
 }
 
 public static class Scenes
@@ -75,7 +82,7 @@ public static class ProjectileParsedData
     public static Dictionary<string, ProjectileData> dictionary = new Dictionary<string, ProjectileData>();
     static ProjectileParsedData()
     {
-        var path  = "res://metadata/GodotAutoSurvival_Metadata_Weapon.txt";
+        var path  = "res://metadata/GodotAutoSurvival_Metadata_Weapon.tsv";
         var pList = ProjectileDataParser.ParseData(path);
         
         foreach (var p in pList)

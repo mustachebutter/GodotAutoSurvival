@@ -8,7 +8,9 @@ public struct ProjectileData
     public string ProjectileName { get; set; }
     public string ProjectileDescription { get; set; }
 	public float Damage { get; set; }
+    public WeaponTypes WeaponType { get; set; }
     public DamageTypes DamageType { get; set; }
+    public float AttackSpeed { get; set; }
     public float Speed { get; set; }
 	public string AnimationName { get; set; }
     public PackedScene ProjectileScene { get; set; }
@@ -23,7 +25,6 @@ public static class ProjectileDataParser
         if(file == null)
             GD.PrintErr($"Failed to parse file {path}");
         
-        GD.Print(file);
         // Skip the first header line
         file.GetLine();
         try
@@ -44,11 +45,13 @@ public static class ProjectileDataParser
                     ProjectileDescription = content[2],
                     Damage = float.Parse(content[3]),
                     DamageType = Enum.Parse<DamageTypes>(content[4].Split(".")[1]),
-                    Speed = float.Parse(content[5]),
-                    AnimationName = content[6],
-                    ProjectileScene = GD.Load<PackedScene>(content[7]),
+                    WeaponType = Enum.Parse<WeaponTypes>(content[5].Split(".")[1]),
+                    AttackSpeed = float.Parse(content[6]),
+                    Speed = float.Parse(content[7]),
+                    AnimationName = content[8],
+                    ProjectileScene = GD.Load<PackedScene>(content[9]),
                 };
-
+                GD.Print($"{projectileData.ProjectileId}, {projectileData.ProjectileName}");
                 projectiles.Add(projectileData);
             }
 
