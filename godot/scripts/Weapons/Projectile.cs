@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Godot;
 
-public partial class Projectile : CharacterBody2D
+public partial class Projectile : Weapon
 {
 	protected AnimatedSprite2D _animatedSprite;
 	protected CollisionShape2D _collisionShape2D;

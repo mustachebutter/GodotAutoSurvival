@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-public partial class Beam : Node2D
+public partial class Beam : Weapon
 {
 	protected Area2D _beamHitbox;
 	protected float _beamWidth { get; set; } = 50.0f;
