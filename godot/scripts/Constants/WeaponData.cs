@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using Godot;
 
-public struct ProjectileData
+public struct WeaponData
 {
-    public string ProjectileId { get; set; }
-    public string ProjectileName { get; set; }
-    public string ProjectileDescription { get; set; }
+    public string WeaponId { get; set; }
+    public string WeaponName { get; set; }
+    public string WeaponDescription { get; set; }
 	public float Damage { get; set; }
     public WeaponTypes WeaponType { get; set; }
     public DamageTypes DamageType { get; set; }
@@ -16,11 +16,11 @@ public struct ProjectileData
     public PackedScene ProjectileScene { get; set; }
 }
 
-public static class ProjectileDataParser
+public static class WeaponDataParser
 {
-    public static List<ProjectileData> ParseData(string path)
+    public static List<WeaponData> ParseData(string path)
     {
-        var projectiles = new List<ProjectileData>();
+        var projectiles = new List<WeaponData>();
         var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
         if(file == null)
             GD.PrintErr($"Failed to parse file {path}");
@@ -38,11 +38,11 @@ public static class ProjectileDataParser
                     continue;
                 }
 
-                var projectileData = new ProjectileData
+                var projectileData = new WeaponData
                 {
-                    ProjectileId = content[0],
-                    ProjectileName = content[1],
-                    ProjectileDescription = content[2],
+                    WeaponId = content[0],
+                    WeaponName = content[1],
+                    WeaponDescription = content[2],
                     Damage = float.Parse(content[3]),
                     DamageType = Enum.Parse<DamageTypes>(content[4].Split(".")[1]),
                     WeaponType = Enum.Parse<WeaponTypes>(content[5].Split(".")[1]),
@@ -51,7 +51,7 @@ public static class ProjectileDataParser
                     AnimationName = content[8],
                     ProjectileScene = GD.Load<PackedScene>(content[9]),
                 };
-                GD.Print($"{projectileData.ProjectileId}, {projectileData.ProjectileName}");
+                GD.Print($"{projectileData.WeaponId}, {projectileData.AnimationName}, {projectileData.ProjectileScene}");
                 projectiles.Add(projectileData);
             }
 

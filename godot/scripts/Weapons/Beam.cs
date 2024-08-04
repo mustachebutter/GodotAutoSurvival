@@ -21,7 +21,6 @@ public partial class Beam : Weapon
 
 		_beamHitboxShape.Size = new Vector2(_beamWidth, _beamLength);
 		_beamAnimationPlayer.AnimationFinished += OnFinishedAnimation;
-		_beamAnimationPlayer.Play("VFX_AnimationLibrary/prime");
 	}
 
 	public void OnFinishedAnimation(StringName animName)
@@ -38,7 +37,10 @@ public partial class Beam : Weapon
 
 	public void HandlePrimedBeam()
 	{
-
+		if (_beamAnimationPlayer == null)
+			GD.Print("Null");
+		else
+			_beamAnimationPlayer.Play(WeaponData.AnimationName);
 	}
 
 }

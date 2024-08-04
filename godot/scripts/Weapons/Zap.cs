@@ -13,10 +13,6 @@ public partial class Zap : Projectile
 	public override void _Ready()
 	{
 		base._Ready();
-		_area2D = GetNode<Area2D>("Area2D");
-		CircleShape2D circle = (CircleShape2D) _area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
-		circle.Radius = _bounceRadius;
-
 		StatusEffect = new Static(this, StatusEffectParsedData.GetData("Status_Zap"));
 	}
 	public override void HandleProjectileEffect(Enemy enemy)

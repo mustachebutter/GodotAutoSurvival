@@ -38,7 +38,7 @@ _data = {
 "RESET": SubResource("Animation_rfmjp")
 }
 
-[node name="beam" type="Node2D"]
+[node name="beam" type="CharacterBody2D"]
 rotation = -6.28319
 script = ExtResource("1_igmbx")
 
