@@ -75,7 +75,7 @@ public partial class Player : BaseCharacter
 		}
 		else if (weapon is Beam beam)
 		{
-			beam.HandlePrimedBeam();
+			beam.PrimeBeamAtTarget(closestTarget);
 			GD.Print("Beam: ", beam.WeaponData.WeaponName);
 		}
 	}

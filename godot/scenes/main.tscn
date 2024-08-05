@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cr752cyhod5wg"]
+[gd_scene load_steps=3 format=3 uid="uid://cr752cyhod5wg"]
 
 [ext_resource type="Script" path="res://scripts/Main.cs" id="1_byp4v"]
 [ext_resource type="PackedScene" uid="uid://bxswmkfhnml0w" path="res://scenes/ui/main_hud.tscn" id="2_qc52h"]
-[ext_resource type="PackedScene" uid="uid://cm1uou65cpx5e" path="res://scenes/beams/beam.tscn" id="3_prubk"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_byp4v")
@@ -16,6 +15,3 @@ script = ExtResource("1_byp4v")
 [node name="ProjectileParentNode" type="Node2D" parent="."]
 
 [node name="MainHUD" parent="." instance=ExtResource("2_qc52h")]
-
-[node name="beam" parent="." instance=ExtResource("3_prubk")]
-position = Vector2(515, 446)

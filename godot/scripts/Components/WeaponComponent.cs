@@ -50,9 +50,14 @@ public partial class WeaponComponent : Node2D
 		};
 
 		Weapon.WeaponData = weaponData[currentWeapon];
+
 		// Add the projectile to the main scene instead
-		GetTree().Root.GetNode("Node2D").GetNode("ProjectileParentNode").AddChild(Weapon);
-		Weapon.Position = _player.Position;
+		if (Weapon.WeaponData.WeaponType == WeaponTypes.Projectile)
+			GetTree().Root.GetNode("Node2D").GetNode("ProjectileParentNode").AddChild(Weapon);
+		else
+			_player.AddChild(Weapon);
+
+		Weapon.GlobalPosition = _player.GlobalPosition;
 
 		_player.FireProjectileAtTarget(closestTarget, Weapon);
 	}

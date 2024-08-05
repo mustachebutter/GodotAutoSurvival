@@ -28,19 +28,37 @@ public partial class Beam : Weapon
 		switch(animName)
 		{
 			case "VFX_AnimationLibrary/prime":
-
+				QueueFree();
 				break;
 			default:
 				break;
 		}
 	}
 
-	public void HandlePrimedBeam()
+	public void PrimeBeamAtTarget(Node2D closestTarget)
 	{
 		if (_beamAnimationPlayer == null)
 			GD.Print("Null");
 		else
+		{
+			var angle = GlobalPosition.AngleToPoint(closestTarget.GlobalPosition);
+			GlobalRotation = angle - (float) Math.PI / 2;
 			_beamAnimationPlayer.Play(WeaponData.AnimationName);
+		}
+	}
+
+	public void DealDamageToCharacter()
+	{
+		// Scan with Area2D
+		var bodies = _beamHitbox.GetOverlappingBodies();
+		if (bodies != null)
+		{
+			foreach (var bd in bodies)
+			{
+				var enemy = (Enemy) bd;
+				enemy.DealDamageToCharacter(WeaponData.Damage);
+			}
+		}
 	}
 
 }
