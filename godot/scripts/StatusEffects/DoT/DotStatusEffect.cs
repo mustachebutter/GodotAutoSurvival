@@ -36,7 +36,7 @@ public class DotStatusEffect : StatusEffect
 	public override void Dispose()
 	{
 		base.Dispose();
-		GD.Print("[DEBUG] Disposing status effect");
+		LoggingUtils.Debug("Disposing status effect");
 		Target.OnCharacterDeadEvent -= OnTargetDied;
 	}
 }

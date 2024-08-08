@@ -71,12 +71,10 @@ public partial class Player : BaseCharacter
 		if (weapon is Projectile projectile)
 		{
 			projectile.ShootAtTarget(Position, closestTarget.Position, AttackRange);
-			GD.Print("Projectile: ", projectile.WeaponData.WeaponName);
 		}
 		else if (weapon is Beam beam)
 		{
 			beam.PrimeBeamAtTarget(closestTarget);
-			GD.Print("Beam: ", beam.WeaponData.WeaponName);
 		}
 	}
 }

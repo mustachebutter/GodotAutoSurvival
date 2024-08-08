@@ -38,7 +38,7 @@ public partial class Beam : Weapon
 	public void PrimeBeamAtTarget(Node2D closestTarget)
 	{
 		if (_beamAnimationPlayer == null)
-			GD.Print("Null");
+			LoggingUtils.Error($"[{nameof(Beam)}] Beam animation player is null!");
 		else
 		{
 			var angle = GlobalPosition.AngleToPoint(closestTarget.GlobalPosition);

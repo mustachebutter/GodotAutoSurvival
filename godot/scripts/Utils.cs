@@ -81,7 +81,7 @@ public static class Utils
 		}
 		catch
 		{
-			GD.PrintErr($"ERROR [{nameof(Utils)}]: Tried to destroy a null timer.");
+			LoggingUtils.Error($"[{nameof(Utils)}]: Tried to destroy a null timer.");
 			throw;
 		}
 

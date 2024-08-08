@@ -24,17 +24,18 @@ public static class StatusEffectDataParser
         var statusEffects = new List<StatusEffectData>();
         var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
         if(file == null)
-            GD.PrintErr($"Failed to parse file {path}");
+            LoggingUtils.Error($"Failed to parse file {path}");
         
         // Skip the first header line
         file.GetLine();
         try
         {
+            LoggingUtils.Info("StatusEffectData Parsing!!!", isBold: true, fontSize: 20);
             while(!file.EofReached())
             {
                 string[] content = file.GetCsvLine("\t");
                 
-                GD.Print(content.Length);
+                LoggingUtils.Info($"Parsing {content.Length} column(s)");
                 if (content.Length == 1)
                 {
                     continue;
@@ -53,26 +54,27 @@ public static class StatusEffectDataParser
                     DamageType = Enum.Parse<DamageTypes>(content[8].Split(".")[1]),
                     TickPerEverySecond = float.Parse(content[9]),
                 };
+                LoggingUtils.Info($"{statusEffectData.StatusEffectId}: {statusEffectData.StatusEffectName}");
                 statusEffects.Add(statusEffectData);
             }
 
 
             if(statusEffects.Count == 0)
-                GD.PrintErr("Wasn't able to parsed any status effect data!");
+                LoggingUtils.Error("Wasn't able to parsed any status effect data!");
     
             return statusEffects;
         }
         catch(FormatException ex)
         {
-            GD.PrintErr($"Failed to parse column for status effect: {ex}");
+            LoggingUtils.Error($"Failed to parse column for status effect: {ex}");
         }
         catch(IndexOutOfRangeException ex)
         {
-            GD.PrintErr($"The number of parsed columns doesn't match the expected for status effect: {ex}");
+            LoggingUtils.Error($"The number of parsed columns doesn't match the expected for status effect: {ex}");
         }
         catch(ArgumentNullException ex)
         {
-            GD.PrintErr($"Tried to parse a null value: {ex}");
+            LoggingUtils.Error($"Tried to parse a null value: {ex}");
         }
 
 

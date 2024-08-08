@@ -39,7 +39,7 @@ public partial class Main : Node2D
 	{
 		if (dummies.Contains(enemy))
 		{
-			GD.Print($"Removed enemy: {dummies.Remove(enemy)}, {enemy.Name}");
+			LoggingUtils.Debug($"Removed enemy: {dummies.Remove(enemy)}, {enemy.Name}");
 		}
 	}
 

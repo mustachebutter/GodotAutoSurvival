@@ -68,7 +68,7 @@ public static class StatusEffectParsedData
 		}
 		else
 		{
-			GD.PrintErr("No status effect was found, applying the default status effect values!");
+			LoggingUtils.Error("No status effect was found, applying the default status effect values!");
 			return dictionary["Status_Default"];
 		}
 	}
@@ -97,7 +97,7 @@ public static class WeaponParsedData
 		}
 		else
 		{
-			GD.PrintErr("No weapon was found, applying the default weapon values!");
+			LoggingUtils.Error("No weapon was found, applying the default weapon values!");
 			return dictionary["Weapon_Default"];
 		}
 	}

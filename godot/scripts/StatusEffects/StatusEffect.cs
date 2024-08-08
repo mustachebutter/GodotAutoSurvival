@@ -43,7 +43,7 @@ public class StatusEffect : IDisposable
         }
         catch (ArgumentNullException e)
         {
-            GD.PrintErr("ERROR: Main Timer is not created! Please create one before starting");
+            LoggingUtils.Error("Main Timer is not created! Please create one before starting");
             throw;
         }   
         
