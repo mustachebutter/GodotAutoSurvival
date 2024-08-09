@@ -10,8 +10,8 @@ public partial class Lazerbeam : Beam
 		base._Ready();
 	}
 
-	public override void HandleProjectileEffect(Enemy hitEnemy)
-	{
-		base.HandleProjectileEffect(hitEnemy);
-	}
+    public override void HandleProjectileEffect(Enemy hitEnemy)
+    {
+        base.HandleProjectileEffect(hitEnemy);
+    }
 }

@@ -6,7 +6,7 @@ public class StatusEffect : IDisposable
     public BaseCharacter Target { get; set; }
     public Timer MainTimer { get; private set; }
     public Node2D Source { get; protected set; }
-    public StatusEffectData StatusEffectData { get; set; }
+    public StatusEffectData StatusEffectData { get; protected set; }
     public virtual void StartStatusEffect () { }
     public virtual void HandleStatusEffect () { }
     public virtual void OnStatusEffectEnd () 
