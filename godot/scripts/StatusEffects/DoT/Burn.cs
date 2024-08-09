@@ -1,26 +1,24 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
 public class Burn : DotStatusEffect
 {
     private VfxBurnExplosion _burnExplosion;
-    public Burn(
-        Node2D source,
-        StatusEffectData statusEffectData
-    )
+    public Burn(Node2D source, StatusEffectData statusEffectData)
     {
-        Source = source;
-        StatusEffectId = statusEffectData.StatusEffectId;
-        StatusEffectName = statusEffectData.StatusEffectName;
-        StatusEffectDesc = statusEffectData.StatusEffectDesc;
-        VisualEffectName = statusEffectData.VisualEffectName;
-        IsStackable = statusEffectData.IsStackable;
-        NumberOfStacks = statusEffectData.NumberOfStacks;
-        Duration = statusEffectData.Duration;
-        Damage = statusEffectData.Damage;
-		DamageType = statusEffectData.DamageType;
-		TickPerEverySecond = statusEffectData.TickPerEverySecond;
+        try
+        {
+            ArgumentNullException.ThrowIfNull(statusEffectData);
+        }
+        catch (ArgumentNullException e)
+        {
+            LoggingUtils.Error($"{nameof(Burn)} Status effect data is null");
+            throw;
+        }
 
+        Source = source;
+        StatusEffectData = statusEffectData;
         // Initialize Explosion
         _burnExplosion = (VfxBurnExplosion) Scenes.VfxBurnExplosion.Instantiate();
         _burnExplosion.ReportEnemies += AffectSideTargets;
@@ -76,7 +74,7 @@ public class Burn : DotStatusEffect
                 // Deals damage to nearby targets
                 // Apply debuffs to nearby targets
                 enemy.StatusEffectComponent.ApplyEffectToCharacter(burn);
-                enemy.DealDamageToCharacter(burn.Damage, DamageTypes.Normal);
+                enemy.DealDamageToCharacter(burn.StatusEffectData.Damage, burn.StatusEffectData.DamageType);
             }
         }
 

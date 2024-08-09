@@ -12,8 +12,6 @@ public partial class Projectile : Weapon
 	protected float _playerRange = 0;
 	protected bool _shouldDestroyProjectile = false;
 	protected bool _shouldDamageEnemy = false;
-	public virtual void HandleProjectileEffect() { }
-	public virtual void HandleProjectileEffect(Enemy hitEnemy) { }
 
 	public override void _Ready()
 	{
