@@ -50,7 +50,7 @@ public static class StatusEffectParsedData
 	public static Dictionary<string, StatusEffectData> dictionary = new Dictionary<string, StatusEffectData>();
 	static StatusEffectParsedData()
 	{
-		var path  = "res://metadata/GodotAutoSurvival_Metadata_StatusEffect.txt";
+		var path  = "res://metadata/GodotAutoSurvival_Metadata_StatusEffect.tsv";
 		var seList = StatusEffectDataParser.ParseData(path);
 		
 		foreach (var se in seList)

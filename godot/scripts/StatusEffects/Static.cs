@@ -7,19 +7,20 @@ public class Static : StatusEffect
     private VfxChainLightning _chainLightning;
 
     private List<Node2D> _lightningStrikesToDispose = new List<Node2D>();
-    public Static(
-        Node2D source,
-        StatusEffectData statusEffectData
-    )
+    public Static(Node2D source, StatusEffectData statusEffectData)
     {
+        try
+        {
+            ArgumentNullException.ThrowIfNull(statusEffectData);
+        }
+        catch (ArgumentNullException e)
+        {
+            LoggingUtils.Error($"{nameof(Static)} Status effect data is null");
+            throw;
+        }
+        
         Source = source;
-        StatusEffectId = statusEffectData.StatusEffectId;
-        StatusEffectName = statusEffectData.StatusEffectName;
-        StatusEffectDesc = statusEffectData.StatusEffectDesc;
-        VisualEffectName = statusEffectData.VisualEffectName;
-        IsStackable = statusEffectData.IsStackable;
-        NumberOfStacks = statusEffectData.NumberOfStacks;
-        Duration = statusEffectData.Duration;
+        StatusEffectData = statusEffectData;
 
         _chainLightning = (VfxChainLightning) Scenes.VfxChainLightning.Instantiate();
         _chainLightning.ReportEnemies += LightningStrikeTargets;
@@ -29,7 +30,7 @@ public class Static : StatusEffect
     {
         base.StartStatusEffect();
         
-		if (NumberOfStacks != 0 && NumberOfStacks % 3 == 0)
+		if (StatusEffectData.NumberOfStacks != 0 && StatusEffectData.NumberOfStacks % 3 == 0)
 		{
             _chainLightning.Position = Target.Position;
             if (_chainLightning.GetParent() == null)

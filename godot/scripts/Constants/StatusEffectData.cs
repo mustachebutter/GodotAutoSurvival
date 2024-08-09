@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-public struct StatusEffectData
+public class StatusEffectData
 {
     public string StatusEffectId { get; set; }
     public string StatusEffectName { get; set; }
