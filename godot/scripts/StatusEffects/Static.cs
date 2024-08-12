@@ -29,7 +29,7 @@ public class Static : StatusEffect
     public override void StartStatusEffect()
     {
         base.StartStatusEffect();
-        
+        LoggingUtils.Debug($"Static stacks: {StatusEffectData.NumberOfStacks}");
 		if (StatusEffectData.NumberOfStacks != 0 && StatusEffectData.NumberOfStacks % 3 == 0)
 		{
             _chainLightning.Position = Target.Position;

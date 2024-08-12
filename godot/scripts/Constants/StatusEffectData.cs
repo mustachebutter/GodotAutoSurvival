@@ -15,6 +15,22 @@ public class StatusEffectData
 	public float Damage { get; set; }
     public DamageTypes DamageType { get; set; }
 	public float TickPerEverySecond { get; set; }
+
+    public StatusEffectData DeepCopy()
+    {
+        return new StatusEffectData { 
+            StatusEffectId = this.StatusEffectId,
+            StatusEffectName = this.StatusEffectName,
+            StatusEffectDesc = this.StatusEffectDesc,
+            VisualEffectName = this.VisualEffectName,
+            IsStackable = this.IsStackable,
+            NumberOfStacks = this.NumberOfStacks,
+            Duration = this.Duration,
+            Damage = this.Damage,
+            DamageType = this.DamageType,
+            TickPerEverySecond = this.TickPerEverySecond,
+        };
+    }
 }
 
 public static class StatusEffectDataParser

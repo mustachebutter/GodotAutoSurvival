@@ -21,6 +21,7 @@ public partial class Beam : Weapon
 
 		_beamHitboxShape.Size = new Vector2(_beamWidth, _beamLength);
 		_beamAnimationPlayer.AnimationFinished += OnFinishedAnimation;
+
 	}
 
 	public void OnFinishedAnimation(StringName animName)
@@ -47,16 +48,22 @@ public partial class Beam : Weapon
 		}
 	}
 
-	public void DealDamageToCharacter()
+	public virtual float CalculateTotalDamage() { 
+		return WeaponData.Damage;
+	}
+
+	public virtual void DealDamageToCharacter()
 	{
 		// Scan with Area2D
 		var bodies = _beamHitbox.GetOverlappingBodies();
 		if (bodies != null)
 		{
+			var totalDamageToDeal = CalculateTotalDamage();
+
 			foreach (var bd in bodies)
 			{
 				var enemy = (Enemy) bd;
-				enemy.DealDamageToCharacter(WeaponData.Damage);
+				enemy.DealDamageToCharacter(totalDamageToDeal);
 			}
 		}
 	}

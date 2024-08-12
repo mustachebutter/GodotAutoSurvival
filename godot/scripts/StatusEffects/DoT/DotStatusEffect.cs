@@ -27,12 +27,6 @@ public class DotStatusEffect : StatusEffect
 	{
 		base.OnStatusEffectEnd();
 		Utils.DestroyTimer(_tickTimer);
-	}
-
-	public override void Dispose()
-	{
-		base.Dispose();
-		LoggingUtils.Debug("Disposing status effect");
 		Target.OnCharacterDeadEvent -= OnTargetDied;
 	}
 }

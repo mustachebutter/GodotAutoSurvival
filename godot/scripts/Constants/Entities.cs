@@ -11,6 +11,19 @@ public static class UtilGetter
 		
 		return sceneTree;
 	}
+
+	public static Player GetMainPlayer()
+	{
+		var player = GetSceneTree().Root.GetNode<Node2D>("Node2D/CharactersParentNode").GetNode<CharacterBody2D>("Player");
+		
+		if (player != null)
+		{
+			return (Player) player;
+		}
+
+		LoggingUtils.Error("Could not retrieved player node");
+		throw new Exception("Could not retrieved player node");
+	}
 }
 public static class ProjectileTypes
 {
@@ -64,7 +77,10 @@ public static class StatusEffectParsedData
 		StatusEffectData statusEffectData;
 		if(dictionary.TryGetValue(key, out statusEffectData))
 		{
-			return statusEffectData;
+			// We have to return a DeepCopy because we are instantiating StatusEffect Data
+			// one time only. Deep copy will generate a new object with a different
+			// address and default state variables.
+			return statusEffectData.DeepCopy();
 		}
 		else
 		{

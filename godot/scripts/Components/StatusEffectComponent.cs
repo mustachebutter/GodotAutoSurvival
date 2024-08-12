@@ -35,7 +35,8 @@ public partial class StatusEffectComponent : Node2D
 		else
 		{
 			StatusEffectList.Add(currentStatusEffect);
-			Target.VisualEffectComponent.PlayVisualEffect(currentStatusEffect.StatusEffectData.VisualEffectName, true);
+			if (currentStatusEffect.StatusEffectData.VisualEffectName != "vfx_default")
+				Target.VisualEffectComponent.PlayVisualEffect(currentStatusEffect.StatusEffectData.VisualEffectName, true);
 			// Do logic of the status effect. Only DOT has special logic for now.
 			// Realistically, we want to do this once!
 			currentStatusEffect.StartStatusEffect();
@@ -53,9 +54,9 @@ public partial class StatusEffectComponent : Node2D
 		// TODO: Some cool design decision here, just gonna assume 1 stack all time for now.
 
 		var status = StatusEffectList.Find(x => x.StatusEffectData.StatusEffectId == currentStatusEffect.StatusEffectData.StatusEffectId);
-
 		if (status != null)
 		{
+			// This DOESN'T actually remove the object from existence
 			StatusEffectList.Remove(currentStatusEffect);
 		}
 	}

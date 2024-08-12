@@ -16,10 +16,10 @@ public partial class Main : Node2D
 		GetTree().DebugCollisionsHint = true;
 		// !!!!!! DEBUG ONLY
 				
-		dummies.Add(Utils.CreateDummy(new Vector2(371, 329), _enemyScene, this));
-		dummies.Add(Utils.CreateDummy(new Vector2(435, 264), _enemyScene, this));
-		dummies.Add(Utils.CreateDummy(new Vector2(455, 396), _enemyScene, this));
-		dummies.Add(Utils.CreateDummy(new Vector2(504, 312), _enemyScene, this));
+		dummies.Add(Utils.CreateDummy(new Vector2(371, 329), _enemyScene));
+		dummies.Add(Utils.CreateDummy(new Vector2(435, 264), _enemyScene));
+		dummies.Add(Utils.CreateDummy(new Vector2(455, 396), _enemyScene));
+		dummies.Add(Utils.CreateDummy(new Vector2(504, 312), _enemyScene));
 
 		foreach (var d in dummies)
 		{
@@ -27,7 +27,7 @@ public partial class Main : Node2D
 		}
 
 		_player = (Player) _playerScene.Instantiate();
-		AddChild(_player);		
+		GetNode<Node2D>("CharactersParentNode").AddChild(_player);		
 	}
 
 	public override void _Process(double delta)

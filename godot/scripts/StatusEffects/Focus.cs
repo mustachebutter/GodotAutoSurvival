@@ -26,10 +26,11 @@ public class Focus : StatusEffect
     {
         base.StartStatusEffect();
         // TODO: This should be checked in the base StatusEffect
-        var num = StatusEffectData.NumberOfStacks % 5 == 0 ? 5 : (StatusEffectData.NumberOfStacks % 5);
-        var extraDamageMultiplier = num * _extraDamagePerStack;
+        var num = StatusEffectData.NumberOfStacks >= 5 ? 5 : (StatusEffectData.NumberOfStacks % 5);
+        ExtraDamageMultiplier = num * _extraDamagePerStack;
 
-
+        LoggingUtils.Debug($"Stacks: {num}");
+        LoggingUtils.Debug($"ExtraDamageMultiplier: {ExtraDamageMultiplier}");
     }
 
     public override void HandleStatusEffect()

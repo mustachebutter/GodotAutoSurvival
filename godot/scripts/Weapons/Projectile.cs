@@ -69,4 +69,10 @@ public partial class Projectile : Weapon
 		var mainNode = (Main) GetParent();
 		mainNode.SpawnNode(node);
 	}
+
+	public override void _ExitTree()
+	{
+		base._ExitTree();
+		StatusEffect = null;
+	}
 }

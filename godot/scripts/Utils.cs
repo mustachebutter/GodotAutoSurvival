@@ -104,11 +104,12 @@ public static class Utils
 	}
 
 	// !!!!!! DEBUG ONLY
-	public static Enemy CreateDummy(Vector2 position, PackedScene enemyScene, Main main)
+	public static Enemy CreateDummy(Vector2 position, PackedScene enemyScene)
 	{
 		var enemyNode = enemyScene.Instantiate();
 
-		main.AddChild(enemyNode);
+		var parent = UtilGetter.GetSceneTree().Root.GetNode<Node2D>("Node2D/CharactersParentNode");
+		parent.AddChild(enemyNode);
 		var enemy = (Enemy) enemyNode;
 		enemy.Position = position;
 

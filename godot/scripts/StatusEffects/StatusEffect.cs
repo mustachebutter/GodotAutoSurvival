@@ -1,7 +1,7 @@
 using System;
 using Godot;
 
-public class StatusEffect : IDisposable
+public class StatusEffect
 {
     public BaseCharacter Target { get; set; }
     public Timer MainTimer { get; private set; }
@@ -11,8 +11,8 @@ public class StatusEffect : IDisposable
     public virtual void HandleStatusEffect () { }
     public virtual void OnStatusEffectEnd () 
     {
+        LoggingUtils.Debug("End of status effect");
         Target.StatusEffectComponent.ClearEffect(this);
-        Dispose();
         Target.VisualEffectComponent.ClearVisualEffect();
         Target = null;
         Utils.DestroyTimer(MainTimer);
@@ -40,6 +40,4 @@ public class StatusEffect : IDisposable
         
         MainTimer?.Start();
     }
-
-    public virtual void Dispose() { }
 }
