@@ -1,0 +1,74 @@
+[gd_scene load_steps=6 format=3 uid="uid://cm1uou65cpx5e"]
+
+[ext_resource type="Script" path="res://scripts/Weapons/Beam.cs" id="1_igmbx"]
+[ext_resource type="AnimationLibrary" uid="uid://bl7c6b6n7fbmn" path="res://assets/sprite_frames/VFX_AnimationLibrary.res" id="3_vh6c1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f72bx"]
+size = Vector2(50, 500)
+
+[sub_resource type="Animation" id="Animation_rfmjp"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Area2D/CollisionShape2D/ColorRect:custom_minimum_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(200, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Area2D/CollisionShape2D/ColorRect:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.25098)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_714fs"]
+_data = {
+"RESET": SubResource("Animation_rfmjp")
+}
+
+[node name="beam" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 4
+script = ExtResource("1_igmbx")
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(0, 250)
+collision_layer = 2
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_f72bx")
+
+[node name="ColorRect" type="ColorRect" parent="Area2D/CollisionShape2D"]
+modulate = Color(1, 1, 1, 0.501961)
+custom_minimum_size = Vector2(200, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -250.0
+offset_right = 25.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 0.25098)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_714fs"),
+"VFX_AnimationLibrary": ExtResource("3_vh6c1")
+}

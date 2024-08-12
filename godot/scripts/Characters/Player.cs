@@ -66,8 +66,15 @@ public partial class Player : BaseCharacter
 		MoveAndSlide();
 	}
 
-	public void FireProjectileAtTarget(Node2D closestTarget, Projectile projectile)
+	public void FireProjectileAtTarget(Node2D closestTarget, Weapon weapon)
 	{
-		projectile.ShootAtTarget(Position, closestTarget.Position, AttackRange);
+		if (weapon is Projectile projectile)
+		{
+			projectile.ShootAtTarget(Position, closestTarget.Position, AttackRange);
+		}
+		else if (weapon is Beam beam)
+		{
+			beam.PrimeBeamAtTarget(closestTarget);
+		}
 	}
 }

@@ -2,23 +2,16 @@ using System;
 using System.Collections.Generic;
 using Godot;
 
-public partial class Projectile : CharacterBody2D
+public partial class Projectile : Weapon
 {
 	protected AnimatedSprite2D _animatedSprite;
 	protected CollisionShape2D _collisionShape2D;
-	protected Area2D _bulletHeadArea2D;
 	private Vector2 _projectileVelocity = new Vector2(0, 0);
 	protected float _distanceTravelled = 0;
 	private Vector2 _previousPosition = new Vector2(0, 0);
 	protected float _playerRange = 0;
 	protected bool _shouldDestroyProjectile = false;
 	protected bool _shouldDamageEnemy = false;
-	public StatusEffect StatusEffect { get; protected set; }
-
-	public ProjectileData ProjectileData { get; set;}
-
-	public virtual void HandleProjectileEffect() { }
-	public virtual void HandleProjectileEffect(Enemy hitEnemy) { }
 
 	public override void _Ready()
 	{
@@ -34,7 +27,7 @@ public partial class Projectile : CharacterBody2D
 		{
 			Enemy enemy = (Enemy) collision.GetCollider();
 
-			enemy.DealDamageToCharacter(ProjectileData.Damage);
+			enemy.DealDamageToCharacter(WeaponData.Damage);
 			
 			HandleProjectileEffect(enemy);
 			// When the projectile hits, destroy itself
@@ -63,9 +56,9 @@ public partial class Projectile : CharacterBody2D
 		Vector2 direction = (targetPosition - sourcePosition).Normalized();
 		LookAt(GlobalPosition + direction);
 		// LookAt(Vector2.Left);
-		Velocity = direction * ProjectileData.Speed;
+		Velocity = direction * WeaponData.Speed;
 		// Play the animation
-		_animatedSprite.Play(ProjectileData.AnimationName);
+		_animatedSprite.Play(WeaponData.AnimationName);
 
 		// Reset some variables
 		_distanceTravelled = 0.0f;
@@ -75,5 +68,11 @@ public partial class Projectile : CharacterBody2D
 	{
 		var mainNode = (Main) GetParent();
 		mainNode.SpawnNode(node);
+	}
+
+	public override void _ExitTree()
+	{
+		base._ExitTree();
+		StatusEffect = null;
 	}
 }

@@ -17,8 +17,7 @@ hframes = 8
 vframes = 8
 
 [node name="VisualEffectComponent" parent="." index="3"]
-frame = 8
-frame_progress = 0.938892
+animation = &"vfx_default"
 
 [node name="CollisionShape2D" parent="." index="4"]
 position = Vector2(0, -5)

@@ -5,59 +5,67 @@ using Godot;
 [Tool]
 public partial class WeaponComponent : Node2D
 {
-    private Timer _timer;
-    public Projectile Projectile;
-    private Player _player;
-	private Dictionary<string, ProjectileData> projectileData = new Dictionary<string, ProjectileData>();
-	private List<string> projectiles = new List<string>();
+	private Timer _timer;
+	public Weapon Weapon;
+	private Player _player;
+	private Dictionary<string, WeaponData> weaponData = new Dictionary<string, WeaponData>();
+	private List<string> weapons = new List<string>();
 	int index = 0;
 	MainHUD MainHUD { get; set; }
 
-    public override void _Ready()
-    {
-        base._Ready();
-        _player = GetParent<Player>();
-		projectileData = ProjectileParsedData.GetAllData();
-		projectiles = projectileData.Keys.Where(x => x != "Weapon_Default").ToList();
-		MainHUD = UtilGetter.GetSceneTree().Root.GetNode<MainHUD>("Node2D/MainHUD");
-		MainHUD.SetDebugWeapon(projectileData[projectiles[index]]);
-    }
-
-    private void CreateProjectile()
+	public override void _Ready()
 	{
-		Node2D closestTarget = Utils.FindClosestTarget(_player.Position, _player.Area2D);
-
-		if (closestTarget == null) return;
-
-		string currentProjectile = projectiles[index];
-		Projectile = currentProjectile switch
-		{
-			"Weapon_Zap" => (Zap) projectileData[currentProjectile].ProjectileScene.Instantiate(),
-			"Weapon_Fireball" => (Fireball) projectileData[currentProjectile].ProjectileScene.Instantiate(),
-			_ => (Projectile) projectileData[currentProjectile].ProjectileScene.Instantiate()
-		};
-
-		Projectile.ProjectileData = projectileData[currentProjectile];
-		// Add the projectile to the main scene instead
-		GetTree().Root.GetNode("Node2D").GetNode("ProjectileParentNode").AddChild(Projectile);
-		Projectile.Position = _player.Position;
-		_player.FireProjectileAtTarget(closestTarget, Projectile);
+		base._Ready();
+		_player = GetParent<Player>();
+		weaponData = WeaponParsedData.GetAllData();
+		weapons = weaponData.Keys.Where(x => x != "Weapon_Default").ToList();
+		MainHUD = UtilGetter.GetSceneTree().Root.GetNode<MainHUD>("Node2D/MainHUD");
+		MainHUD.SetDebugWeapon(weaponData[weapons[index]]);
 	}
 
-    public void StartTimer(float seconds = 0.0f)
+	public void StartTimer(float seconds = 0.0f)
 	{
 		if (seconds > 0)
 		{	
-			CreateProjectile();
+			StartWeapon();
 			_timer = Utils.CreateTimer(this, OnTimerTimeout, seconds, false);
 			_timer?.Start();
 
 		}
 	}
 
+	private void StartWeapon()
+	{
+		Node2D closestTarget = Utils.FindClosestTarget(_player.Position, _player.Area2D);
+
+		if (closestTarget == null) return;
+
+		string currentWeapon = weapons[index];
+		Weapon = currentWeapon switch
+		{
+			"Weapon_Zap" => (Zap) weaponData[currentWeapon].ProjectileScene.Instantiate(),
+			"Weapon_Fireball" => (Fireball) weaponData[currentWeapon].ProjectileScene.Instantiate(),
+			"Weapon_Lazer" => (Lazerbeam) weaponData[currentWeapon].ProjectileScene.Instantiate(),
+			_ => (Weapon) weaponData[currentWeapon].ProjectileScene.Instantiate()
+		};
+
+		Weapon.WeaponData = weaponData[currentWeapon];
+
+		// Add the projectile to the main scene instead
+		if (Weapon.WeaponData.WeaponType == WeaponTypes.Projectile)
+			GetTree().Root.GetNode("Node2D").GetNode("ProjectileParentNode").AddChild(Weapon);
+		else
+			_player.AddChild(Weapon);
+
+		Weapon.GlobalPosition = _player.GlobalPosition;
+
+		_player.FireProjectileAtTarget(closestTarget, Weapon);
+	}
+
+
 	public void SwitchNextWeapon()
 	{
-		if (index < projectiles.Count() - 1)
+		if (index < weapons.Count() - 1)
 		{
 			index++;
 		}
@@ -66,11 +74,11 @@ public partial class WeaponComponent : Node2D
 			index = 0;
 		}
 
-		MainHUD.SetDebugWeapon(projectileData[projectiles[index]]);
+		MainHUD.SetDebugWeapon(weaponData[weapons[index]]);
 	}
 	private void OnTimerTimeout()
 	{
-		CreateProjectile();
+		StartWeapon();
 	}
 
 

@@ -87,8 +87,7 @@ hframes = 8
 vframes = 8
 
 [node name="VisualEffectComponent" parent="." index="3"]
-frame = 10
-frame_progress = 0.282081
+animation = &"vfx_default"
 
 [node name="WeaponComponent" type="Node2D" parent="." index="4"]
 script = ExtResource("4_stmua")

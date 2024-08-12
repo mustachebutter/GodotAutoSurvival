@@ -186,11 +186,6 @@ region = Rect2(960, 288, 96, 96)
 
 [resource]
 animations = [{
-"frames": [],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qw6kt")
@@ -310,6 +305,11 @@ animations = [{
 "loop": true,
 "name": &"vfx_chain_lightning",
 "speed": 50.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"vfx_default",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
