@@ -4,15 +4,6 @@ using Godot;
 
 public partial class BaseCharacter : CharacterBody2D
 {
-	[ExportGroup("Stats")]
-	[Export(PropertyHint.Range, "0, 1000, 1")]
-	public float Health { get; private set;} = 100.0f;
-	[Export(PropertyHint.Range, "0, 3, 0.1")]
-	public float AttackSpeed { get; set; } = 0.5f;
-	[Export(PropertyHint.Range, "0, 1000, 1")]
-	public float AttackRange { get; private set; } = 300.0f;
-	[Export(PropertyHint.Range, "0, 1000, 1")]
-	public float Speed { get; private set; } = 100.0f;
 	private Godot.Vector2 _textOffset = new Godot.Vector2(0.0f, 0.0f);
 
 	private bool _isDead = false;
@@ -20,6 +11,7 @@ public partial class BaseCharacter : CharacterBody2D
 	public delegate void OnCharacterDeadHandler();
 	public event OnCharacterDeadHandler OnCharacterDeadEvent;
 
+	public CharacterStatComponent CharacterStatComponent { get; private set; }
 	public DamageNumberComponent DamageNumberComponent { get; private set; }
 	public StatusEffectComponent StatusEffectComponent { get; private set; }
 	public VisualEffectComponent VisualEffectComponent { get; private set; }
@@ -30,7 +22,7 @@ public partial class BaseCharacter : CharacterBody2D
 	{
 		get
 		{
-			if (Health <= 0)
+			if (CharacterStatComponent.Health <= 0)
 				return true;
 			
 			return false;
@@ -41,12 +33,14 @@ public partial class BaseCharacter : CharacterBody2D
 	public override void _Ready()
 	{
 		base._Ready();
-		Area2D = GetNode<Area2D>("Area2D");
-		var circle = (CircleShape2D) Area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
-		circle.Radius = AttackRange / 2;
-
 		StatusEffectComponent = GetNode<StatusEffectComponent>("StatusEffectComponent");
 		VisualEffectComponent = GetNode<VisualEffectComponent>("VisualEffectComponent");
+		CharacterStatComponent = GetNode<CharacterStatComponent>("CharacterStatComponent");
+
+		Area2D = GetNode<Area2D>("Area2D");
+		var circle = (CircleShape2D) Area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
+		circle.Radius = CharacterStatComponent.AttackRange / 2;
+
 
 		StatusEffectComponent.Target = this;
 	}
@@ -55,7 +49,7 @@ public partial class BaseCharacter : CharacterBody2D
 	{
 		if (damage > 0)
 		{
-			Health -= damage;
+			CharacterStatComponent.Health -= damage;
 			DamageNumberComponent = (DamageNumberComponent) Scenes.UiDamageNumber.Instantiate();
 			AddChild(DamageNumberComponent);
 

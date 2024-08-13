@@ -9,7 +9,7 @@ public partial class Player : BaseCharacter
 	{
 		base._Ready();
 		WeaponComponent = GetNode<WeaponComponent>("WeaponComponent");
-		WeaponComponent.StartTimer(1 / AttackSpeed);
+		WeaponComponent.StartTimer(1 / CharacterStatComponent.AttackSpeed);
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -60,7 +60,7 @@ public partial class Player : BaseCharacter
 		
 
 		// Normalized the Vector
-		velocity = velocity.Normalized() * Speed;
+		velocity = velocity.Normalized() * CharacterStatComponent.Speed;
 
 		Velocity = velocity;
 		MoveAndSlide();
@@ -70,7 +70,7 @@ public partial class Player : BaseCharacter
 	{
 		if (weapon is Projectile projectile)
 		{
-			projectile.ShootAtTarget(Position, closestTarget.Position, AttackRange);
+			projectile.ShootAtTarget(Position, closestTarget.Position, CharacterStatComponent.AttackRange);
 		}
 		else if (weapon is Beam beam)
 		{
