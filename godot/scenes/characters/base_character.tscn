@@ -24,9 +24,6 @@ scale = Vector2(2, 2)
 
 [node name="CharacterStatComponent" type="Node2D" parent="."]
 script = ExtResource("2_j4i26")
-AttackSpeed = 1.0
-AttackRange = 500.0
-Speed = 150.0
 
 [node name="DamageNumberComponent" type="Node2D" parent="."]
 script = ExtResource("2_0ub6m")
