@@ -27,6 +27,7 @@ public class DotStatusEffect : StatusEffect
 	{
 		base.OnStatusEffectEnd();
 		Utils.DestroyTimer(_tickTimer);
-		Target.OnCharacterDeadEvent -= OnTargetDied;
+		if (Target != null)
+			Target.OnCharacterDeadEvent -= OnTargetDied;
 	}
 }

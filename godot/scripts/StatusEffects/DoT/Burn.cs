@@ -43,6 +43,7 @@ public class Burn : DotStatusEffect
     public override void OnTargetDied()
     {
         base.OnTargetDied();
+        if (Target == null) LoggingUtils.Debug("TARGET NULL");
         // When the target died, spread to other closeby targets
         //Add to tree
         UtilGetter.GetSceneTree().Root.GetNode("Node2D").GetNode("VFXParentNode").AddChild(_burnExplosion);

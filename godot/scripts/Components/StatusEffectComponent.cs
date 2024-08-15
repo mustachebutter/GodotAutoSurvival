@@ -10,7 +10,7 @@ public partial class StatusEffectComponent : Node2D
 	public void ApplyEffectToCharacter(StatusEffect currentStatusEffect)
 	{
 		currentStatusEffect.Target = Target;
-		if (currentStatusEffect.MainTimer == null)
+		if (currentStatusEffect.MainTimer == null && currentStatusEffect.Target != null)
 			currentStatusEffect.CreateMainTimer();
 		// Should do custom logic here
 		// eg. Stackable status

@@ -84,6 +84,9 @@ texture = ExtResource("3_op5oa")
 hframes = 8
 vframes = 8
 
+[node name="CharacterStatComponent" parent="." index="1"]
+Health = 100.0
+
 [node name="WeaponComponent" type="Node2D" parent="." index="4"]
 script = ExtResource("4_stmua")
 

@@ -14,7 +14,6 @@ public class StatusEffect
         LoggingUtils.Debug("End of status effect");
         Target.StatusEffectComponent.ClearEffect(this);
         Target.VisualEffectComponent.ClearVisualEffect();
-        Target = null;
         Utils.DestroyTimer(MainTimer);
     }
 
