@@ -3,21 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
+public struct Stat
+{
+    public int Level { get; set; }
+    public float Value { get; set; }
+}
+
+
 public class CharacterStatData
 {
-	public float Attack { get; set;} = 100.0f;
-	public float AttackRange { get; set; } = 500.0f;
-	public float AttackSpeed { get; set; } = 1.0f;
+	public Stat Attack { get; set;} = new Stat { Level = 1, Value = 100.0f };
+	public Stat AttackRange { get; set; } = new Stat { Level = 1, Value = 500.0f };
+	public Stat AttackSpeed { get; set; } = new Stat { Level = 1, Value = 1.0f };
 
-	public float Health { get; set;} = 0.0f;
-	public float Defense { get; set; } = 50.0f;
-	public float ElementalResistance { get; set; } = 50.0f;
+	public Stat Health { get; set;} = new Stat { Level = 1, Value = 100.0f };
+	public Stat Defense { get; set; } = new Stat { Level = 1, Value = 50.0f };
+	public Stat ElementalResistance { get; set; } = new Stat { Level = 1, Value = 50.0f };
 
-	public float Speed { get; set; } = 100.0f;
-	public float Crit { get; set; } = 1.0f;
-	public float CritDamage { get; set; } = 100.0f;
+	public Stat Speed { get; set; } = new Stat { Level = 1, Value = 100.0f };
+	public Stat Crit { get; set; } = new Stat { Level = 1, Value = 1.0f };
+	public Stat CritDamage { get; set; } = new Stat { Level = 1, Value = 100.0f };
 
-    public float GetPropertyValue(string propertyName)
+    public Stat GetPropertyValue(string propertyName)
     {
         var propertyInfo = GetType().GetProperty(propertyName);
         if (propertyInfo == null)
@@ -26,7 +33,7 @@ public class CharacterStatData
             throw new Exception("Error getting character stat, please check error log");
         }
 
-        return (float) propertyInfo.GetValue(this);
+        return (Stat) propertyInfo.GetValue(this);
     }
 }
 
@@ -35,7 +42,7 @@ public static class CharacterStatDataParser
     // public static (string[], Dictionary<int, CharacterStatData>) ParseData(string path)
     public static (string[], List<(int, CharacterStatData)>) ParseData(string path)
     {
-        var characterStats = new List<(int, CharacterStatData)>();
+        var characterStats = new List<CharacterStatData>();
         var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
         if(file == null)
             LoggingUtils.Error($"Failed to parse file {path}");
