@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-public struct Stat
+public class Stat
 {
     public int Level { get; set; }
     public float Value { get; set; }
@@ -39,8 +39,7 @@ public class CharacterStatData
 
 public static class CharacterStatDataParser
 {
-    // public static (string[], Dictionary<int, CharacterStatData>) ParseData(string path)
-    public static (string[], List<(int, CharacterStatData)>) ParseData(string path)
+    public static List<CharacterStatData> ParseData(string path)
     {
         var characterStats = new List<CharacterStatData>();
         var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
@@ -64,24 +63,24 @@ public static class CharacterStatDataParser
                 var level = int.Parse(content[0]);
                 var csd = new CharacterStatData
                 {
-                    Health = float.Parse(content[1]),
-                    Attack = float.Parse(content[2]),
-                    AttackRange = float.Parse(content[3]),
-                    AttackSpeed = float.Parse(content[4]),
-                    Speed = float.Parse(content[5]),
-                    Crit = float.Parse(content[6]),
-                    CritDamage = float.Parse(content[7]),
-                    Defense = float.Parse(content[8]),
-                    ElementalResistance = float.Parse(content[9]),
+                    Health = new Stat { Level = level, Value = float.Parse(content[1]) },
+                    Attack = new Stat { Level = level, Value = float.Parse(content[2]) },
+                    AttackRange = new Stat { Level = level, Value = float.Parse(content[3]) },
+                    AttackSpeed = new Stat { Level = level, Value = float.Parse(content[4]) },
+                    Speed = new Stat { Level = level, Value = float.Parse(content[5]) },
+                    Crit = new Stat { Level = level, Value = float.Parse(content[6]) },
+                    CritDamage = new Stat { Level = level, Value = float.Parse(content[7]) },
+                    Defense = new Stat { Level = level, Value = float.Parse(content[8]) },
+                    ElementalResistance = new Stat { Level = level, Value = float.Parse(content[9]) },
                 };
                 
-                characterStats.Add((level, csd));
+                characterStats.Add(csd);
             }
 
             if(characterStats.Count == 0)
                 LoggingUtils.Error("Wasn't able to parsed any character stats data!");
     
-            return (keys, characterStats);
+            return characterStats;
         }
         catch(FormatException ex)
         {
@@ -97,6 +96,7 @@ public static class CharacterStatDataParser
         }
 
 
-        return (Array.Empty<string>(), null);
+        // return (Array.Empty<string>(), null);
+        return null;
     }
 }

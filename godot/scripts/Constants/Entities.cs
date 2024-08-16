@@ -126,26 +126,21 @@ public static class WeaponParsedData
 
 public static class CharacterStatParsedData
 {
-	public static Dictionary<string, (int Level, float Value)> StatDictionary { get; set; } = new Dictionary<string, (int Level, float Value)>();
+	private readonly static List<CharacterStatData> _characterStatsList;
 
 	static CharacterStatParsedData()
 	{
 		var path = "res://metadata/GodotAutoSurvival_Metadata_Stats.tsv";
-		(string[] keys, List<(int level, CharacterStatData csd)> characterStatsList) = CharacterStatDataParser.ParseData(path);
-
-		// var zipped = keys
-		// 	.Zip(characterStatsList, (key, csd) => new { Key = key, CharacterStatData = csd });
-
-		foreach (var key in keys)
-		{
-			if (StatDictionary.ContainsKey(key))
-			{
-				foreach (var (level, csd) in characterStatsList)
-				{
-					
-				}
-			}
-		}
+		_characterStatsList = CharacterStatDataParser.ParseData(path);
 	}
 
+	public static List<CharacterStatData> GetDataTable()
+	{
+		return _characterStatsList;
+	}
+
+	// public static CharacterStatData GetData()
+	// {
+
+	// }
 }
