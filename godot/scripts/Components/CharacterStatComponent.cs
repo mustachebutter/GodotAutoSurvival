@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Godot;
 
 public partial class CharacterStatComponent : Node2D
@@ -26,6 +28,43 @@ public partial class CharacterStatComponent : Node2D
 	[Export(PropertyHint.Range, "0, 999, 1")]
 	public float CritDamage { get; set; } = 100.0f;
 
+	public Dictionary<string, (int Level, float Value)> StatDictionary { get; set; } = new Dictionary<string, (int Level, float Value)>();
+
     //TODO: Handling stats level
+	public Dictionary<string, (int Level, float Value)> GetStats()
+	{
+		// Do some verification
+		foreach (var item in StatDictionary)
+		{
+			(int level, float value) = item.Value;
+			if (level < 1 || level > 30)
+			{
+				LoggingUtils.Error($"Attempting to get stat ({item.Key}) but level is {level} with value {value}");
+				return null;
+			}
+		}
+
+		return StatDictionary;
+	}
+
+	public (int Level, float Value) GetStat(string key)
+	{
+		var statDictionary = GetStats();
+
+		if (statDictionary == null)
+		{
+			throw new Exception("Error getting stats, please check the error log");
+		}
+
+		if (!statDictionary.ContainsKey(key))
+		{
+			LoggingUtils.Error($"No key {key} found. Currently available keys: {statDictionary.Keys}");
+			throw new Exception($"Error getting stat {key}, please check the error log");
+		}
+
+		(int Level, float Value) = statDictionary[key];
+
+		return (Level, Value);
+	}
     //TODO: Get stats from file
 }

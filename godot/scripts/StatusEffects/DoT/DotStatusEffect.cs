@@ -29,5 +29,9 @@ public class DotStatusEffect : StatusEffect
 		Utils.DestroyTimer(_tickTimer);
 		if (Target != null)
 			Target.OnCharacterDeadEvent -= OnTargetDied;
+		
+		//!!! This should be at the bottom of inheritance
+		//!!! since this is called last.
+		Target = null;
 	}
 }
