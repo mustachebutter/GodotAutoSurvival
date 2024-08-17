@@ -126,21 +126,39 @@ public static class WeaponParsedData
 
 public static class CharacterStatParsedData
 {
-	private readonly static List<CharacterStatData> _characterStatsList;
+	private readonly static string[] STATS_MAPPER = {"Health", "Attack", "AttackRange", "AttackSpeed", "Speed", "Crit", "CritDamage", "Defense", "ElementalResistance" };
+
+	private readonly static Dictionary<string, List<Stat>> _statDictionary;
 
 	static CharacterStatParsedData()
 	{
 		var path = "res://metadata/GodotAutoSurvival_Metadata_Stats.tsv";
-		_characterStatsList = CharacterStatDataParser.ParseData(path);
+		var characterStatDataList = CharacterStatDataParser.ParseData(path);
+
+		Dictionary<string, List<Stat>> temp_dict = new Dictionary<string, List<Stat>>();
+
+		// Looping through each stat
+		foreach (var stat_key in STATS_MAPPER)
+		{
+			var allLevelsOfStat = new List<Stat>();
+			// Looping through each level of a stat (eg. Attack)
+			foreach (var characterStat in characterStatDataList)
+			{
+				allLevelsOfStat.Add(characterStat.GetPropertyValue(stat_key));
+			}
+			temp_dict.Add(stat_key, allLevelsOfStat);
+		}
+
+		if (temp_dict.Count == 0)
+		{
+			LoggingUtils.Error("Could not generate any entry for dictionary of stats");
+		}
+
+		_statDictionary = temp_dict;
 	}
 
-	public static List<CharacterStatData> GetDataTable()
+	public static Dictionary<string, List<Stat>> GetCharacterStatDictionary()
 	{
-		return _characterStatsList;
+		return _statDictionary;
 	}
-
-	// public static CharacterStatData GetData()
-	// {
-
-	// }
 }

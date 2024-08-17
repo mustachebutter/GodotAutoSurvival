@@ -22,7 +22,7 @@ public partial class BaseCharacter : CharacterBody2D
 	{
 		get
 		{
-			if (CharacterStatComponent.Health <= 0)
+			if (CharacterStatComponent.CharacterStatData.Health.Value <= 0)
 				return true;
 			
 			return false;
@@ -39,7 +39,7 @@ public partial class BaseCharacter : CharacterBody2D
 
 		Area2D = GetNode<Area2D>("Area2D");
 		var circle = (CircleShape2D) Area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
-		circle.Radius = CharacterStatComponent.AttackRange / 2;
+		circle.Radius = CharacterStatComponent.CharacterStatData.AttackRange.Value / 2;
 
 
 		StatusEffectComponent.Target = this;
@@ -49,7 +49,7 @@ public partial class BaseCharacter : CharacterBody2D
 	{
 		if (damage > 0)
 		{
-			CharacterStatComponent.Health -= damage;
+			CharacterStatComponent.CharacterStatData.Health.Value -= damage;
 			DamageNumberComponent = (DamageNumberComponent) Scenes.UiDamageNumber.Instantiate();
 			AddChild(DamageNumberComponent);
 

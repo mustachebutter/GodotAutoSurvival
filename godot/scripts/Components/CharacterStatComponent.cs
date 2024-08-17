@@ -1,86 +1,65 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Godot;
 
 public partial class CharacterStatComponent : Node2D
 {
-    // [ExportGroup("Offense")]
-    // [Export(PropertyHint.Range, "0, 999, 1")]
-	// public float Attack { get; set;} = 100.0f;
-	// [Export(PropertyHint.Range, "0, 999, 1")]
-	// public float AttackRange { get; set; } = 500.0f;
-	// [Export(PropertyHint.Range, "0, 2, 0.1")]
-	// public float AttackSpeed { get; set; } = 1.0f;
-
-    // [ExportGroup("Defense")]
-	// [Export(PropertyHint.Range, "0, 9999, 1")]
-	// public float Health { get; set;} = 0.0f;
-	// [Export(PropertyHint.Range, "0, 99, 1")]
-	// public float Defense { get; set; } = 50.0f;
-	// [Export(PropertyHint.Range, "0, 99, 1")]
-	// public float ElementalResistance { get; set; } = 50.0f;
-
-    // [ExportGroup("Utilities")]
-	// [Export(PropertyHint.Range, "0, 200, 1")]
-	// public float Speed { get; set; } = 100.0f;
-    // [Export(PropertyHint.Range, "0, 100, 1")]
-	// public float Crit { get; set; } = 1.0f;
-	// [Export(PropertyHint.Range, "0, 999, 1")]
-	// public float CritDamage { get; set; } = 100.0f;
+	public const int MAX_LEVEL = 30;
 	public CharacterStatData CharacterStatData { get; set; }
 
     public override void _Ready()
     {
         base._Ready();
-		var csdList = CharacterStatParsedData.GetDataTable();
-		var csd = csdList.Find(x => x.Attack.Level == 1);
-		if (csd != null)
-		{
-			CharacterStatData = csd;
-		}
-		else
-		{
-			LoggingUtils.Error("Could not initialize stat in CharacterStatComponent");
-		}
-    }
-    public Dictionary<string, (int Level, float Value)> StatDictionary { get; set; } = new Dictionary<string, (int Level, float Value)>();
+		var characterStatDict = CharacterStatParsedData.GetCharacterStatDictionary();
 
-    //TODO: Handling stats level
-	public Dictionary<string, (int Level, float Value)> GetStats()
-	{
+		CharacterStatData = new CharacterStatData 
+		{
+			Health = characterStatDict["Health"][0],
+			Attack = characterStatDict["Attack"][0],
+			AttackRange = characterStatDict["AttackRange"][0],
+			AttackSpeed = characterStatDict["AttackSpeed"][0],
+			Speed = characterStatDict["Speed"][0],
+			Crit = characterStatDict["Crit"][0],
+			CritDamage = characterStatDict["CritDamage"][0],
+			Defense = characterStatDict["Defense"][0],
+			ElementalResistance = characterStatDict["ElementalResistance"][0],
+		};
 		
-		// Do some verification
-		foreach (var item in StatDictionary)
+    }
+
+	public void UpgradeStatLevel(string statKey, int levelToUpgrade = 1)
+	{
+		var stat = CharacterStatData.GetPropertyValue(statKey);
+
+		if (stat == null)
 		{
-			(int level, float value) = item.Value;
-			if (level < 1 || level > 30)
-			{
-				LoggingUtils.Error($"Attempting to get stat ({item.Key}) but level is {level} with value {value}");
-				return null;
-			}
+			LoggingUtils.Error("Attempted to upgrade a non existing stat");
+			return;
 		}
 
-		return StatDictionary;
+		if (stat.Level + levelToUpgrade > MAX_LEVEL)
+		{
+			LoggingUtils.Debug("Max Level reached. Cannot upgrade anymore!");
+		}
+
+		LoggingUtils.Debug($"Before upgrade ({statKey}): LVL {stat.Level} - {stat.Value}");
+		stat.Level = stat.Level + levelToUpgrade;
+		stat.Value = GetValueOfStat(statKey, stat.Level);
+		LoggingUtils.Debug($"After upgrade ({statKey}): LVL {stat.Level} - {stat.Value}");
 	}
 
-	public (int Level, float Value) GetStat(string key)
+	public float GetValueOfStat(string statKey, int level)
 	{
-		var statDictionary = GetStats();
+		var statDictionary = CharacterStatParsedData.GetCharacterStatDictionary();
 
-		if (statDictionary == null)
+		if (statDictionary.TryGetValue(statKey, out List<Stat> allLevelsOfStat))
 		{
-			throw new Exception("Error getting stats, please check the error log");
+			return allLevelsOfStat.Find(x => x.Level == level).Value;
 		}
-
-		if (!statDictionary.ContainsKey(key))
-		{
-			LoggingUtils.Error($"No key {key} found. Currently available keys: {statDictionary.Keys}");
-			throw new Exception($"Error getting stat {key}, please check the error log");
-		}
-
-		(int Level, float Value) = statDictionary[key];
-
-		return (Level, Value);
+		
+		LoggingUtils.Error($"Could not find stat {statKey} with level {level} in the dictionary");
+		throw new Exception("Failed to get value of stat, please check the log");
 	}
 }

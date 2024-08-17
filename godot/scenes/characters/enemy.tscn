@@ -15,9 +15,6 @@ texture = ExtResource("3_0dnh7")
 hframes = 8
 vframes = 8
 
-[node name="CharacterStatComponent" parent="." index="1"]
-Health = 100.0
-
 [node name="CollisionShape2D" parent="." index="5"]
 position = Vector2(0, -5)
 
