@@ -126,7 +126,7 @@ public static class WeaponParsedData
 
 public static class CharacterStatParsedData
 {
-	private readonly static string[] STATS_MAPPER = {"Health", "Attack", "AttackRange", "AttackSpeed", "Speed", "Crit", "CritDamage", "Defense", "ElementalResistance" };
+	public readonly static string[] STATS_MAPPER = {"Health", "Attack", "AttackRange", "AttackSpeed", "Speed", "Crit", "CritDamage", "Defense", "ElementalResistance" };
 
 	private readonly static Dictionary<string, List<Stat>> _statDictionary;
 

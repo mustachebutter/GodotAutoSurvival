@@ -26,7 +26,6 @@ public partial class CharacterStatComponent : Node2D
 			Defense = characterStatDict["Defense"][0],
 			ElementalResistance = characterStatDict["ElementalResistance"][0],
 		};
-		
     }
 
 	public void UpgradeStatLevel(string statKey, int levelToUpgrade = 1)

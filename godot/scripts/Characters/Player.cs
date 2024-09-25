@@ -10,6 +10,9 @@ public partial class Player : BaseCharacter
 		base._Ready();
 		WeaponComponent = GetNode<WeaponComponent>("WeaponComponent");
 		WeaponComponent.StartTimer(1 / CharacterStatComponent.CharacterStatData.AttackSpeed.Value);
+		var MainHUD = UtilGetter.GetSceneTree().Root.GetNode<MainHUD>("Node2D/MainHUD");
+		MainHUD.SetDebugStats(CharacterStatComponent.CharacterStatData);
+
 	}
 
 	public override void _PhysicsProcess(double delta)
