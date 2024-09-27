@@ -5,8 +5,14 @@ using Godot;
 
 public class Stat
 {
+    public string Name { get; set; }
     public int Level { get; set; }
     public float Value { get; set; }
+
+    public Stat DeepCopy()
+    {
+        return new Stat { Name = this.Name, Level = this.Level, Value = this.Value };
+    }
 }
 
 
@@ -15,25 +21,27 @@ public class CharacterStatData
 	public Stat Attack { get; set;} = new Stat { Level = 1, Value = 100.0f };
 	public Stat AttackRange { get; set; } = new Stat { Level = 1, Value = 500.0f };
 	public Stat AttackSpeed { get; set; } = new Stat { Level = 1, Value = 1.0f };
-
 	public Stat Health { get; set;} = new Stat { Level = 1, Value = 100.0f };
 	public Stat Defense { get; set; } = new Stat { Level = 1, Value = 50.0f };
 	public Stat ElementalResistance { get; set; } = new Stat { Level = 1, Value = 50.0f };
-
 	public Stat Speed { get; set; } = new Stat { Level = 1, Value = 100.0f };
 	public Stat Crit { get; set; } = new Stat { Level = 1, Value = 1.0f };
 	public Stat CritDamage { get; set; } = new Stat { Level = 1, Value = 100.0f };
 
-    public Stat GetPropertyValue(string propertyName)
+    public CharacterStatData DeepCopy()
     {
-        var propertyInfo = GetType().GetProperty(propertyName);
-        if (propertyInfo == null)
+        return new CharacterStatData
         {
-            LoggingUtils.Error($"Tried to get an non-existing property of character data {propertyName}");
-            throw new Exception("Error getting character stat, please check error log");
-        }
-
-        return (Stat) propertyInfo.GetValue(this);
+            Attack = this.Attack,
+            AttackRange = this.AttackRange,
+            AttackSpeed = this.AttackSpeed,
+            Health = this.Health,
+            Defense = this.Defense,
+            ElementalResistance = this.ElementalResistance,
+            Speed = this.Speed,
+            Crit = this.Crit,
+            CritDamage = this.CritDamage,
+        };
     }
 }
 
@@ -63,15 +71,15 @@ public static class CharacterStatDataParser
                 var level = int.Parse(content[0]);
                 var csd = new CharacterStatData
                 {
-                    Health = new Stat { Level = level, Value = float.Parse(content[1]) },
-                    Attack = new Stat { Level = level, Value = float.Parse(content[2]) },
-                    AttackRange = new Stat { Level = level, Value = float.Parse(content[3]) },
-                    AttackSpeed = new Stat { Level = level, Value = float.Parse(content[4]) },
-                    Speed = new Stat { Level = level, Value = float.Parse(content[5]) },
-                    Crit = new Stat { Level = level, Value = float.Parse(content[6]) },
-                    CritDamage = new Stat { Level = level, Value = float.Parse(content[7]) },
-                    Defense = new Stat { Level = level, Value = float.Parse(content[8]) },
-                    ElementalResistance = new Stat { Level = level, Value = float.Parse(content[9]) },
+                    Health = new Stat { Name = keys[1], Level = level, Value = float.Parse(content[1]) },
+                    Attack = new Stat { Name = keys[2], Level = level, Value = float.Parse(content[2]) },
+                    AttackRange = new Stat { Name = keys[3], Level = level, Value = float.Parse(content[3]) },
+                    AttackSpeed = new Stat { Name = keys[4], Level = level, Value = float.Parse(content[4]) },
+                    Speed = new Stat { Name = keys[5], Level = level, Value = float.Parse(content[5]) },
+                    Crit = new Stat { Name = keys[6], Level = level, Value = float.Parse(content[6]) },
+                    CritDamage = new Stat { Name = keys[7], Level = level, Value = float.Parse(content[7]) },
+                    Defense = new Stat { Name = keys[8], Level = level, Value = float.Parse(content[8]) },
+                    ElementalResistance = new Stat { Name = keys[9], Level = level, Value = float.Parse(content[9]) },
                 };
                 
                 characterStats.Add(csd);
@@ -95,8 +103,6 @@ public static class CharacterStatDataParser
             LoggingUtils.Error($"Tried to parse a null value: {ex}");
         }
 
-
-        // return (Array.Empty<string>(), null);
         return null;
     }
 }

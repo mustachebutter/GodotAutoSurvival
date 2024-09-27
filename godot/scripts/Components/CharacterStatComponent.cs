@@ -12,53 +12,67 @@ public partial class CharacterStatComponent : Node2D
     public override void _Ready()
     {
         base._Ready();
-		var characterStatDict = CharacterStatParsedData.GetCharacterStatDictionary();
+		var characterStatDatabase = CharacterStatParsedData.GetCharacterStatDatabase();
 
-		CharacterStatData = new CharacterStatData 
-		{
-			Health = characterStatDict["Health"][0],
-			Attack = characterStatDict["Attack"][0],
-			AttackRange = characterStatDict["AttackRange"][0],
-			AttackSpeed = characterStatDict["AttackSpeed"][0],
-			Speed = characterStatDict["Speed"][0],
-			Crit = characterStatDict["Crit"][0],
-			CritDamage = characterStatDict["CritDamage"][0],
-			Defense = characterStatDict["Defense"][0],
-			ElementalResistance = characterStatDict["ElementalResistance"][0],
-		};
+		// Initialize with level 1
+		CharacterStatData = characterStatDatabase[0].DeepCopy();
     }
 
-	public void UpgradeStatLevel(string statKey, int levelToUpgrade = 1)
+	public Stat GetValueOfStat(string statKey = "Default", int level = 1)
 	{
-		var stat = CharacterStatData.GetPropertyValue(statKey);
 
-		if (stat == null)
+		if (statKey == "Default")
 		{
-			LoggingUtils.Error("Attempted to upgrade a non existing stat");
-			return;
+			LoggingUtils.Error("Tried to retrieve a non existing stat");
+			return null;
 		}
 
-		if (stat.Level + levelToUpgrade > MAX_LEVEL)
+		if (level <= 0)
+		{
+			LoggingUtils.Error($"Tried to retrieve stat with an impossible level {level}");
+			return null;
+		}
+		
+		var characterStatDatabase = CharacterStatParsedData.GetCharacterStatDatabase();
+		var currentStatOfLevel = characterStatDatabase[level - 1];
+		// Good old switch case :D
+		Stat currentStatValue = statKey switch
+		{
+			"Health" => currentStatOfLevel.Health.DeepCopy(),
+			"Attack" => currentStatOfLevel.Attack.DeepCopy(),
+			"AttackRange" => currentStatOfLevel.AttackRange.DeepCopy(),
+			"AttackSpeed" => currentStatOfLevel.AttackSpeed.DeepCopy(),
+			"Speed" => currentStatOfLevel.Speed.DeepCopy(),
+			"Crit" => currentStatOfLevel.Crit.DeepCopy(),
+			"CritDamage" => currentStatOfLevel.CritDamage.DeepCopy(),
+			"Defense" => currentStatOfLevel.Defense.DeepCopy(),
+			"ElementalResistance" => currentStatOfLevel.ElementalResistance.DeepCopy(),
+			_ => null,
+		};
+
+		if (currentStatValue == null)
+		{
+			LoggingUtils.Error($"Could not find stat {statKey} with level {level} in the database");
+			throw new Exception("Failed to get value of stat, please check the log");
+		}
+
+		return currentStatValue;
+	}
+
+	public void UpgradeStatLevel(Stat stat, int levelToUpgrade = 1)
+	{
+		var currentStatValue = GetValueOfStat(stat.Name, stat.Level);
+
+		LoggingUtils.Error("#################################");
+		if (currentStatValue.Level + levelToUpgrade >= MAX_LEVEL)
 		{
 			LoggingUtils.Debug("Max Level reached. Cannot upgrade anymore!");
 		}
 
-		LoggingUtils.Debug($"Before upgrade ({statKey}): LVL {stat.Level} - {stat.Value}");
+		LoggingUtils.Debug($"Before upgrade: LVL {stat.Level} - {stat.Value}");
 		stat.Level = stat.Level + levelToUpgrade;
-		stat.Value = GetValueOfStat(statKey, stat.Level);
-		LoggingUtils.Debug($"After upgrade ({statKey}): LVL {stat.Level} - {stat.Value}");
+		stat.Value = GetValueOfStat(stat.Name, stat.Level).Value;
+		LoggingUtils.Debug($"After upgrade: LVL {stat.Level} - {stat.Value}");
 	}
 
-	public float GetValueOfStat(string statKey, int level)
-	{
-		var statDictionary = CharacterStatParsedData.GetCharacterStatDictionary();
-
-		if (statDictionary.TryGetValue(statKey, out List<Stat> allLevelsOfStat))
-		{
-			return allLevelsOfStat.Find(x => x.Level == level).Value;
-		}
-		
-		LoggingUtils.Error($"Could not find stat {statKey} with level {level} in the dictionary");
-		throw new Exception("Failed to get value of stat, please check the log");
-	}
 }

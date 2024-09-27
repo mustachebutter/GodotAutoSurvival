@@ -1,12 +1,15 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 public partial class MainHUD : CanvasLayer
 {
 	public Label Debug_CurrentWeapon;
 	public RichTextLabel Debug_CurrentWeaponDetails;
 	public VBoxContainer StatsContainer;
+	public Dictionary<string, HBoxContainer> statContainerPair = new Dictionary<string, HBoxContainer>();
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
@@ -55,19 +58,25 @@ public partial class MainHUD : CanvasLayer
 
 		return (hBoxContainer, statFieldLabel, levelUpBtn, levelDownBtn);
 	}
-	public void SetDebugStats(CharacterStatData characterStatData)
+	public void SetDebugStats(CharacterStatData characterStatData, CharacterStatComponent characterStatComponent)
 	{
-
-		string finalStr = "";
 		foreach (var stat in CharacterStatParsedData.STATS_MAPPER)
 		{
 			var (hBoxContainer, container, buttonUp, buttonDown) = CreateDebugStatContainer();
-			var statValue = characterStatData.GetPropertyValue(stat);
-			finalStr = $"[color=red]{stat}[/color]: {statValue.Value} (LVL {statValue.Level})";
+			var statValue = characterStatComponent.GetValueOfStat(stat);
+
+			if (statValue == null) return;
+
+			var finalStr = $"[color=red]{stat}[/color]: {statValue.Value} (LVL {statValue.Level})";
 			container.Text = finalStr;
+
+			buttonUp.Pressed += () => {
+				characterStatComponent.UpgradeStatLevel(statValue, 1);
+				var finalStr = $"[color=red]{stat}[/color]: {statValue.Value} (LVL {statValue.Level})";
+				container.Text = finalStr;
+			};
+
 			StatsContainer.AddChild(hBoxContainer);
 		}
-		
-
 	}
 }
