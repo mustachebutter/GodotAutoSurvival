@@ -49,6 +49,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer2"]
+visible = false
 layout_mode = 2
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Control/VBoxContainer2/HBoxContainer"]

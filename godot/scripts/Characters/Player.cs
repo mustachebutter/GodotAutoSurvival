@@ -11,7 +11,7 @@ public partial class Player : BaseCharacter
 		WeaponComponent = GetNode<WeaponComponent>("WeaponComponent");
 		WeaponComponent.StartTimer(1 / CharacterStatComponent.CharacterStatData.AttackSpeed.Value);
 		var MainHUD = UtilGetter.GetSceneTree().Root.GetNode<MainHUD>("Node2D/MainHUD");
-		MainHUD.SetDebugStats(CharacterStatComponent.CharacterStatData, CharacterStatComponent);
+		MainHUD.SetDebugStats(CharacterStatComponent);
 
 	}
 
@@ -73,7 +73,7 @@ public partial class Player : BaseCharacter
 	{
 		if (weapon is Projectile projectile)
 		{
-			projectile.ShootAtTarget(Position, closestTarget.Position, CharacterStatComponent.CharacterStatData.AttackRange.Value);
+			projectile.ShootAtTarget(Position, closestTarget.Position, CharacterStatComponent.CharacterStatData.AttackRange.Value, this);
 		}
 		else if (weapon is Beam beam)
 		{

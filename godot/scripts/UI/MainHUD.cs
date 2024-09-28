@@ -58,12 +58,12 @@ public partial class MainHUD : CanvasLayer
 
 		return (hBoxContainer, statFieldLabel, levelUpBtn, levelDownBtn);
 	}
-	public void SetDebugStats(CharacterStatData characterStatData, CharacterStatComponent characterStatComponent)
+	public void SetDebugStats(CharacterStatComponent characterStatComponent)
 	{
 		foreach (var stat in CharacterStatParsedData.STATS_MAPPER)
 		{
 			var (hBoxContainer, container, buttonUp, buttonDown) = CreateDebugStatContainer();
-			var statValue = characterStatComponent.GetValueOfStat(stat);
+			var statValue = characterStatComponent.GetStatFromDatabase(stat);
 
 			if (statValue == null) return;
 
@@ -71,8 +71,8 @@ public partial class MainHUD : CanvasLayer
 			container.Text = finalStr;
 
 			buttonUp.Pressed += () => {
-				characterStatComponent.UpgradeStatLevel(statValue, 1);
-				var finalStr = $"[color=red]{stat}[/color]: {statValue.Value} (LVL {statValue.Level})";
+				characterStatComponent.UpgradeStatLevel(stat, 1);
+				var finalStr = $"[color=red]{stat}[/color]: {characterStatComponent.GetStatFromName(stat).Value} (LVL {characterStatComponent.GetStatFromName(stat).Level})";
 				container.Text = finalStr;
 			};
 
