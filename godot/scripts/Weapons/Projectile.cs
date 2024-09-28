@@ -4,7 +4,6 @@ using Godot;
 
 public partial class Projectile : Weapon
 {
-	public BaseCharacter SourceCharacter { get; set; }
 	protected AnimatedSprite2D _animatedSprite;
 	protected CollisionShape2D _collisionShape2D;
 	private Vector2 _projectileVelocity = new Vector2(0, 0);
@@ -28,13 +27,7 @@ public partial class Projectile : Weapon
 		{
 			Enemy enemy = (Enemy) collision.GetCollider();
 
-			float characterDamage = SourceCharacter == null ? 
-				0
-				: SourceCharacter.CharacterStatComponent.CharacterStatData.Attack.Value;
-			enemy.DealDamageToCharacter(
-				WeaponData.Damage + 
-				characterDamage
-			);
+			enemy.DealDamageToCharacter(CalculateTotalDamage());
 			
 			HandleProjectileEffect(enemy);
 			// When the projectile hits, destroy itself

@@ -77,7 +77,7 @@ public partial class Player : BaseCharacter
 		}
 		else if (weapon is Beam beam)
 		{
-			beam.PrimeBeamAtTarget(closestTarget);
+			beam.PrimeBeamAtTarget(closestTarget, this);
 		}
 	}
 }
