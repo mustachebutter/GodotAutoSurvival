@@ -5,7 +5,7 @@ using Godot;
 public class Burn : DotStatusEffect
 {
     private VfxBurnExplosion _burnExplosion;
-    public Burn(Node2D source, StatusEffectData statusEffectData)
+    public Burn(StatusEffectData statusEffectData)
     {
         try
         {
@@ -17,7 +17,6 @@ public class Burn : DotStatusEffect
             throw;
         }
 
-        Source = source;
         StatusEffectData = statusEffectData;
         // Initialize Explosion
         _burnExplosion = (VfxBurnExplosion) Scenes.VfxBurnExplosion.Instantiate();
@@ -68,7 +67,6 @@ public class Burn : DotStatusEffect
             {
                 // Create new Burn instance
                 var burn = new Burn(
-                    enemy,
                     StatusEffectParsedData.GetData("Status_DOT_Burn")
 		        );
 
@@ -83,6 +81,7 @@ public class Burn : DotStatusEffect
 
     public void CleanUpBurnExplosion()
     {
+        // LoggingUtils.Debug($"Is source character (Clean up) {SourceCharacter.Name}");
         _burnExplosion.QueueFree();
     }
 

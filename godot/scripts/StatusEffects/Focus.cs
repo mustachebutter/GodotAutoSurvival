@@ -7,7 +7,7 @@ public class Focus : StatusEffect
     private int _maxStacks = 5;
     private float _extraDamagePerStack = 0.05f;
     public float ExtraDamageMultiplier = 0.0f;
-    public Focus(Node2D source, StatusEffectData statusEffectData)
+    public Focus(StatusEffectData statusEffectData)
     {
         try
         {
@@ -18,7 +18,7 @@ public class Focus : StatusEffect
             LoggingUtils.Error($"{nameof(Focus)} Status effect data is null");
             throw;
         }
-        Source = source;
+
         StatusEffectData = statusEffectData;
     }
 

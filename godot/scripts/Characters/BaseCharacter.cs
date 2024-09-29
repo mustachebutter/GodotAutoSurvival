@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 using Godot;
@@ -41,7 +42,7 @@ public partial class BaseCharacter : CharacterBody2D
 		var circle = (CircleShape2D) Area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
 		circle.Radius = CharacterStatComponent.CharacterStatData.AttackRange.Value / 2;
 
-
+		//TODO: This is not correct?
 		StatusEffectComponent.Target = this;
 	}
 
@@ -71,4 +72,5 @@ public partial class BaseCharacter : CharacterBody2D
 	{
 		QueueFree();
 	}
+
 }

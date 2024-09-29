@@ -7,7 +7,7 @@ public class Static : StatusEffect
     private VfxChainLightning _chainLightning;
 
     private List<Node2D> _lightningStrikesToDispose = new List<Node2D>();
-    public Static(Node2D source, StatusEffectData statusEffectData)
+    public Static(StatusEffectData statusEffectData)
     {
         try
         {
@@ -19,7 +19,6 @@ public class Static : StatusEffect
             throw;
         }
         
-        Source = source;
         StatusEffectData = statusEffectData;
 
         _chainLightning = (VfxChainLightning) Scenes.VfxChainLightning.Instantiate();

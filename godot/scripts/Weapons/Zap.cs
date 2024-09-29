@@ -13,11 +13,11 @@ public partial class Zap : Projectile
 	public override void _Ready()
 	{
 		base._Ready();
-		StatusEffect = new Static(this, StatusEffectParsedData.GetData("Status_Zap"));
+		StatusEffect = new Static(StatusEffectParsedData.GetData("Status_Zap"));
 	}
-	public override void HandleProjectileEffect(Enemy enemy)
+	public override void HandleProjectileEffect(BaseCharacter source, Enemy enemy)
 	{
-		base.HandleProjectileEffect();
+		base.HandleProjectileEffect(source, enemy);
 		enemy.StatusEffectComponent.ApplyEffectToCharacter(StatusEffect);
 	}
 

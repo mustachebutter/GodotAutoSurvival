@@ -5,13 +5,18 @@ public partial class Fireball : Projectile
 	public override void _Ready()
 	{
 		base._Ready();
-		StatusEffect = new Burn(this, StatusEffectParsedData.GetData("Status_DOT_Burn"));
+		StatusEffect = new Burn(StatusEffectParsedData.GetData("Status_DOT_Burn"));
 	}
 
-	public override void HandleProjectileEffect(Enemy enemy)
+	public override void HandleProjectileEffect(BaseCharacter source, Enemy enemy)
 	{
-		base.HandleProjectileEffect(enemy);
+		LoggingUtils.Debug($"Is source (initiator) {source.Name}");
+
+		base.HandleProjectileEffect(source, enemy);
 		enemy.StatusEffectComponent.ApplyEffectToCharacter(StatusEffect);
+
+		LoggingUtils.Debug($"Is source character (initiator) {SourceCharacter.Name}");
+
 	}
 
 }

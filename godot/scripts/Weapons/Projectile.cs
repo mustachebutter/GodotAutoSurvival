@@ -29,7 +29,7 @@ public partial class Projectile : Weapon
 
 			enemy.DealDamageToCharacter(CalculateTotalDamage());
 			
-			HandleProjectileEffect(enemy);
+			HandleProjectileEffect(SourceCharacter, enemy);
 			// When the projectile hits, destroy itself
 			QueueFree();
 
