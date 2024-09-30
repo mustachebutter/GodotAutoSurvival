@@ -13,7 +13,7 @@ public partial class Fireball : Projectile
 		LoggingUtils.Debug($"Is source (initiator) {source.Name}");
 
 		base.HandleProjectileEffect(source, enemy);
-		enemy.StatusEffectComponent.ApplyEffectToCharacter(StatusEffect);
+		enemy.StatusEffectComponent.ApplyEffectToCharacter(StatusEffect, source, enemy);
 
 		LoggingUtils.Debug($"Is source character (initiator) {SourceCharacter.Name}");
 

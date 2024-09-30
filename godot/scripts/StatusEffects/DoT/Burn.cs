@@ -72,7 +72,7 @@ public class Burn : DotStatusEffect
 
                 // Deals damage to nearby targets
                 // Apply debuffs to nearby targets
-                enemy.StatusEffectComponent.ApplyEffectToCharacter(burn);
+                enemy.StatusEffectComponent.ApplyEffectToCharacter(burn, SourceCharacter, enemy);
                 enemy.DealDamageToCharacter(burn.StatusEffectData.Damage, burn.StatusEffectData.DamageType);
             }
         }

@@ -27,7 +27,7 @@ public partial class Lazerbeam : Beam
 	public override void DealDamageToCharacter()
 	{
 		var player = UtilGetter.GetMainPlayer();
-		player.StatusEffectComponent.ApplyEffectToCharacter(StatusEffect);
+		player.StatusEffectComponent.ApplyEffectToCharacter(StatusEffect, SourceCharacter, player);
 
 		base.DealDamageToCharacter();
 	}

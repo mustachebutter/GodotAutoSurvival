@@ -18,7 +18,7 @@ public partial class Zap : Projectile
 	public override void HandleProjectileEffect(BaseCharacter source, Enemy enemy)
 	{
 		base.HandleProjectileEffect(source, enemy);
-		enemy.StatusEffectComponent.ApplyEffectToCharacter(StatusEffect);
+		enemy.StatusEffectComponent.ApplyEffectToCharacter(StatusEffect, SourceCharacter, enemy);
 	}
 
 }

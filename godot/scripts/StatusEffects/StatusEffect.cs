@@ -5,7 +5,7 @@ public class StatusEffect
 {
     public BaseCharacter Target { get; set; }
     public Timer MainTimer { get; private set; }
-    public BaseCharacter SourceCharacter { get; protected set; }
+    public BaseCharacter SourceCharacter { get; set; }
     public StatusEffectData StatusEffectData { get; protected set; }
     public virtual void StartStatusEffect () { }
     public virtual void HandleStatusEffect () { }
