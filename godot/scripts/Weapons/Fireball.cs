@@ -10,13 +10,8 @@ public partial class Fireball : Projectile
 
 	public override void HandleProjectileEffect(BaseCharacter source, Enemy enemy)
 	{
-		LoggingUtils.Debug($"Is source (initiator) {source.Name}");
-
 		base.HandleProjectileEffect(source, enemy);
 		enemy.StatusEffectComponent.ApplyEffectToCharacter(StatusEffect, source, enemy);
-
-		LoggingUtils.Debug($"Is source character (initiator) {SourceCharacter.Name}");
-
 	}
 
 }

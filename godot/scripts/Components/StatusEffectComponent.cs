@@ -4,7 +4,6 @@ using Godot;
 [Tool]
 public partial class StatusEffectComponent : Node2D
 {
-	public BaseCharacter Target { get; set; }
 	public List<StatusEffect> StatusEffectList { get; private set; } = new List<StatusEffect>();
 
 	public void ApplyEffectToCharacter(StatusEffect currentStatusEffect, BaseCharacter sourceCharacter, BaseCharacter targetCharacter)
@@ -37,10 +36,12 @@ public partial class StatusEffectComponent : Node2D
 		{
 			StatusEffectList.Add(currentStatusEffect);
 			if (currentStatusEffect.StatusEffectData.VisualEffectName != "vfx_default")
-				Target.VisualEffectComponent.PlayVisualEffect(currentStatusEffect.StatusEffectData.VisualEffectName, true);
+			{
+				LoggingUtils.Debug($"Playing visual effect on {currentStatusEffect.Target.Name}");
+				currentStatusEffect.Target.VisualEffectComponent.PlayVisualEffect(currentStatusEffect.StatusEffectData.VisualEffectName, true);
+			}
 			// Do logic of the status effect. Only DOT has special logic for now.
 			// Realistically, we want to do this once!
-			LoggingUtils.Debug($"Is source character (initiator) {currentStatusEffect.SourceCharacter.Name}");
 			currentStatusEffect.StartStatusEffect();
 			status = currentStatusEffect;
 		}

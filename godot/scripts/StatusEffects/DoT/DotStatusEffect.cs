@@ -10,7 +10,7 @@ public class DotStatusEffect : StatusEffect
 	public override void StartStatusEffect()
 	{
 		base.StartStatusEffect();
-		if (Target.IsDead) return;
+		LoggingUtils.Debug($"{Target.Name} {Target.IsDead} - {Target.CharacterStatComponent.CharacterStatData.Health.Value}");
 		
 		_tickTimer = Utils.CreateTimer(Target, HandleStatusEffect, StatusEffectData.TickPerEverySecond, false);
 		_tickTimer?.Start();
@@ -38,6 +38,7 @@ public class DotStatusEffect : StatusEffect
 
 	public override void HandleStatusEffect()
 	{
+		LoggingUtils.Debug($"Dealing damage to {Target}");
 		// Tick damage
 		Target.DealDamageToCharacter(CalculateTotalDamage(), StatusEffectData.DamageType);
 	}
@@ -45,9 +46,14 @@ public class DotStatusEffect : StatusEffect
 	public override void OnStatusEffectEnd()
 	{
 		base.OnStatusEffectEnd();
-		Utils.DestroyTimer(_tickTimer);
 		if (Target != null)
+		{
 			Target.OnCharacterDeadEvent -= OnTargetDied;
+			if (Target.IsDead)
+			{
+				Utils.DestroyTimer(_tickTimer);
+			}
+		}
 		
 		//!!! This should be at the bottom of inheritance
 		//!!! since this is called last.

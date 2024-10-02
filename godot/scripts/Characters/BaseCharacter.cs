@@ -6,7 +6,7 @@ using Godot;
 public partial class BaseCharacter : CharacterBody2D
 {
 	private Godot.Vector2 _textOffset = new Godot.Vector2(0.0f, 0.0f);
-
+	private Label _healthLabel;
 	private bool _isDead = false;
 	private bool _hasTriggeredOnDead = false;
 	public delegate void OnCharacterDeadHandler();
@@ -38,16 +38,26 @@ public partial class BaseCharacter : CharacterBody2D
 		VisualEffectComponent = GetNode<VisualEffectComponent>("VisualEffectComponent");
 		CharacterStatComponent = GetNode<CharacterStatComponent>("CharacterStatComponent");
 
+		CharacterStatComponent = new CharacterStatComponent();
+		// LoggingUtils.Debug($"Stat Component {CharacterStatComponent}");
+		LoggingUtils.Debug($"Status Effect Component {StatusEffectComponent}");		
+
 		Area2D = GetNode<Area2D>("Area2D");
 		var circle = (CircleShape2D) Area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
 		circle.Radius = CharacterStatComponent.CharacterStatData.AttackRange.Value / 2;
 
-		//TODO: This is not correct?
-		StatusEffectComponent.Target = this;
+		_healthLabel = GetNode<Label>("HealthLabel");
+	}
+
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
+		_healthLabel.Text = $"{CharacterStatComponent.CharacterStatData.Health.Value}";
 	}
 
 	public void DealDamageToCharacter(float damage = 0.0f, DamageTypes damageType = DamageTypes.Normal)
 	{
+		LoggingUtils.Info($"Dealing damage to {Name}");
 		if (damage > 0)
 		{
 			CharacterStatComponent.CharacterStatData.Health.Value -= damage;

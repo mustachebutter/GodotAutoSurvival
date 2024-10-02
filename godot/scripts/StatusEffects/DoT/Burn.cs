@@ -81,7 +81,6 @@ public class Burn : DotStatusEffect
 
     public void CleanUpBurnExplosion()
     {
-        // LoggingUtils.Debug($"Is source character (Clean up) {SourceCharacter.Name}");
         _burnExplosion.QueueFree();
     }
 
