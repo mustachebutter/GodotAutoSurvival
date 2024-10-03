@@ -7,7 +7,14 @@ public class StatusEffect
     public Timer MainTimer { get; private set; }
     public BaseCharacter SourceCharacter { get; set; }
     public StatusEffectData StatusEffectData { get; protected set; }
-    public virtual void StartStatusEffect () { }
+    public virtual void StartStatusEffect () 
+    {
+		if (Target.IsDead)
+		{
+			OnTargetDied();
+			return;
+		}
+    }
     public virtual void HandleStatusEffect () { }
     public virtual void OnStatusEffectEnd () 
     {
@@ -16,6 +23,8 @@ public class StatusEffect
         Target.VisualEffectComponent.ClearVisualEffect();
         Utils.DestroyTimer(MainTimer);
     }
+
+    public virtual void OnTargetDied() { }
 
     //Entry point for Status Effect, which is invoked in Projectile or any source of damage.
 

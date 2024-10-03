@@ -65,12 +65,17 @@ public partial class BaseCharacter : CharacterBody2D
 			DamageNumberComponent.UpdateText(damage.ToString(), damageType);
 		}
 		
+		CharacterBelowZeroHealth();
+	}
+
+	public void CharacterBelowZeroHealth()
+	{
 		if(IsDead && !_hasTriggeredOnDead)
 		{
-			StatusEffectComponent.StatusEffectList.ForEach(x => LoggingUtils.Debug($"SEL: {x}"));
 			OnCharacterDeadEvent?.Invoke();
 			_hasTriggeredOnDead = true;
 		}
+
 	}
 
 	public void DestroyCharacter()

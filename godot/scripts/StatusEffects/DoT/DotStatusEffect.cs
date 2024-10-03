@@ -5,12 +5,10 @@ public class DotStatusEffect : StatusEffect
 {
 	public const float STATUS_EFFECT_DAMAGE_MULTIPLIER = 0.1f;
 	protected Timer _tickTimer;
-	public virtual void OnTargetDied() { }
 
 	public override void StartStatusEffect()
 	{
 		base.StartStatusEffect();
-		LoggingUtils.Debug($"{Target.Name} {Target.IsDead} - {Target.CharacterStatComponent.CharacterStatData.Health.Value}");
 		
 		_tickTimer = Utils.CreateTimer(Target, HandleStatusEffect, StatusEffectData.TickPerEverySecond, false);
 		_tickTimer?.Start();
