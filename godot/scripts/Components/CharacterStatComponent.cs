@@ -11,9 +11,8 @@ public partial class CharacterStatComponent : Node2D
 
     public override void _Ready()
     {
-        base._Ready();
+		base._Ready();
 		var characterStatDatabase = CharacterStatParsedData.GetCharacterStatDatabase();
-
 		// Initialize with level 1
 		CharacterStatData = characterStatDatabase[0].DeepCopy();
     }
@@ -106,6 +105,26 @@ public partial class CharacterStatComponent : Node2D
 		currentStatValue.Level = currentStatValue.Level + levelToUpgrade;
 		currentStatValue.Value = GetStatFromDatabase(currentStatValue.Name, currentStatValue.Level).Value;
 		LoggingUtils.Debug($"After upgrade: LVL {currentStatValue.Level} - {currentStatValue.Value}");
+	}
+
+	public void AddStat(string statKey, float amount = 0.0f)
+	{
+		var currentStatValue = GetStatFromName(statKey);
+		currentStatValue.Value = currentStatValue.Value + amount;
+	}
+
+	public void ReduceStat(string statKey, float amount = 0.0f)
+	{
+		var currentStatValue = GetStatFromName(statKey);
+		if (currentStatValue.Value - amount < 0)
+		{
+			LoggingUtils.Debug("Reduced stat to lower than 0");
+			currentStatValue.Value = 0;
+			return;
+		}
+
+		currentStatValue.Value = currentStatValue.Value - amount;
+		
 	}
 
 }

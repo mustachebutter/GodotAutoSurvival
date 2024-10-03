@@ -15,7 +15,7 @@ public partial class Main : Node2D
 		// !!!!!! DEBUG ONLY
 		GetTree().DebugCollisionsHint = true;
 		// !!!!!! DEBUG ONLY
-				
+		
 		dummies.Add(Utils.CreateDummy(new Vector2(371, 329), _enemyScene));
 		dummies.Add(Utils.CreateDummy(new Vector2(435, 264), _enemyScene));
 		dummies.Add(Utils.CreateDummy(new Vector2(455, 396), _enemyScene));

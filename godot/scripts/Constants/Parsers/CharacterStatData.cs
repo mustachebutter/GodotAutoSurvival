@@ -32,15 +32,15 @@ public class CharacterStatData
     {
         return new CharacterStatData
         {
-            Attack = this.Attack,
-            AttackRange = this.AttackRange,
-            AttackSpeed = this.AttackSpeed,
-            Health = this.Health,
-            Defense = this.Defense,
-            ElementalResistance = this.ElementalResistance,
-            Speed = this.Speed,
-            Crit = this.Crit,
-            CritDamage = this.CritDamage,
+            Attack = this.Attack.DeepCopy(),
+            AttackRange = this.AttackRange.DeepCopy(),
+            AttackSpeed = this.AttackSpeed.DeepCopy(),
+            Health = this.Health.DeepCopy(),
+            Defense = this.Defense.DeepCopy(),
+            ElementalResistance = this.ElementalResistance.DeepCopy(),
+            Speed = this.Speed.DeepCopy(),
+            Crit = this.Crit.DeepCopy(),
+            CritDamage = this.CritDamage.DeepCopy(),
         };
     }
 }
