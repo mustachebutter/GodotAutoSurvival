@@ -14,7 +14,7 @@ public static class UtilGetter
 
 	public static Player GetMainPlayer()
 	{
-		var player = GetSceneTree().Root.GetNode<Node2D>("Node2D/CharactersParentNode").GetNode<CharacterBody2D>("Player");
+		var player = GetSceneTree().Root.GetNode<Node2D>("MotherNode/CharactersParentNode").GetNode<CharacterBody2D>("Player");
 		
 		if (player != null)
 		{
@@ -23,6 +23,19 @@ public static class UtilGetter
 
 		LoggingUtils.Error("Could not retrieved player node");
 		throw new Exception("Could not retrieved player node");
+	}
+
+	public static MobSpawnerComponent GetMainMobSpawner()
+	{
+		var mobSpawner = GetSceneTree().Root.GetNode<Node2D>("MotherNode").GetNode<MobSpawnerComponent>("MobSpawnerComponent");
+
+		if (mobSpawner != null)
+		{
+			return (MobSpawnerComponent) mobSpawner;
+		}
+
+		LoggingUtils.Error("Could not retrieved mob spawner node");
+		throw new Exception("Could not retrieved mob spawner node");
 	}
 }
 public static class ProjectileTypes

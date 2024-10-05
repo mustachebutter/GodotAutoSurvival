@@ -12,7 +12,7 @@ public partial class MainHUD : CanvasLayer
 	public Button SpawnDummyButton;
 	public CheckButton SpawnModeButton;
 	public Dictionary<string, HBoxContainer> statContainerPair = new Dictionary<string, HBoxContainer>();
-
+	public MobSpawnerComponent MobSpawner;
 	private List<Vector2> dummyPositions = new List<Vector2> 
 	{ 
 		new Vector2(371, 329), 
@@ -32,6 +32,7 @@ public partial class MainHUD : CanvasLayer
 		SpawnDummyButton.Pressed += SpawnDummies;
 		SpawnModeButton.Toggled += SwitchSpawnMode;
 
+		MobSpawner = UtilGetter.GetMainMobSpawner();
 		SpawnModeButton.ButtonPressed = true;
 	}
 
@@ -107,15 +108,22 @@ public partial class MainHUD : CanvasLayer
 		// 	enemy.CharacterStatComponent.AddStat("Health", 100.0f);
 		// }
 
-		Random random = new Random();
-
-		for (int i = 0; i < 4; i++)
+		if (GlobalConfigs.EnemySpawnMode.Equals(EnemySpawnMode.Dummy))
 		{
-			int randomX = random.Next(0, 500);
-			int randomY = random.Next(0, 500);
-			var enemy = Utils.CreateDummy(new Vector2(randomX, randomY), Scenes.Enemy);
-			enemy.OnCharacterDeadEvent += enemy.DestroyCharacter;
-			enemy.CharacterStatComponent.AddStat("Health", 100.0f);
+			Random random = new Random();
+
+			for (int i = 0; i < 4; i++)
+			{
+				int randomX = random.Next(0, 500);
+				int randomY = random.Next(0, 500);
+				var enemy = Utils.CreateDummy(new Vector2(randomX, randomY), Scenes.Enemy);
+				enemy.OnCharacterDeadEvent += enemy.DestroyCharacter;
+				enemy.CharacterStatComponent.AddStat("Health", 100.0f);
+			}
+		}
+		else
+		{
+			MobSpawner.StartSpawningEnemies();
 		}
 	}
 
@@ -125,11 +133,12 @@ public partial class MainHUD : CanvasLayer
 		{
 			GlobalConfigs.EnemySpawnMode = EnemySpawnMode.Dummy;
 			SpawnModeButton.Text = "MODE: DUMMY";
+			MobSpawner.StopSpawningEnemies();
 		}
 		else
 		{
 			SpawnModeButton.Text = "MODE: SPAWN";
-			GlobalConfigs.EnemySpawnMode = EnemySpawnMode.Dummy;
+			GlobalConfigs.EnemySpawnMode = EnemySpawnMode.Normal;
 		}
 	}
 }

@@ -108,7 +108,7 @@ public static class Utils
 	{
 		var enemyNode = enemyScene.Instantiate();
 
-		var parent = UtilGetter.GetSceneTree().Root.GetNode<Node2D>("Node2D/CharactersParentNode");
+		var parent = UtilGetter.GetSceneTree().Root.GetNode<Node2D>("MotherNode/CharactersParentNode");
 		parent.AddChild(enemyNode);
 		var enemy = (Enemy) enemyNode;
 		enemy.Position = position;
