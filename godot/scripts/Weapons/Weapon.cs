@@ -5,7 +5,7 @@ public partial class Weapon : CharacterBody2D
 	public BaseCharacter SourceCharacter { get; set; }
     public StatusEffect StatusEffect { get; protected set; }
     public WeaponData WeaponData { get; set;}
-    public virtual void HandleProjectileEffect() { }
+    public virtual void OnTargetDied(BaseCharacter target) { }
 	public virtual void HandleProjectileEffect(BaseCharacter source, Enemy hitEnemy) 
     { 
         SourceCharacter = source;

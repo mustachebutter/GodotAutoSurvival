@@ -59,8 +59,19 @@ public partial class Beam : Weapon
 			{
 				var enemy = (Enemy) bd;
 				enemy.DealDamageToCharacter(CalculateTotalDamage());
+
+				if (enemy.IsDead)
+				{
+					OnTargetDied(enemy);
+				}
 			}
 		}
 	}
 
+	public override void OnTargetDied(BaseCharacter target)
+	{
+		base.OnTargetDied(target);
+
+		target.DestroyCharacter();
+	}
 }

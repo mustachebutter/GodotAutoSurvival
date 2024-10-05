@@ -9,13 +9,30 @@ public partial class MainHUD : CanvasLayer
 	public Label Debug_CurrentWeapon;
 	public RichTextLabel Debug_CurrentWeaponDetails;
 	public VBoxContainer StatsContainer;
+	public Button SpawnDummyButton;
+	public CheckButton SpawnModeButton;
 	public Dictionary<string, HBoxContainer> statContainerPair = new Dictionary<string, HBoxContainer>();
+
+	private List<Vector2> dummyPositions = new List<Vector2> 
+	{ 
+		new Vector2(371, 329), 
+		new Vector2(435, 264), 
+		new Vector2(455, 396),
+		new Vector2(504, 312)
+	};
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		Debug_CurrentWeapon = GetNode<Label>("Control/VBoxContainer/Label");
 		Debug_CurrentWeaponDetails = GetNode<RichTextLabel>("Control/VBoxContainer/RichTextLabel");
 		StatsContainer = GetNode<VBoxContainer>("Control/VBoxContainer2");
+		SpawnDummyButton = GetNode<Button>("Control/VBoxContainer3/SpawnDummyButton");
+		SpawnModeButton = GetNode<CheckButton>("Control/VBoxContainer3/SpawmModeButton");
+
+		SpawnDummyButton.Pressed += SpawnDummies;
+		SpawnModeButton.Toggled += SwitchSpawnMode;
+
+		SpawnModeButton.ButtonPressed = true;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -77,6 +94,42 @@ public partial class MainHUD : CanvasLayer
 			};
 
 			StatsContainer.AddChild(hBoxContainer);
+		}
+	}
+
+	public void SpawnDummies()
+	{
+		LoggingUtils.Debug("Spawn some dummies");
+		// foreach (var position in dummyPositions)
+		// {
+		// 	var enemy = Utils.CreateDummy(position, Scenes.Enemy);
+		// 	enemy.OnCharacterDeadEvent += enemy.DestroyCharacter;
+		// 	enemy.CharacterStatComponent.AddStat("Health", 100.0f);
+		// }
+
+		Random random = new Random();
+
+		for (int i = 0; i < 4; i++)
+		{
+			int randomX = random.Next(0, 500);
+			int randomY = random.Next(0, 500);
+			var enemy = Utils.CreateDummy(new Vector2(randomX, randomY), Scenes.Enemy);
+			enemy.OnCharacterDeadEvent += enemy.DestroyCharacter;
+			enemy.CharacterStatComponent.AddStat("Health", 100.0f);
+		}
+	}
+
+	private void SwitchSpawnMode(bool buttonPressed)
+	{
+		if (buttonPressed)
+		{
+			GlobalConfigs.EnemySpawnMode = EnemySpawnMode.Dummy;
+			SpawnModeButton.Text = "MODE: DUMMY";
+		}
+		else
+		{
+			SpawnModeButton.Text = "MODE: SPAWN";
+			GlobalConfigs.EnemySpawnMode = EnemySpawnMode.Dummy;
 		}
 	}
 }

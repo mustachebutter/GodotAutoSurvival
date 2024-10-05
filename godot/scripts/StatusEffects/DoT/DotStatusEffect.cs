@@ -36,6 +36,7 @@ public class DotStatusEffect : StatusEffect
 
 	public override void HandleStatusEffect()
 	{
+		// TODO: Apparently the Target is null upon switching to Zap and have Zap effect on when Burn is still active 
 		LoggingUtils.Debug($"Dealing damage to {Target.Name}");
 		// Tick damage
 		Target.DealDamageToCharacter(CalculateTotalDamage(), StatusEffectData.DamageType);

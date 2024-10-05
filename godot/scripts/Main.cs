@@ -7,8 +7,6 @@ public partial class Main : Node2D
 {
 	private PackedScene _playerScene = Scenes.Player;
 	private Player _player;
-	private PackedScene _enemyScene = Scenes.Enemy;
-	private List<Enemy> dummies = new List<Enemy>();
 
 	public override void _Ready()
 	{
@@ -16,16 +14,6 @@ public partial class Main : Node2D
 		GetTree().DebugCollisionsHint = true;
 		// !!!!!! DEBUG ONLY
 		
-		dummies.Add(Utils.CreateDummy(new Vector2(371, 329), _enemyScene));
-		dummies.Add(Utils.CreateDummy(new Vector2(435, 264), _enemyScene));
-		dummies.Add(Utils.CreateDummy(new Vector2(455, 396), _enemyScene));
-		dummies.Add(Utils.CreateDummy(new Vector2(504, 312), _enemyScene));
-
-		foreach (var d in dummies)
-		{
-			d.OnCharacterDeadEvent += () => HandleEnemyDead(d);
-		}
-
 		_player = (Player) _playerScene.Instantiate();
 		GetNode<Node2D>("CharactersParentNode").AddChild(_player);		
 	}
@@ -35,14 +23,6 @@ public partial class Main : Node2D
 		
 	}
 	
-	private void HandleEnemyDead(Enemy enemy)
-	{
-		if (dummies.Contains(enemy))
-		{
-			LoggingUtils.Debug($"Removed enemy: {dummies.Remove(enemy)}, {enemy.Name}");
-		}
-	}
-
 	public void SpawnNode(Node2D node)
 	{
 		AddChild(node);

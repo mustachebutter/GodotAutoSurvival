@@ -71,3 +71,24 @@ text = "Up"
 [node name="Button2" type="Button" parent="Control/VBoxContainer2/HBoxContainer"]
 layout_mode = 2
 text = "Down"
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -74.0
+offset_top = 30.0
+offset_right = -30.0
+offset_bottom = 66.0
+grow_horizontal = 0
+alignment = 1
+
+[node name="SpawnDummyButton" type="Button" parent="Control/VBoxContainer3"]
+layout_mode = 2
+text = "Spawn Dummy"
+
+[node name="SpawmModeButton" type="CheckButton" parent="Control/VBoxContainer3"]
+layout_mode = 2
+text = "MODE: DUMMY"
+alignment = 1

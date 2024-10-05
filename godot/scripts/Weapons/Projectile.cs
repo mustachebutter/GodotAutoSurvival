@@ -29,7 +29,15 @@ public partial class Projectile : Weapon
 
 			enemy.DealDamageToCharacter(CalculateTotalDamage());
 			
-			HandleProjectileEffect(SourceCharacter, enemy);
+			if (!enemy.IsDead)
+			{
+				HandleProjectileEffect(SourceCharacter, enemy);
+			}
+			else
+			{
+				OnTargetDied(enemy);
+			}
+
 			// When the projectile hits, destroy itself
 			QueueFree();
 
@@ -69,6 +77,13 @@ public partial class Projectile : Weapon
 	{
 		var mainNode = (Main) GetParent();
 		mainNode.SpawnNode(node);
+	}
+
+	public override void OnTargetDied(BaseCharacter target)
+	{
+		base.OnTargetDied(target);
+
+		target.DestroyCharacter();
 	}
 
 	public override void _ExitTree()
