@@ -6,7 +6,7 @@ public partial class MobSpawnerComponent : Node2D
     public override void _Ready()
     {
         base._Ready();
-        _timer = Utils.CreateTimer(this, SpawnEnemies, 3.0f, false);
+        _timer = Utils.CreateTimer(this, SpawnEnemies, 5.0f, false);
     }
 
     public void StartSpawningEnemies()
