@@ -17,7 +17,7 @@ public partial class CharacterStatComponent : Node2D
 		CharacterStatData = characterStatDatabase[0].DeepCopy();
     }
 
-	public Stat GetStatFromName(string statKey = "Default")
+	public UpgradableObject GetStatFromName(string statKey = "Default")
 	{
 		if (statKey == "Default")
 		{
@@ -25,7 +25,7 @@ public partial class CharacterStatComponent : Node2D
 			return null;
 		}
 
-		Stat currentStatValue = statKey switch
+		UpgradableObject currentStatValue = statKey switch
 		{
 			"Health" => CharacterStatData.Health,
 			"Attack" => CharacterStatData.Attack,
@@ -48,7 +48,7 @@ public partial class CharacterStatComponent : Node2D
 		return currentStatValue;
 	}
 
-	public Stat GetStatFromDatabase(string statKey = "Default", int level = 1)
+	public UpgradableObject GetStatFromDatabase(string statKey = "Default", int level = 1)
 	{
 
 		if (statKey == "Default")
@@ -66,7 +66,7 @@ public partial class CharacterStatComponent : Node2D
 		var characterStatDatabase = CharacterStatParsedData.GetCharacterStatDatabase();
 		var currentStatOfLevel = characterStatDatabase[level - 1];
 		// Good old switch case :D
-		Stat currentStatValue = statKey switch
+		UpgradableObject currentStatValue = statKey switch
 		{
 			"Health" => currentStatOfLevel.Health.DeepCopy(),
 			"Attack" => currentStatOfLevel.Attack.DeepCopy(),

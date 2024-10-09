@@ -106,10 +106,13 @@ public static class StatusEffectParsedData
 public static class WeaponParsedData
 {
 	public static Dictionary<string, WeaponData> dictionary = new Dictionary<string, WeaponData>();
+	public static List<WeaponDamageData> weaponDamageDatabase = new List<WeaponDamageData>();
 	static WeaponParsedData()
 	{
 		var path  = "res://metadata/GodotAutoSurvival_Metadata_Weapon.tsv";
+		var path_damage = "res://metadata/GodotAutoSurvival_Metadata_WeaponMetadata.tsv";
 		var pList = WeaponDataParser.ParseData(path);
+		weaponDamageDatabase = WeaponDataParser.ParseDamageData(path_damage);
 		
 		foreach (var p in pList)
 		{

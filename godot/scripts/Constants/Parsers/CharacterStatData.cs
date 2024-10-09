@@ -3,30 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-public class Stat
+public class UpgradableObject
 {
     public string Name { get; set; }
     public int Level { get; set; }
     public float Value { get; set; }
 
-    public Stat DeepCopy()
+    public UpgradableObject DeepCopy()
     {
-        return new Stat { Name = this.Name, Level = this.Level, Value = this.Value };
+        return new UpgradableObject { Name = this.Name, Level = this.Level, Value = this.Value };
     }
 }
 
 
 public class CharacterStatData
 {
-	public Stat Attack { get; set;} = new Stat { Level = 1, Value = 100.0f };
-	public Stat AttackRange { get; set; } = new Stat { Level = 1, Value = 500.0f };
-	public Stat AttackSpeed { get; set; } = new Stat { Level = 1, Value = 1.0f };
-	public Stat Health { get; set;} = new Stat { Level = 1, Value = 100.0f };
-	public Stat Defense { get; set; } = new Stat { Level = 1, Value = 50.0f };
-	public Stat ElementalResistance { get; set; } = new Stat { Level = 1, Value = 50.0f };
-	public Stat Speed { get; set; } = new Stat { Level = 1, Value = 100.0f };
-	public Stat Crit { get; set; } = new Stat { Level = 1, Value = 1.0f };
-	public Stat CritDamage { get; set; } = new Stat { Level = 1, Value = 100.0f };
+	public UpgradableObject Attack { get; set;} = new UpgradableObject { Level = 1, Value = 100.0f };
+	public UpgradableObject AttackRange { get; set; } = new UpgradableObject { Level = 1, Value = 500.0f };
+	public UpgradableObject AttackSpeed { get; set; } = new UpgradableObject { Level = 1, Value = 1.0f };
+	public UpgradableObject Health { get; set;} = new UpgradableObject { Level = 1, Value = 100.0f };
+	public UpgradableObject Defense { get; set; } = new UpgradableObject { Level = 1, Value = 50.0f };
+	public UpgradableObject ElementalResistance { get; set; } = new UpgradableObject { Level = 1, Value = 50.0f };
+	public UpgradableObject Speed { get; set; } = new UpgradableObject { Level = 1, Value = 100.0f };
+	public UpgradableObject Crit { get; set; } = new UpgradableObject { Level = 1, Value = 1.0f };
+	public UpgradableObject CritDamage { get; set; } = new UpgradableObject { Level = 1, Value = 100.0f };
 
     public CharacterStatData DeepCopy()
     {
@@ -71,15 +71,15 @@ public static class CharacterStatDataParser
                 var level = int.Parse(content[0]);
                 var csd = new CharacterStatData
                 {
-                    Health = new Stat { Name = keys[1], Level = level, Value = float.Parse(content[1]) },
-                    Attack = new Stat { Name = keys[2], Level = level, Value = float.Parse(content[2]) },
-                    AttackRange = new Stat { Name = keys[3], Level = level, Value = float.Parse(content[3]) },
-                    AttackSpeed = new Stat { Name = keys[4], Level = level, Value = float.Parse(content[4]) },
-                    Speed = new Stat { Name = keys[5], Level = level, Value = float.Parse(content[5]) },
-                    Crit = new Stat { Name = keys[6], Level = level, Value = float.Parse(content[6]) },
-                    CritDamage = new Stat { Name = keys[7], Level = level, Value = float.Parse(content[7]) },
-                    Defense = new Stat { Name = keys[8], Level = level, Value = float.Parse(content[8]) },
-                    ElementalResistance = new Stat { Name = keys[9], Level = level, Value = float.Parse(content[9]) },
+                    Health = new UpgradableObject { Name = keys[1], Level = level, Value = float.Parse(content[1]) },
+                    Attack = new UpgradableObject { Name = keys[2], Level = level, Value = float.Parse(content[2]) },
+                    AttackRange = new UpgradableObject { Name = keys[3], Level = level, Value = float.Parse(content[3]) },
+                    AttackSpeed = new UpgradableObject { Name = keys[4], Level = level, Value = float.Parse(content[4]) },
+                    Speed = new UpgradableObject { Name = keys[5], Level = level, Value = float.Parse(content[5]) },
+                    Crit = new UpgradableObject { Name = keys[6], Level = level, Value = float.Parse(content[6]) },
+                    CritDamage = new UpgradableObject { Name = keys[7], Level = level, Value = float.Parse(content[7]) },
+                    Defense = new UpgradableObject { Name = keys[8], Level = level, Value = float.Parse(content[8]) },
+                    ElementalResistance = new UpgradableObject { Name = keys[9], Level = level, Value = float.Parse(content[9]) },
                 };
                 
                 characterStats.Add(csd);
