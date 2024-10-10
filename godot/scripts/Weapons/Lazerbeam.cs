@@ -8,7 +8,7 @@ public partial class Lazerbeam : Beam
 	public override void _Ready()
 	{
 		base._Ready();
-		StatusEffect = new Focus(StatusEffectParsedData.GetData("Status_Focus"));
+		StatusEffect = new Focus(DataParser.GetStatusEffectData("Status_Focus"));
 	}
 
 	public override void HandleProjectileEffect(BaseCharacter source, Enemy hitEnemy)

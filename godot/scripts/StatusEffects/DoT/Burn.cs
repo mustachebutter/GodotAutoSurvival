@@ -67,7 +67,7 @@ public class Burn : DotStatusEffect
             {
                 // Create new Burn instance
                 var burn = new Burn(
-                    StatusEffectParsedData.GetData("Status_DOT_Burn")
+                    DataParser.GetStatusEffectData("Status_DOT_Burn")
 		        );
 
                 // Deals damage to nearby targets

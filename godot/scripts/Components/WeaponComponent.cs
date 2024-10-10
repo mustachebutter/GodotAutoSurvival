@@ -17,7 +17,7 @@ public partial class WeaponComponent : Node2D
 	{
 		base._Ready();
 		_player = GetParent<Player>();
-		weaponData = WeaponParsedData.GetAllData();
+		weaponData = DataParser.GetAllData();
 		weapons = weaponData.Keys.Where(x => x != "Weapon_Default").ToList();
 		MainHUD = UtilGetter.GetSceneTree().Root.GetNode<MainHUD>("MotherNode/MainHUD");
 		MainHUD.SetDebugWeapon(weaponData[weapons[index]]);

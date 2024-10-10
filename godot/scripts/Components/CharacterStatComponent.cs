@@ -12,7 +12,7 @@ public partial class CharacterStatComponent : Node2D
     public override void _Ready()
     {
 		base._Ready();
-		var characterStatDatabase = CharacterStatParsedData.GetCharacterStatDatabase();
+		var characterStatDatabase = DataParser.GetCharacterStatDatabase();
 		// Initialize with level 1
 		CharacterStatData = characterStatDatabase[0].DeepCopy();
     }
@@ -63,7 +63,7 @@ public partial class CharacterStatComponent : Node2D
 			return null;
 		}
 		
-		var characterStatDatabase = CharacterStatParsedData.GetCharacterStatDatabase();
+		var characterStatDatabase = DataParser.GetCharacterStatDatabase();
 		var currentStatOfLevel = characterStatDatabase[level - 1];
 		// Good old switch case :D
 		UpgradableObject currentStatValue = statKey switch

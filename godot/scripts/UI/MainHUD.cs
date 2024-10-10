@@ -78,7 +78,7 @@ public partial class MainHUD : CanvasLayer
 	}
 	public void SetDebugStats(CharacterStatComponent characterStatComponent)
 	{
-		foreach (var stat in CharacterStatParsedData.STATS_MAPPER)
+		foreach (var stat in DataParser.STATS_MAPPER)
 		{
 			var (hBoxContainer, container, buttonUp, buttonDown) = CreateDebugStatContainer();
 			var statValue = characterStatComponent.GetStatFromDatabase(stat);
