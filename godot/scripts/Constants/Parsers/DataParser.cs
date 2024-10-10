@@ -8,12 +8,13 @@ public static class DataParser
 	private readonly static string FILE_METADATA_WEAPON  = "res://metadata/GodotAutoSurvival_Metadata_Weapon.tsv";
 	private readonly static string FILE_METADATA_WEAPON_DAMAGE = "res://metadata/GodotAutoSurvival_Metadata_WeaponMetadata.tsv";
 	private readonly static string FILE_METADATA_STATS = "res://metadata/GodotAutoSurvival_Metadata_Stats.tsv";
+	private readonly static string FILE_METADATA_CHARACTER_LEVEL = "";
 
 	private static Dictionary<string, StatusEffectData> _statusEffectDictionary = new Dictionary<string, StatusEffectData>();
 	private static Dictionary<string, WeaponData> _weaponEffectDictionary = new Dictionary<string, WeaponData>();
 	private static List<WeaponDamageData> _weaponDamageDatabase = new List<WeaponDamageData>();
 	private readonly static List<CharacterStatData> _characterStatDatabase = new List<CharacterStatData>();
-
+	private readonly static List<CharacterLevelData> _characterLevelDatabase = new List<CharacterLevelData>();
 
 	static DataParser()
 	{
@@ -33,7 +34,7 @@ public static class DataParser
 		_weaponDamageDatabase = WeaponDataParser.ParseDamageData(FILE_METADATA_WEAPON_DAMAGE);
 
 		_characterStatDatabase = CharacterStatDataParser.ParseData(FILE_METADATA_STATS);
-
+		_characterLevelDatabase = CharacterStatDataParser.ParseLevelData(FILE_METADATA_CHARACTER_LEVEL);
 	}
 
 	public static StatusEffectData GetStatusEffectData(string key)
@@ -80,6 +81,11 @@ public static class DataParser
 	public static List<CharacterStatData> GetCharacterStatDatabase()
 	{
 		return _characterStatDatabase;
+	}
+
+	public static List<CharacterLevelData> GetCharacterLevelDatabase()
+	{
+		return _characterLevelDatabase;
 	}
 
 	public static UpgradableObject GetStatFromDatabase(string statKey = "Default", int level = 1)

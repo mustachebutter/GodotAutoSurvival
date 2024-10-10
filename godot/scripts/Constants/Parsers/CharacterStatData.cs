@@ -61,6 +61,20 @@ public class UpgradableObject
     }
 }
 
+public class CharacterLevelData
+{
+    public int Level { get; set; }
+    public int ExperienceToLevelUp { get; set; }
+
+    public CharacterLevelData DeepCopy()
+    {
+        return new CharacterLevelData
+        {
+            Level = this.Level,
+            ExperienceToLevelUp = this.ExperienceToLevelUp,
+        };
+    }
+}
 
 public class CharacterStatData
 {
@@ -143,6 +157,58 @@ public static class CharacterStatDataParser
         catch(IndexOutOfRangeException ex)
         {
             LoggingUtils.Error($"The number of parsed columns doesn't match the expected for character stat: {ex}");
+        }
+        catch(ArgumentNullException ex)
+        {
+            LoggingUtils.Error($"Tried to parse a null value: {ex}");
+        }
+
+        return null;
+    }
+
+    public static List<CharacterLevelData> ParseLevelData(string path)
+    {
+        var characterLevels = new List<CharacterLevelData>();
+        var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
+        if(file == null)
+            LoggingUtils.Error($"Failed to parse file {path}");
+        
+        // Skip the first header line
+        string[] keys = file.GetCsvLine("\t");
+        try
+        {
+            LoggingUtils.Info("CharacterLevelData Parsing!!!", isBold: true, fontSize: 20);
+            while(!file.EofReached())
+            {
+                string[] content = file.GetCsvLine("\t");
+                LoggingUtils.Info($"Parsing {content.Length} column(s)");
+                if (content.Length == 1)
+                {
+                    continue;
+                }
+
+                var level = int.Parse(content[0]);
+                var cld = new CharacterLevelData
+                {
+                    Level = int.Parse(content[0]),
+                    ExperienceToLevelUp = int.Parse(content[1]),
+                };
+                
+                characterLevels.Add(cld);
+            }
+
+            if(characterLevels.Count == 0)
+                LoggingUtils.Error("Wasn't able to parsed any character level data!");
+    
+            return characterLevels;
+        }
+        catch(FormatException ex)
+        {
+            LoggingUtils.Error($"Failed to parse column for character level: {ex}");
+        }
+        catch(IndexOutOfRangeException ex)
+        {
+            LoggingUtils.Error($"The number of parsed columns doesn't match the expected for character level: {ex}");
         }
         catch(ArgumentNullException ex)
         {
