@@ -13,6 +13,8 @@ public partial class MainHUD : CanvasLayer
 	public CheckButton SpawnModeButton;
 	public Dictionary<string, HBoxContainer> statContainerPair = new Dictionary<string, HBoxContainer>();
 	public MobSpawnerComponent MobSpawner;
+	public ProgressBar ExpBar;
+	public Label LevelLabel;
 	private List<Vector2> dummyPositions = new List<Vector2> 
 	{ 
 		new Vector2(371, 329), 
@@ -28,6 +30,8 @@ public partial class MainHUD : CanvasLayer
 		StatsContainer = GetNode<VBoxContainer>("Control/VBoxContainer2");
 		SpawnDummyButton = GetNode<Button>("Control/VBoxContainer3/SpawnDummyButton");
 		SpawnModeButton = GetNode<CheckButton>("Control/VBoxContainer3/SpawmModeButton");
+		ExpBar = GetNode<ProgressBar>("Control/VBoxContainer4/ProgressBar");
+		LevelLabel = GetNode<Label>("Control/VBoxContainer4/Label");
 
 		SpawnDummyButton.Pressed += SpawnDummies;
 		SpawnModeButton.Toggled += SwitchSpawnMode;
@@ -146,5 +150,15 @@ public partial class MainHUD : CanvasLayer
 			SpawnModeButton.Text = "MODE: SPAWN";
 			GlobalConfigs.EnemySpawnMode = EnemySpawnMode.Normal;
 		}
+	}
+
+	public void SetExperience(int currentExp, int expToLevelUp)
+	{
+		ExpBar.Value = currentExp / (expToLevelUp - currentExp) * 100;
+	}
+
+	public void SetLevel(int level = 1)
+	{
+		LevelLabel.Text = $"LEVEL {level}";
 	}
 }

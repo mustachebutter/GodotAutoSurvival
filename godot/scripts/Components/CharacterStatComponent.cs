@@ -1,24 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using Godot;
 
 public partial class CharacterStatComponent : Node2D
 {
 	public CharacterStatData CharacterStatData { get; set; }
-	public CharacterLevelData CurrentCharacterLevel { get; set; }
-	public int Experience { get; set; }
 
     public override void _Ready()
     {
 		base._Ready();
 		var firstCharacterStatLevel = DataParser.GetCharacterStatDatabase()[0].DeepCopy();
-		var firstCharacterLevel = DataParser.GetCharacterLevelDatabase()[0].DeepCopy();
-		// Initialize with level 1
 		CharacterStatData = firstCharacterStatLevel;
-		CurrentCharacterLevel = firstCharacterLevel;
-		Experience = 0;
     }
 
 	public UpgradableObject GetStatFromName(string statKey = "Default")
@@ -70,37 +61,4 @@ public partial class CharacterStatComponent : Node2D
 
 		currentStatValue.Value = currentStatValue.Value - amount;
 	}
-
-	public void GainExperience(int experience = 0)
-	{
-		Experience += experience;
-
-		if (Experience < CurrentCharacterLevel.ExperienceToLevelUp)
-		{
-			return;
-		}
-		else
-		{
-			// Level up here
-			LevelUp();
-		}
-	}
-
-	public void LevelUp(int levelToUpgrade = 1)
-	{
-		var characterLevelDatabase = DataParser.GetCharacterLevelDatabase();
-		int maxLevel = characterLevelDatabase.LastOrDefault().Level;
-
-		if (CurrentCharacterLevel.Level + levelToUpgrade > maxLevel)
-		{
-			LoggingUtils.Error("#################################");
-			LoggingUtils.Error("Max Level reached. Cannot level up anymore!");
-			LoggingUtils.Error($"Current Level = {CurrentCharacterLevel.Level}, Level To Upgrade = {levelToUpgrade}");
-			return;
-		}
-
-		CharacterLevelData nextLevel = characterLevelDatabase[CurrentCharacterLevel.Level + levelToUpgrade];
-		CurrentCharacterLevel = nextLevel.DeepCopy();
-	}
-
 }

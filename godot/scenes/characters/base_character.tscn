@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://jlhhk6jfrg8f"]
+[gd_scene load_steps=10 format=3 uid="uid://jlhhk6jfrg8f"]
 
 [ext_resource type="Script" path="res://scripts/Characters/BaseCharacter.cs" id="1_seaek"]
 [ext_resource type="Script" path="res://scripts/Components/DamageNumberComponent.cs" id="2_0ub6m"]
 [ext_resource type="Script" path="res://scripts/Components/CharacterStatComponent.cs" id="2_rn3f3"]
 [ext_resource type="Script" path="res://scripts/Components/StatusEffectComponent.cs" id="3_ac2co"]
+[ext_resource type="Script" path="res://scripts/Components/CharacterLevelComponent.cs" id="3_jhpyx"]
 [ext_resource type="SpriteFrames" uid="uid://c7yenip1an2se" path="res://assets/sprite_frames/Effects.tres" id="4_7m177"]
 [ext_resource type="Script" path="res://scripts/Components/VisualEffectComponent.cs" id="4_dgpnq"]
 
@@ -24,6 +25,9 @@ scale = Vector2(2, 2)
 
 [node name="CharacterStatComponent" type="Node2D" parent="."]
 script = ExtResource("2_rn3f3")
+
+[node name="CharacterLevelComponent" type="Node2D" parent="."]
+script = ExtResource("3_jhpyx")
 
 [node name="DamageNumberComponent" type="Node2D" parent="."]
 script = ExtResource("2_0ub6m")

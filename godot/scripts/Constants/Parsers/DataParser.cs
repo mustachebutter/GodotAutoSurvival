@@ -8,7 +8,7 @@ public static class DataParser
 	private readonly static string FILE_METADATA_WEAPON  = "res://metadata/GodotAutoSurvival_Metadata_Weapon.tsv";
 	private readonly static string FILE_METADATA_WEAPON_DAMAGE = "res://metadata/GodotAutoSurvival_Metadata_WeaponMetadata.tsv";
 	private readonly static string FILE_METADATA_STATS = "res://metadata/GodotAutoSurvival_Metadata_Stats.tsv";
-	private readonly static string FILE_METADATA_CHARACTER_LEVEL = "";
+	private readonly static string FILE_METADATA_CHARACTER_LEVEL = "res://metadata/GodotAutoSurvival_Metadata_CharacterLevel.tsv";
 
 	private static Dictionary<string, StatusEffectData> _statusEffectDictionary = new Dictionary<string, StatusEffectData>();
 	private static Dictionary<string, WeaponData> _weaponEffectDictionary = new Dictionary<string, WeaponData>();
