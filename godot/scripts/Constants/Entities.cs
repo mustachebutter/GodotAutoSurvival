@@ -5,16 +5,22 @@ using Godot;
 
 public static class UtilGetter
 {
-	public static SceneTree GetSceneTree()
+	public static Node2D GetMotherNode()
 	{
 		var sceneTree = (SceneTree) Engine.GetMainLoop() ?? throw new InvalidOperationException($"ERROR [{nameof(UtilGetter)}] Could not get the Scene Tree");
+		var motherNode = sceneTree.Root.GetNode<Node2D>("MotherNode");
 		
-		return sceneTree;
+		return motherNode;
 	}
+
+	public static Node2D GetCharactersParentNode() { return GetMotherNode().GetNode<Node2D>("CharactersParentNode"); }
+	public static Node2D GetVfxParentNode() { return GetMotherNode().GetNode<Node2D>("VFXParentNode"); }
+	public static Node2D GetProjectileParentNode() { return GetMotherNode().GetNode<Node2D>("ProjectileParentNode"); }
+	public static MainHUD GetMainHUD() { return GetMotherNode().GetNode<MainHUD>("MainHUD"); }
 
 	public static Player GetMainPlayer()
 	{
-		var player = GetSceneTree().Root.GetNode<Node2D>("MotherNode/CharactersParentNode").GetNode<CharacterBody2D>("Player");
+		var player = GetCharactersParentNode().GetNode<CharacterBody2D>("Player");
 		
 		if (player != null)
 		{
@@ -27,7 +33,7 @@ public static class UtilGetter
 
 	public static MobSpawnerComponent GetMainMobSpawner()
 	{
-		var mobSpawner = GetSceneTree().Root.GetNode<Node2D>("MotherNode").GetNode<MobSpawnerComponent>("MobSpawnerComponent");
+		var mobSpawner = GetMotherNode().GetNode<MobSpawnerComponent>("MobSpawnerComponent");
 
 		if (mobSpawner != null)
 		{
@@ -37,15 +43,6 @@ public static class UtilGetter
 		LoggingUtils.Error("Could not retrieved mob spawner node");
 		throw new Exception("Could not retrieved mob spawner node");
 	}
-}
-public static class ProjectileTypes
-{
-	// DEBUG: Do this for quick test
-	// Please change this to an actual database that reads from .csv
-	// Or a dictionary!
-	public static string Zap = "Zap";
-	public static string CrissCross = "CrissCross";
-	public static string Fireball = "Fireball";
 }
 
 public enum DamageTypes

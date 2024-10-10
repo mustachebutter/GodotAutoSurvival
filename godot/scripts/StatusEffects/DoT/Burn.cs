@@ -45,7 +45,7 @@ public class Burn : DotStatusEffect
         if (Target == null) LoggingUtils.Debug("TARGET NULL");
         // When the target died, spread to other closeby targets
         //Add to tree
-        UtilGetter.GetSceneTree().Root.GetNode("MotherNode").GetNode("VFXParentNode").AddChild(_burnExplosion);
+        UtilGetter.GetVfxParentNode().AddChild(_burnExplosion);
         _burnExplosion.Position = Target.Position;
         
         var explosionAnimatedSprite = _burnExplosion.AnimatedSprite2D;

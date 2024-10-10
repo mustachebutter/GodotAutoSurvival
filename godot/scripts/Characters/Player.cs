@@ -10,7 +10,7 @@ public partial class Player : BaseCharacter
 		base._Ready();
 		WeaponComponent = GetNode<WeaponComponent>("WeaponComponent");
 		WeaponComponent.StartTimer(1 / CharacterStatComponent.CharacterStatData.AttackSpeed.Value);
-		var MainHUD = UtilGetter.GetSceneTree().Root.GetNode<MainHUD>("MotherNode/MainHUD");
+		var MainHUD = UtilGetter.GetMainHUD();
 		MainHUD.SetDebugStats(CharacterStatComponent);
 
 	}

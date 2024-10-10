@@ -19,7 +19,7 @@ public partial class WeaponComponent : Node2D
 		_player = GetParent<Player>();
 		weaponData = DataParser.GetAllData();
 		weapons = weaponData.Keys.Where(x => x != "Weapon_Default").ToList();
-		MainHUD = UtilGetter.GetSceneTree().Root.GetNode<MainHUD>("MotherNode/MainHUD");
+		MainHUD = UtilGetter.GetMainHUD();
 		MainHUD.SetDebugWeapon(weaponData[weapons[index]]);
 	}
 
@@ -53,7 +53,7 @@ public partial class WeaponComponent : Node2D
 
 		// Add the projectile to the main scene instead
 		if (Weapon.WeaponData.WeaponType == WeaponTypes.Projectile)
-			GetTree().Root.GetNode("MotherNode").GetNode("ProjectileParentNode").AddChild(Weapon);
+			UtilGetter.GetProjectileParentNode().AddChild(Weapon);
 		else
 			_player.AddChild(Weapon);
 
