@@ -13,6 +13,52 @@ public class UpgradableObject
     {
         return new UpgradableObject { Name = this.Name, Level = this.Level, Value = this.Value };
     }
+
+    public void Upgrade(UpgradableObjectTypes type, int levelToUpgrade = 1)
+    {
+        int maxLevel = type switch
+        {
+            UpgradableObjectTypes.Stat => 30,
+            UpgradableObjectTypes.Weapon => 12,
+            UpgradableObjectTypes.StatusEffect => 10,
+            _ => 1
+        };
+
+        if (maxLevel == 1)
+        {
+            LoggingUtils.Error("Passing in the incorrect UpgradableObjectType while trying to upgrade stat");
+            return;
+        }
+
+		if (Level + levelToUpgrade > maxLevel)
+		{
+			LoggingUtils.Error("#################################");
+			LoggingUtils.Error("Max Level reached. Cannot upgrade anymore!");
+			LoggingUtils.Error($"Current Level = {Level}, Level To Upgrade = {levelToUpgrade}");
+			return;
+		}
+
+		LoggingUtils.Debug($"Before upgrade: LVL {Level} - {Value}");
+		Level = Level + levelToUpgrade;
+		Value = DataParser.GetStatFromDatabase(Name, Level).Value;
+		LoggingUtils.Debug($"After upgrade: LVL {Level} - {Value}");
+    }
+
+    public void Downgrade(int levelToDowngrade = 1)
+    {
+        if (Level - levelToDowngrade < 0)
+        {
+            LoggingUtils.Error("#################################");
+			LoggingUtils.Error("Lowest Level reached. Cannot downgrade anymore!");
+			LoggingUtils.Error($"Current Level = {Level}, Level To Downgrade = {levelToDowngrade}");
+			return;
+        }
+
+        LoggingUtils.Debug($"Before downgrade: LVL {Level} - {Value}");
+		Level = Level - levelToDowngrade;
+		Value = DataParser.GetStatFromDatabase(Name, Level).Value;
+		LoggingUtils.Debug($"After downgrade: LVL {Level} - {Value}");
+    }
 }
 
 

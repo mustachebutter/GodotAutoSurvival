@@ -19,6 +19,7 @@ public struct WeaponData
 public class WeaponDamageData
 {
     public string WeaponId { get; set; }
+    public int MainLevel { get; set; }
     public DamageTypes DamageType { get; set; }
 	public UpgradableObject Damage { get; set; }
     public UpgradableObject AttackSpeed { get; set; }
@@ -119,6 +120,7 @@ public static class WeaponDataParser
                 var projectileDamageData = new WeaponDamageData
                 {
                     WeaponId = currentWeaponId,
+                    MainLevel = 1,
                     DamageType = Enum.Parse<DamageTypes>(content[1].Split(".")[1]),
                     Damage = new UpgradableObject { Name = "Damage", Level = 1, Value = float.Parse(content[2]) },
                     AttackSpeed = new UpgradableObject { Name = "AttackSpeed", Level = 1, Value = float.Parse(content[3]) },

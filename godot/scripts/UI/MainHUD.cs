@@ -81,7 +81,7 @@ public partial class MainHUD : CanvasLayer
 		foreach (var stat in DataParser.STATS_MAPPER)
 		{
 			var (hBoxContainer, container, buttonUp, buttonDown) = CreateDebugStatContainer();
-			var statValue = characterStatComponent.GetStatFromDatabase(stat);
+			var statValue = characterStatComponent.GetStatFromName(stat);
 
 			if (statValue == null) return;
 
@@ -89,7 +89,13 @@ public partial class MainHUD : CanvasLayer
 			container.Text = finalStr;
 
 			buttonUp.Pressed += () => {
-				characterStatComponent.UpgradeStatLevel(stat, 1);
+				statValue.Upgrade(UpgradableObjectTypes.Stat, 1);
+				var finalStr = $"[color=red]{stat}[/color]: {characterStatComponent.GetStatFromName(stat).Value} (LVL {characterStatComponent.GetStatFromName(stat).Level})";
+				container.Text = finalStr;
+			};
+
+			buttonDown.Pressed += () => {
+				statValue.Downgrade(1);
 				var finalStr = $"[color=red]{stat}[/color]: {characterStatComponent.GetStatFromName(stat).Value} (LVL {characterStatComponent.GetStatFromName(stat).Level})";
 				container.Text = finalStr;
 			};

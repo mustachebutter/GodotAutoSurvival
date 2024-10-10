@@ -59,6 +59,13 @@ public enum WeaponTypes
 	Beam,
 }
 
+public enum UpgradableObjectTypes
+{
+	Stat,
+	Weapon,
+	StatusEffect,
+}
+
 public static class Scenes
 {
 	public static PackedScene Player = (PackedScene) GD.Load("res://scenes/characters/player.tscn");

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 public static class DataParser
@@ -81,4 +82,44 @@ public static class DataParser
 		return _characterStatDatabase;
 	}
 
+	public static UpgradableObject GetStatFromDatabase(string statKey = "Default", int level = 1)
+	{
+
+		if (statKey == "Default")
+		{
+			LoggingUtils.Error("Tried to retrieve a non existing stat");
+			return null;
+		}
+
+		if (level <= 0)
+		{
+			LoggingUtils.Error($"Tried to retrieve stat with an impossible level {level}");
+			return null;
+		}
+		
+		var characterStatDatabase = GetCharacterStatDatabase();
+		var currentStatOfLevel = characterStatDatabase[level - 1];
+		// Good old switch case :D
+		UpgradableObject currentStatValue = statKey switch
+		{
+			"Health" => currentStatOfLevel.Health.DeepCopy(),
+			"Attack" => currentStatOfLevel.Attack.DeepCopy(),
+			"AttackRange" => currentStatOfLevel.AttackRange.DeepCopy(),
+			"AttackSpeed" => currentStatOfLevel.AttackSpeed.DeepCopy(),
+			"Speed" => currentStatOfLevel.Speed.DeepCopy(),
+			"Crit" => currentStatOfLevel.Crit.DeepCopy(),
+			"CritDamage" => currentStatOfLevel.CritDamage.DeepCopy(),
+			"Defense" => currentStatOfLevel.Defense.DeepCopy(),
+			"ElementalResistance" => currentStatOfLevel.ElementalResistance.DeepCopy(),
+			_ => null,
+		};
+
+		if (currentStatValue == null)
+		{
+			LoggingUtils.Error($"Could not find stat {statKey} with level {level} in the database");
+			throw new Exception("Failed to get value of stat, please check the log");
+		}
+
+		return currentStatValue;
+	}
 }
