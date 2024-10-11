@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public partial class MobSpawnerComponent : Node2D
@@ -28,6 +29,7 @@ public partial class MobSpawnerComponent : Node2D
             LoggingUtils.Info($"{randomSpawnPosition}");
             var enemy = Utils.CreateDummy(randomSpawnPosition, Scenes.Enemy);
             enemy.OnCharacterDeadEvent += enemy.DestroyCharacter;
+
             enemy.CharacterStatComponent.AddStat("Health", 100.0f);
         }
     }

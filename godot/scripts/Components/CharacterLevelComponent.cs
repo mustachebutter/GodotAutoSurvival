@@ -4,6 +4,7 @@ using Godot;
 public partial class CharacterLevelComponent : Node2D
 {
     public CharacterLevelData CurrentCharacterLevel { get; set; }
+    public Area2D ExpSuctionArea2D { get; set; }
 	public int Experience { get; set; }
     public override void _Ready()
     {
@@ -16,11 +17,35 @@ public partial class CharacterLevelComponent : Node2D
         mainHUD.SetExperience(Experience, CurrentCharacterLevel.ExperienceToLevelUp);
         mainHUD.SetLevel(CurrentCharacterLevel.Level);
 
+        ExpSuctionArea2D = GetNode<Area2D>("ExpSuctionArea2D");
+        var circle = (CircleShape2D) GetNode<CollisionShape2D>("ExpSuctionArea2D/CollisionShape2D").Shape;
+        circle.Radius = 150.0f;
     }
 
-	public void GainExperience(int experience = 0)
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+        var bodies = ExpSuctionArea2D.GetOverlappingBodies();
+
+        if (bodies != null)
+        {
+            foreach (var bd in bodies)
+            {
+                if (bd is ExperienceOrb experienceOrb)
+                {
+                    GainExperience(experienceOrb.ExperienceValue);
+                    experienceOrb.QueueFree();
+                }
+            }
+        }
+    }
+
+    public void GainExperience(int experience = 0)
 	{
+        LoggingUtils.Debug($"Gained EXP - {experience}");
 		Experience += experience;
+
+        LoggingUtils.Debug($"Current EXP - {Experience}");
 
 		if (Experience >= CurrentCharacterLevel.ExperienceToLevelUp)
 		{

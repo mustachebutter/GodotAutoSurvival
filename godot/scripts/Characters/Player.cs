@@ -4,15 +4,17 @@ using System.Collections.Generic;
 
 public partial class Player : BaseCharacter
 {
-	public WeaponComponent WeaponComponent;
+	public WeaponComponent WeaponComponent { get; private set; }
+	public CharacterLevelComponent CharacterLevelComponent { get; private set; }
+
 	public override void _Ready()
 	{
 		base._Ready();
 		WeaponComponent = GetNode<WeaponComponent>("WeaponComponent");
+		CharacterLevelComponent = GetNode<CharacterLevelComponent>("CharacterLevelComponent");
 		WeaponComponent.StartTimer(1 / CharacterStatComponent.CharacterStatData.AttackSpeed.Value);
 		var MainHUD = UtilGetter.GetMainHUD();
 		MainHUD.SetDebugStats(CharacterStatComponent);
-
 	}
 
 	public override void _PhysicsProcess(double delta)

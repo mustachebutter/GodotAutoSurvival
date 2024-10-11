@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Numerics;
 using Godot;
 
 public partial class BaseCharacter : CharacterBody2D
@@ -80,6 +78,14 @@ public partial class BaseCharacter : CharacterBody2D
 
 	public void DestroyCharacter()
 	{
+		LoggingUtils.Error("Destroying characters");
+		Random random = new Random();
+
+		var orb = (ExperienceOrb) Scenes.ExperienceOrb.Instantiate();
+		orb.Position = Position + new Vector2(random.Next(1, 20), random.Next(1, 20));
+		orb.Scale = new Vector2(0.1f, 0.1f);
+		UtilGetter.GetMotherNode().AddChild(orb);
+
 		QueueFree();
 	}
 
