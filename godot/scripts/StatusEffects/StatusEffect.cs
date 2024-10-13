@@ -18,7 +18,6 @@ public class StatusEffect
     public virtual void HandleStatusEffect () { }
     public virtual void OnStatusEffectEnd () 
     {
-        LoggingUtils.Debug("End of status effect");
         Target.StatusEffectComponent.ClearEffect(this);
         Target.VisualEffectComponent.ClearVisualEffect();
         Utils.DestroyTimer(MainTimer);

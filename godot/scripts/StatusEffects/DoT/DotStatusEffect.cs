@@ -36,7 +36,6 @@ public class DotStatusEffect : StatusEffect
 
 	public override void HandleStatusEffect()
 	{
-		LoggingUtils.Debug($"Dealing damage to {Target.Name}");
 		// Tick damage
 		Target.DealDamageToCharacter(CalculateTotalDamage(), StatusEffectData.DamageType);
 	}

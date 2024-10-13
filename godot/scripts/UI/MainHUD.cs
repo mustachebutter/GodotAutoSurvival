@@ -152,9 +152,9 @@ public partial class MainHUD : CanvasLayer
 		}
 	}
 
-	public void SetExperience(int currentExp, int expToLevelUp)
+	public void SetExperience(int currentExp, int previousLevelMax, int expToLevelUp)
 	{
-		float expValue = (float) currentExp / (expToLevelUp - currentExp);
+		float expValue = (float) (currentExp - previousLevelMax) / (expToLevelUp - previousLevelMax);
 		LoggingUtils.Debug($"{currentExp} - {expToLevelUp}");
 		ExpBar.Value = Math.Round((double) (expValue * 100), 2);
 	}

@@ -5,16 +5,16 @@ public partial class CharacterLevelComponent : Node2D
 {
     public CharacterLevelData CurrentCharacterLevel { get; set; }
     public Area2D ExpSuctionArea2D { get; set; }
-	public int Experience { get; set; }
+	public int Experience { get; set; } = 0;
+    public int PreviousLevelMax { get; set; } = 0;
     public override void _Ready()
     {
         base._Ready();
         var firstCharacterLevel = DataParser.GetCharacterLevelDatabase()[0].DeepCopy();
         CurrentCharacterLevel = firstCharacterLevel;
-		Experience = 0;
         
         var mainHUD = UtilGetter.GetMainHUD();
-        mainHUD.SetExperience(Experience, CurrentCharacterLevel.ExperienceToLevelUp);
+        mainHUD.SetExperience(Experience, PreviousLevelMax, CurrentCharacterLevel.ExperienceToLevelUp);
         mainHUD.SetLevel(CurrentCharacterLevel.Level);
 
         ExpSuctionArea2D = GetNode<Area2D>("ExpSuctionArea2D");
@@ -42,17 +42,14 @@ public partial class CharacterLevelComponent : Node2D
 
     public void GainExperience(int experience = 0)
 	{
-        LoggingUtils.Debug($"Gained EXP - {experience}");
 		Experience += experience;
-
-        LoggingUtils.Debug($"Current EXP - {Experience}");
 
 		if (Experience >= CurrentCharacterLevel.ExperienceToLevelUp)
 		{
 			LevelUp();
 		}
 
-		UtilGetter.GetMainHUD().SetExperience(Experience, CurrentCharacterLevel.ExperienceToLevelUp);
+		UtilGetter.GetMainHUD().SetExperience(Experience, PreviousLevelMax, CurrentCharacterLevel.ExperienceToLevelUp);
 	}
 
 	public void LevelUp(int levelToUpgrade = 1)
@@ -68,8 +65,10 @@ public partial class CharacterLevelComponent : Node2D
 			return;
 		}
 
-		CharacterLevelData nextLevel = characterLevelDatabase[CurrentCharacterLevel.Level + levelToUpgrade];
+        PreviousLevelMax = CurrentCharacterLevel.ExperienceToLevelUp;
+		CharacterLevelData nextLevel = characterLevelDatabase[CurrentCharacterLevel.Level + levelToUpgrade - 1];
 		CurrentCharacterLevel = nextLevel.DeepCopy();
+        LoggingUtils.Error($"Level to set: {CurrentCharacterLevel.Level}");
 		UtilGetter.GetMainHUD().SetLevel(CurrentCharacterLevel.Level);
 	}
 }
