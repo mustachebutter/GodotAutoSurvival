@@ -9,7 +9,7 @@ public static class UtilGetter
 	{
 		var sceneTree = (SceneTree) Engine.GetMainLoop() ?? throw new InvalidOperationException($"ERROR [{nameof(UtilGetter)}] Could not get the Scene Tree");
 		var motherNode = sceneTree.Root.GetNode<Node2D>("MotherNode");
-		
+
 		return motherNode;
 	}
 
@@ -43,6 +43,12 @@ public static class UtilGetter
 		LoggingUtils.Error("Could not retrieved mob spawner node");
 		throw new Exception("Could not retrieved mob spawner node");
 	}
+
+	public static bool GetPaused()
+	{
+		var sceneTree = (SceneTree) Engine.GetMainLoop() ?? throw new InvalidOperationException($"ERROR [{nameof(UtilGetter)}] Could not get the Scene Tree");
+		return sceneTree.Paused;
+	}
 }
 
 public enum DamageTypes
@@ -74,4 +80,7 @@ public static class Scenes
 	public static PackedScene VfxBurnExplosion = (PackedScene) GD.Load("res://scenes/vfx/vfx_burn_explosion.tscn");
 	public static PackedScene VfxChainLightning = (PackedScene) GD.Load("res://scenes/vfx/vfx_chain_lightning.tscn");
 	public static PackedScene ExperienceOrb = (PackedScene) GD.Load("res://scenes/experience_orb.tscn");
+	public static PackedScene AugmentHud = (PackedScene) GD.Load("res://scenes/ui/augment_hud.tscn");
+	public static PackedScene AugmentCard = (PackedScene) GD.Load("res://scenes/ui/augment_card.tscn");
+
 }

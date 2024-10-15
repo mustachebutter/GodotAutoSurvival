@@ -163,4 +163,11 @@ public partial class MainHUD : CanvasLayer
 	{
 		LevelLabel.Text = $"LEVEL {level}";
 	}
+
+	public void SetUpAugmentHUD()
+	{
+		AugmentHUD augmentHUD = (AugmentHUD) Scenes.AugmentHud.Instantiate();
+		augmentHUD.PopulateAugmentCard();
+		AddChild(augmentHUD);
+	}
 }

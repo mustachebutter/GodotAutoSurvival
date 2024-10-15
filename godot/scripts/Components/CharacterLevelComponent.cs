@@ -70,5 +70,7 @@ public partial class CharacterLevelComponent : Node2D
 		CurrentCharacterLevel = nextLevel.DeepCopy();
         LoggingUtils.Error($"Level to set: {CurrentCharacterLevel.Level}");
 		UtilGetter.GetMainHUD().SetLevel(CurrentCharacterLevel.Level);
+
+        Augment.StartAugmentSelection();
 	}
 }
