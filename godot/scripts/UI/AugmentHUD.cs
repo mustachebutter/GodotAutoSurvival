@@ -22,8 +22,8 @@ public partial class AugmentHUD : CanvasLayer
 		for (int i = 0; i < MAX_AUGMENTS; i++)
 		{
 			AugmentCard augmentCard = (AugmentCard) Scenes.AugmentCard.Instantiate();
-			LoggingUtils.Debug($"{augmentCard.Name}");
 			AugmentContainer.AddChild(augmentCard);
+			LoggingUtils.Debug($"{augmentCard.Name}");
 		};
 	}
 }

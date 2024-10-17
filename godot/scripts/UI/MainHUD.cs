@@ -167,7 +167,7 @@ public partial class MainHUD : CanvasLayer
 	public void SetUpAugmentHUD()
 	{
 		AugmentHUD augmentHUD = (AugmentHUD) Scenes.AugmentHud.Instantiate();
-		augmentHUD.PopulateAugmentCard();
 		AddChild(augmentHUD);
+		augmentHUD.PopulateAugmentCard();
 	}
 }

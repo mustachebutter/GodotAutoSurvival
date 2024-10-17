@@ -12,7 +12,6 @@ public partial class AugmentCard : MarginContainer
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		LoggingUtils.Debug("Hello");
 		Button = GetNode<Button>("Button");
 		Button.Pressed += () => { LoggingUtils.Info($"Test button #{Name}"); };
 		BackgroundColor = GetNode<ColorRect>("ColorRect");

@@ -33,8 +33,7 @@ public partial class CharacterLevelComponent : Node2D
             {
                 if (bd is ExperienceOrb experienceOrb)
                 {
-                    GainExperience(experienceOrb.ExperienceValue);
-                    experienceOrb.QueueFree();
+                    experienceOrb.ShouldMoveTowardsPlayer = true;
                 }
             }
         }
