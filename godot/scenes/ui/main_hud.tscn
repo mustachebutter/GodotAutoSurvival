@@ -10,31 +10,23 @@ bg_color = Color(0, 0.72549, 0.258824, 1)
 follow_viewport_scale = 0.001
 script = ExtResource("1_p6omv")
 
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
-layout_mode = 1
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -43.0
-offset_right = 184.0
+offset_top = -113.0
+offset_right = 212.0
 grow_vertical = 0
+metadata/_edit_use_anchors_ = true
 
-[node name="Label" type="Label" parent="Control/VBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_rihvd")
 theme_override_font_sizes/font_size = 40
 text = "Weapon_X"
 vertical_alignment = 1
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Control/VBoxContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/normal_font_size = 25
 theme_override_font_sizes/bold_font_size = 25
@@ -46,16 +38,16 @@ text = "[b][color=red]Damage[/color][/b]: 0
 fit_content = true
 autowrap_mode = 0
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="Control"]
-layout_mode = 0
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
 offset_right = 40.0
 offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2"]
 visible = false
 layout_mode = 2
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Control/VBoxContainer2/HBoxContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer2/HBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_font_sizes/normal_font_size = 10
@@ -66,38 +58,37 @@ text = "[b][color=blue]Attack Speed[/color][/b]: 0.0"
 fit_content = true
 autowrap_mode = 0
 
-[node name="Button" type="Button" parent="Control/VBoxContainer2/HBoxContainer"]
+[node name="Button" type="Button" parent="VBoxContainer2/HBoxContainer"]
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 text = "Up"
 
-[node name="Button2" type="Button" parent="Control/VBoxContainer2/HBoxContainer"]
+[node name="Button2" type="Button" parent="VBoxContainer2/HBoxContainer"]
 layout_mode = 2
 text = "Down"
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="Control"]
-layout_mode = 1
+[node name="VBoxContainer3" type="VBoxContainer" parent="."]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -74.0
+offset_left = -198.0
 offset_top = 30.0
 offset_right = -30.0
-offset_bottom = 66.0
+offset_bottom = 96.0
 grow_horizontal = 0
 alignment = 1
+metadata/_edit_use_anchors_ = true
 
-[node name="SpawnDummyButton" type="Button" parent="Control/VBoxContainer3"]
+[node name="SpawnDummyButton" type="Button" parent="VBoxContainer3"]
 layout_mode = 2
 text = "Spawn Dummy"
 
-[node name="SpawmModeButton" type="CheckButton" parent="Control/VBoxContainer3"]
+[node name="SpawmModeButton" type="CheckButton" parent="VBoxContainer3"]
 layout_mode = 2
 text = "MODE: DUMMY"
 alignment = 1
 
-[node name="VBoxContainer4" type="VBoxContainer" parent="Control"]
-layout_mode = 1
+[node name="VBoxContainer4" type="VBoxContainer" parent="."]
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -107,12 +98,13 @@ offset_left = -1000.0
 offset_top = -57.0
 grow_horizontal = 0
 grow_vertical = 0
+metadata/_edit_use_anchors_ = true
 
-[node name="Label" type="Label" parent="Control/VBoxContainer4"]
+[node name="Label" type="Label" parent="VBoxContainer4"]
 layout_mode = 2
 text = "Level 0"
 
-[node name="ProgressBar" type="ProgressBar" parent="Control/VBoxContainer4"]
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer4"]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_styles/fill = SubResource("StyleBoxFlat_ccpsi")

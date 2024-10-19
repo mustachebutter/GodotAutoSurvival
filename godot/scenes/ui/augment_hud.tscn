@@ -4,42 +4,37 @@
 [ext_resource type="Script" path="res://scripts/UI/AugmentHUD.cs" id="1_upwou"]
 
 [node name="CanvasLayer" type="CanvasLayer"]
+layer = 2
 script = ExtResource("1_upwou")
 
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Control"]
-layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-alignment = 1
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="Control"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
 visible = false
-layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -1146.0
+offset_bottom = 1146.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="augment_card" parent="HBoxContainer2" instance=ExtResource("1_ka6un")]
+layout_mode = 2
+
+[node name="augment_card2" parent="HBoxContainer2" instance=ExtResource("1_ka6un")]
+layout_mode = 2
+
+[node name="augment_card3" parent="HBoxContainer2" instance=ExtResource("1_ka6un")]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 alignment = 1
-
-[node name="augment_card" parent="Control/HBoxContainer2" instance=ExtResource("1_ka6un")]
-layout_mode = 2
-
-[node name="augment_card2" parent="Control/HBoxContainer2" instance=ExtResource("1_ka6un")]
-layout_mode = 2
-
-[node name="augment_card3" parent="Control/HBoxContainer2" instance=ExtResource("1_ka6un")]
-layout_mode = 2

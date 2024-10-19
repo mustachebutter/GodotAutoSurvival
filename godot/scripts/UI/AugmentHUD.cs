@@ -9,7 +9,7 @@ public partial class AugmentHUD : CanvasLayer
 	{
 		base._Ready();
 
-		AugmentContainer = GetNode<HBoxContainer>("Control/HBoxContainer");
+		AugmentContainer = GetNode<HBoxContainer>("HBoxContainer");
 	}
 
 	public override void _Process(double delta)

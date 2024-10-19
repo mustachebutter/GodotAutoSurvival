@@ -7,16 +7,13 @@ public partial class Augment : Node2D
     public override void _Ready()
     {
         base._Ready();
-        
+        ProcessMode = ProcessModeEnum.Always; 
     }
 
     public override void _Process(double delta)
     {
         base._Process(delta);
-        if (GlobalConfigs.IsGamePaused)
-        {
-            GetTree().Paused = true;
-        }
+        GetTree().Paused = GlobalConfigs.IsGamePaused;
     }
     public static void StartAugmentSelection()
     {
@@ -33,5 +30,6 @@ public partial class Augment : Node2D
     {
         // Unpause the game
         GlobalConfigs.IsGamePaused = false;
+        UtilGetter.GetMainHUD().TurnOffAugmentHUD();
     }
 }

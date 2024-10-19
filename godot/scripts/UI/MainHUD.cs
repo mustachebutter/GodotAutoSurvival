@@ -25,13 +25,13 @@ public partial class MainHUD : CanvasLayer
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		Debug_CurrentWeapon = GetNode<Label>("Control/VBoxContainer/Label");
-		Debug_CurrentWeaponDetails = GetNode<RichTextLabel>("Control/VBoxContainer/RichTextLabel");
-		StatsContainer = GetNode<VBoxContainer>("Control/VBoxContainer2");
-		SpawnDummyButton = GetNode<Button>("Control/VBoxContainer3/SpawnDummyButton");
-		SpawnModeButton = GetNode<CheckButton>("Control/VBoxContainer3/SpawmModeButton");
-		ExpBar = GetNode<ProgressBar>("Control/VBoxContainer4/ProgressBar");
-		LevelLabel = GetNode<Label>("Control/VBoxContainer4/Label");
+		Debug_CurrentWeapon = GetNode<Label>("VBoxContainer/Label");
+		Debug_CurrentWeaponDetails = GetNode<RichTextLabel>("VBoxContainer/RichTextLabel");
+		StatsContainer = GetNode<VBoxContainer>("VBoxContainer2");
+		SpawnDummyButton = GetNode<Button>("VBoxContainer3/SpawnDummyButton");
+		SpawnModeButton = GetNode<CheckButton>("VBoxContainer3/SpawmModeButton");
+		ExpBar = GetNode<ProgressBar>("VBoxContainer4/ProgressBar");
+		LevelLabel = GetNode<Label>("VBoxContainer4/Label");
 
 		SpawnDummyButton.Pressed += SpawnDummies;
 		SpawnModeButton.Toggled += SwitchSpawnMode;
@@ -169,5 +169,17 @@ public partial class MainHUD : CanvasLayer
 		AugmentHUD augmentHUD = (AugmentHUD) Scenes.AugmentHud.Instantiate();
 		AddChild(augmentHUD);
 		augmentHUD.PopulateAugmentCard();
+	}
+
+	public void TurnOffAugmentHUD()
+	{
+		var children = GetChildren();
+		foreach (var c in children)
+		{
+			if (c is AugmentHUD augmentHUD)
+			{
+				RemoveChild(augmentHUD);
+			}
+		}
 	}
 }
