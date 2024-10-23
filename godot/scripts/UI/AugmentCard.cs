@@ -7,6 +7,7 @@ public partial class AugmentCard : MarginContainer
 	public Label LevelText { get; set; }
 	public TextureRect AugmentIcon { get; set; }
 	public RichTextLabel AugmentDescription { get; set; }
+	public AugmentType CardType { get; set; }
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -31,6 +32,7 @@ public partial class AugmentCard : MarginContainer
 		{
 			if (mb.ButtonIndex == MouseButton.Left && mb.Pressed)
 			{
+				Augment.OnSelectedAugmentCard(CardType, "Health");
 				Augment.EndAugmentSelection();
 			}
 		}

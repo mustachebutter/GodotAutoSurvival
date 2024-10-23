@@ -51,26 +51,11 @@ public static class UtilGetter
 	}
 }
 
-public enum DamageTypes
-{
-	Fire,
-	Electric,
-	Normal,
-	Light,
-}
+public enum DamageTypes { Fire, Electric, Normal, Light, }
+public enum WeaponTypes { Projectile, Beam, }
+public enum UpgradableObjectTypes { Stat, Weapon, StatusEffect, };
+public enum AugmentType { Stat, Weapon, Item };
 
-public enum WeaponTypes
-{
-	Projectile,
-	Beam,
-}
-
-public enum UpgradableObjectTypes
-{
-	Stat,
-	Weapon,
-	StatusEffect,
-}
 
 public static class Scenes
 {

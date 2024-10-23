@@ -89,23 +89,25 @@ public partial class MainHUD : CanvasLayer
 
 			if (statValue == null) return;
 
-			var finalStr = $"[color=red]{stat}[/color]: {statValue.Value} (LVL {statValue.Level})";
-			container.Text = finalStr;
+			statValue.OnLevelChanged += (UpgradableObject @object) => SetStatText(container, @object);
+
+			SetStatText(container, statValue);
 
 			buttonUp.Pressed += () => {
 				statValue.Upgrade(UpgradableObjectTypes.Stat, 1);
-				var finalStr = $"[color=red]{stat}[/color]: {characterStatComponent.GetStatFromName(stat).Value} (LVL {characterStatComponent.GetStatFromName(stat).Level})";
-				container.Text = finalStr;
 			};
 
 			buttonDown.Pressed += () => {
 				statValue.Downgrade(1);
-				var finalStr = $"[color=red]{stat}[/color]: {characterStatComponent.GetStatFromName(stat).Value} (LVL {characterStatComponent.GetStatFromName(stat).Level})";
-				container.Text = finalStr;
 			};
 
 			StatsContainer.AddChild(hBoxContainer);
 		}
+	}
+
+	private void SetStatText(RichTextLabel container, UpgradableObject @object)
+	{
+		container.Text = $"[color=red]{@object.Name}[/color]: {@object.Value} (LVL {@object.Level})";;
 	}
 
 	public void SpawnDummies()

@@ -8,6 +8,7 @@ public class UpgradableObject
     public string Name { get; set; }
     public int Level { get; set; }
     public float Value { get; set; }
+    public event Action<UpgradableObject> OnLevelChanged;
 
     public UpgradableObject DeepCopy()
     {
@@ -42,6 +43,8 @@ public class UpgradableObject
 		Level = Level + levelToUpgrade;
 		Value = DataParser.GetStatFromDatabase(Name, Level).Value;
 		LoggingUtils.Debug($"After upgrade: LVL {Level} - {Value}");
+
+        OnLevelChanged?.Invoke(this);
     }
 
     public void Downgrade(int levelToDowngrade = 1)
@@ -58,6 +61,8 @@ public class UpgradableObject
 		Level = Level - levelToDowngrade;
 		Value = DataParser.GetStatFromDatabase(Name, Level).Value;
 		LoggingUtils.Debug($"After downgrade: LVL {Level} - {Value}");
+
+        OnLevelChanged?.Invoke(this);
     }
 }
 

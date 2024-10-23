@@ -3,7 +3,6 @@ using Godot;
 
 public partial class Augment : Node2D
 {
-    public enum AugmentType { Stat, Weapon, Item };
     // Delegate
     private Action<bool> _onGamePausedHandler;
 
@@ -38,6 +37,26 @@ public partial class Augment : Node2D
         GlobalConfigs.IsGamePaused = false;
         UtilGetter.GetMainHUD().TurnOffAugmentHUD();
     }
+
+    public static void OnSelectedAugmentCard(AugmentType augmentType, string statKey = "Default")
+    {
+        switch(augmentType)
+        {
+            case AugmentType.Stat:
+                Player player = UtilGetter.GetMainPlayer();
+                UpgradableObject stat = player.CharacterStatComponent.GetStatFromName(statKey);
+                stat.Upgrade(UpgradableObjectTypes.Stat, 1);
+                break;
+            // TODO: Doesn't have these implemented yet!
+            // case AugmentType.Weapon:
+            //     break;
+            // case AugmentType.Item:
+            //     break;
+            default:
+                break;
+        }
+    }
+
 
     public override void _ExitTree()
     {

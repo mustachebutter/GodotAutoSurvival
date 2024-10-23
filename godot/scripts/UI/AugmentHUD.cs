@@ -23,6 +23,8 @@ public partial class AugmentHUD : CanvasLayer
 		{
 			AugmentCard augmentCard = (AugmentCard) Scenes.AugmentCard.Instantiate();
 			AugmentContainer.AddChild(augmentCard);
+			// Decide which type of card it is
+			augmentCard.CardType = AugmentType.Stat;
 			LoggingUtils.Debug($"{augmentCard.Name}");
 		};
 	}
