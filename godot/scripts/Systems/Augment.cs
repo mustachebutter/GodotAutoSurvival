@@ -1,10 +1,14 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 
 public partial class Augment : Node2D
 {
     // Delegate
     private Action<bool> _onGamePausedHandler;
+
+    // TODO: Probably refactor this to hold some data
+    // public List<AugmentData> augmentDataList;
 
     public override void _Ready()
     {
@@ -57,6 +61,25 @@ public partial class Augment : Node2D
         }
     }
 
+    public static void SetUpAugmentCards(List<AugmentCard> augmentCards)
+    {
+        int rareChance = 5;
+
+        foreach (var ac in augmentCards)
+        {
+            Random random = new Random();
+            
+            if (random.Next(0, 100) < rareChance)
+            {
+                // Rare!
+            }
+            else
+            {
+                ac.SetAugmentCard(AugmentType.Stat, 1);
+            }
+        }
+        
+    }
 
     public override void _ExitTree()
     {

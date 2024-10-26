@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 public partial class AugmentHUD : CanvasLayer
@@ -19,13 +20,20 @@ public partial class AugmentHUD : CanvasLayer
 
 	public void PopulateAugmentCard()
 	{
+		var augmentCardList = new List<AugmentCard>();
 		for (int i = 0; i < MAX_AUGMENTS; i++)
 		{
 			AugmentCard augmentCard = (AugmentCard) Scenes.AugmentCard.Instantiate();
-			AugmentContainer.AddChild(augmentCard);
 			// Decide which type of card it is
 			augmentCard.CardType = AugmentType.Stat;
-			LoggingUtils.Debug($"{augmentCard.Name}");
+			augmentCardList.Add(augmentCard);
 		};
+
+		Augment.SetUpAugmentCards(augmentCardList);
+
+		foreach (var ac in augmentCardList)
+		{
+			AddChild(ac);
+		}
 	}
 }

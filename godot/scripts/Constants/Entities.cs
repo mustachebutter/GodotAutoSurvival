@@ -55,6 +55,7 @@ public enum DamageTypes { Fire, Electric, Normal, Light, }
 public enum WeaponTypes { Projectile, Beam, }
 public enum UpgradableObjectTypes { Stat, Weapon, StatusEffect, };
 public enum AugmentType { Stat, Weapon, Item };
+public enum CardRarity { Common, Rare, Epic, Legendary, Mythic }
 
 
 public static class Scenes
