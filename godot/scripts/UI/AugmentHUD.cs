@@ -29,11 +29,11 @@ public partial class AugmentHUD : CanvasLayer
 			augmentCardList.Add(augmentCard);
 		};
 
-		Augment.SetUpAugmentCards(augmentCardList);
-
 		foreach (var ac in augmentCardList)
 		{
-			AddChild(ac);
+			AugmentContainer.AddChild(ac);
 		}
+
+		Augment.SetUpAugmentCards(augmentCardList);
 	}
 }

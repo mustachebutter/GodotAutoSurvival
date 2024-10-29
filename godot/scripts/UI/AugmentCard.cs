@@ -40,6 +40,7 @@ public partial class AugmentCard : MarginContainer
 
 	public void SetAugmentCard(CardRarity cardRarity, AugmentType cardType, Color backgroundColor, int currentLevel, float value = 0.0f)
 	{
+		LoggingUtils.Debug($"{backgroundColor}");
 		BackgroundColor.Color = backgroundColor;
 		LevelText.Text = $"Lv. {currentLevel}";
 		// AugmentIcon

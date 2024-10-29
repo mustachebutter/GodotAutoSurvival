@@ -72,10 +72,11 @@ public partial class Augment : Node2D
             if (random.Next(0, 100) < rareChance)
             {
                 // Rare!
+                ac.SetAugmentCard(CardRarity.Rare, AugmentType.Stat, Colors.RED, 1, 10.0f);
             }
             else
             {
-                ac.SetAugmentCard(AugmentType.Stat, 1);
+                ac.SetAugmentCard(CardRarity.Common, AugmentType.Stat, Colors.BLUE, 1, 5.0f);
             }
         }
         
