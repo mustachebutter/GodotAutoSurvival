@@ -9,12 +9,14 @@ public static class DataParser
 	private readonly static string FILE_METADATA_WEAPON_DAMAGE = "res://metadata/GodotAutoSurvival_Metadata_WeaponMetadata.tsv";
 	private readonly static string FILE_METADATA_STATS = "res://metadata/GodotAutoSurvival_Metadata_Stats.tsv";
 	private readonly static string FILE_METADATA_CHARACTER_LEVEL = "res://metadata/GodotAutoSurvival_Metadata_CharacterLevel.tsv";
+	private readonly static string FILE_AUGMENT_RATE = "res://metadata/GodotAutoSurvival_Metadata_AugmentRate.tsv";
 
 	private static Dictionary<string, StatusEffectData> _statusEffectDictionary = new Dictionary<string, StatusEffectData>();
 	private static Dictionary<string, WeaponData> _weaponEffectDictionary = new Dictionary<string, WeaponData>();
 	private static List<WeaponDamageData> _weaponDamageDatabase = new List<WeaponDamageData>();
 	private readonly static List<CharacterStatData> _characterStatDatabase = new List<CharacterStatData>();
 	private readonly static List<CharacterLevelData> _characterLevelDatabase = new List<CharacterLevelData>();
+	private readonly static List<AugmentRateData> _augmentRateDatabase = new List<AugmentRateData>();
 
 	static DataParser()
 	{
@@ -35,6 +37,7 @@ public static class DataParser
 
 		_characterStatDatabase = CharacterStatDataParser.ParseData(FILE_METADATA_STATS);
 		_characterLevelDatabase = CharacterStatDataParser.ParseLevelData(FILE_METADATA_CHARACTER_LEVEL);
+		_augmentRateDatabase = AugmentRateDataParser.ParseData(FILE_AUGMENT_RATE);
 	}
 
 	public static StatusEffectData GetStatusEffectData(string key)
@@ -88,6 +91,11 @@ public static class DataParser
 		return _characterLevelDatabase;
 	}
 
+	public static List<AugmentRateData> GetAugmentRateDatabase()
+	{
+		return _augmentRateDatabase;
+	}
+
 	public static UpgradableObject GetStatFromDatabase(string statKey = "Default", int level = 1)
 	{
 
@@ -127,5 +135,11 @@ public static class DataParser
 		}
 
 		return currentStatValue;
+	}
+
+	public static AugmentRateData GetAugmentRateFromLevel(int level)
+	{
+		AugmentRateData augmentRateFound = _augmentRateDatabase.Find(x => x.Level == level);
+		return augmentRateFound.DeepCopy();
 	}
 }

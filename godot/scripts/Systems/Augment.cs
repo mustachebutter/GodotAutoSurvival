@@ -63,20 +63,36 @@ public partial class Augment : Node2D
 
     public static void SetUpAugmentCards(List<AugmentCard> augmentCards)
     {
-        int rareChance = 5;
+        Player player = UtilGetter.GetMainPlayer();
+        int level = player.CharacterLevelComponent.CurrentCharacterLevel.Level;
+
+        AugmentRateData augmentRate = DataParser.GetAugmentRateFromLevel(level);
+        LoggingUtils.Debug($"Common: {augmentRate.CommonRate}, Rare: {augmentRate.RareRate}, Epic: {augmentRate.EpicRate}, Legendary: {augmentRate.LegendaryRate}, Mythic: {augmentRate.MythicRate}, ");
 
         foreach (var ac in augmentCards)
         {
             Random random = new Random();
-            
-            if (random.Next(0, 100) < rareChance)
-            {
-                // Rare!
-                ac.SetAugmentCard(CardRarity.Rare, AugmentType.Stat, Colors.RED, 1, 10.0f);
-            }
-            else
+            int randomNumber = random.Next(1, 101);
+            LoggingUtils.Debug($"Generated number: {randomNumber}");
+            if (randomNumber <= augmentRate.CommonRate)
             {
                 ac.SetAugmentCard(CardRarity.Common, AugmentType.Stat, Colors.BLUE, 1, 5.0f);
+            }
+            else if (randomNumber > augmentRate.CommonRate && randomNumber <= augmentRate.RareRate)
+            {
+                ac.SetAugmentCard(CardRarity.Rare, AugmentType.Stat, Colors.GREEN, 1, 10.0f);
+            }
+            else if (randomNumber > augmentRate.RareRate && randomNumber <= augmentRate.EpicRate)
+            {
+                ac.SetAugmentCard(CardRarity.Epic, AugmentType.Stat, Colors.PURPLE, 1, 20.0f);
+            }
+            else if (randomNumber > augmentRate.EpicRate && randomNumber <= augmentRate.LegendaryRate)
+            {
+                ac.SetAugmentCard(CardRarity.Legendary, AugmentType.Stat, Colors.YELLOW, 1, 50.0f);
+            }
+            else if (randomNumber > augmentRate.LegendaryRate && randomNumber <= augmentRate.MythicRate)
+            {
+                ac.SetAugmentCard(CardRarity.Mythic, AugmentType.Stat, Colors.RED, 1, 10.0f);
             }
         }
         
