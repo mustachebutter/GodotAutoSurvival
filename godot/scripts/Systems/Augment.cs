@@ -83,7 +83,10 @@ public partial class Augment : Node2D
             UpgradableObject stat = player.CharacterStatComponent.GetStatFromName(statKey);
             characterStats.Add(stat);
         }
-        characterStats = characterStats.OrderBy(s => s.Level).ToList();
+        characterStats = characterStats
+            .OrderByDescending(s => s.Level)
+            .ThenBy(s => s.Name)
+            .ToList();
 
         // Setting each card
         foreach (var ac in augmentCards)
@@ -91,11 +94,11 @@ public partial class Augment : Node2D
             Random random = new Random();
             int randomNumber = random.Next(1, 101);
             int randomChanceOfStatPriority = random.Next(0, 10);
-            int randomIndex = random.Next(0, 3);
-            int randomIndex2 = random.Next(3, GlobalConfigs.STATS.Length);
+            int randomIndex = random.Next(0, 2);
+            int randomIndex2 = random.Next(2, GlobalConfigs.STATS.Length);
             
             // We want to prioritize stats that have been upgraded but the chances of getting other stats are never 0
-            int indexOfStatToUpgrade = randomChanceOfStatPriority <= 8 ? randomIndex : randomIndex2;            
+            int indexOfStatToUpgrade = randomChanceOfStatPriority <= 7 ? randomIndex : randomIndex2;            
             UpgradableObject statKeyToUpgrade = characterStats[indexOfStatToUpgrade];
 
             if (randomNumber <= augmentRate.CommonRate)
