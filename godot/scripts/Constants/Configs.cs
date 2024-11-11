@@ -23,4 +23,7 @@ public static class GlobalConfigs
     }
 
     public static event Action<bool> OnGamePausedChanged;
+
+    public static readonly string[] STATS = { "Health", "Attack", "AttackRange", "AttackSpeed", "Speed", "Crit", "CritDamage", "Defense", "ElementalResistance", };
+
 }

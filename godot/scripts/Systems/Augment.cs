@@ -5,7 +5,6 @@ using Godot;
 
 public partial class Augment : Node2D
 {
-    public static readonly string[] STATS = { "Health", "Attack", "AttackRange", "AttackSpeed", "Speed", "Crit", "CritDamage", "Defense", "ElementalResistance", };
     // Delegate
     private Action<bool> _onGamePausedHandler;
 
@@ -79,7 +78,7 @@ public partial class Augment : Node2D
 
         // Set stat priority to prioritize stats upgrade to spawn
         List<UpgradableObject> characterStats = new List<UpgradableObject>();
-        foreach (var statKey in STATS)
+        foreach (var statKey in GlobalConfigs.STATS)
         {
             UpgradableObject stat = player.CharacterStatComponent.GetStatFromName(statKey);
             characterStats.Add(stat);
@@ -93,7 +92,7 @@ public partial class Augment : Node2D
             int randomNumber = random.Next(1, 101);
             int randomChanceOfStatPriority = random.Next(0, 10);
             int randomIndex = random.Next(0, 3);
-            int randomIndex2 = random.Next(3, STATS.Length);
+            int randomIndex2 = random.Next(3, GlobalConfigs.STATS.Length);
             
             // We want to prioritize stats that have been upgraded but the chances of getting other stats are never 0
             int indexOfStatToUpgrade = randomChanceOfStatPriority <= 8 ? randomIndex : randomIndex2;            

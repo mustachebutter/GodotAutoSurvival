@@ -86,12 +86,20 @@ public partial class MainHUD : CanvasLayer
 		{
 			var (hBoxContainer, container, buttonUp, buttonDown) = CreateDebugStatContainer();
 			var statValue = characterStatComponent.GetStatFromName(stat);
+			(float baseValue, float modifierValue, float totalValue) = characterStatComponent.GetAllStatFromName(stat);
 
 			if (statValue == null) return;
 
-			statValue.OnLevelChanged += (UpgradableObject @object) => SetStatText(container, @object);
+			// Needs to do this to distinguish the containers so that it can be used to check for the proper event to update itself
+			container.Name = statValue.Name.Replace(" ", "_");
 
-			SetStatText(container, statValue);
+			characterStatComponent.OnAnyStatUpgraded += (UpgradableObject @object, float baseValue, float modifierValue, float totalValue) => 
+			{
+				if (container.Name == @object.Name)
+					SetStatText(container, @object, baseValue, modifierValue, totalValue);
+			};
+
+			SetStatText(container, statValue, baseValue, modifierValue, totalValue);
 
 			buttonUp.Pressed += () => {
 				statValue.Upgrade(UpgradableObjectTypes.Stat, 1);
@@ -105,9 +113,9 @@ public partial class MainHUD : CanvasLayer
 		}
 	}
 
-	private void SetStatText(RichTextLabel container, UpgradableObject @object)
+	private void SetStatText(RichTextLabel container, UpgradableObject @object, float baseValue, float modifierValue, float totalValue)
 	{
-		container.Text = $"[color=red]{@object.Name}[/color]: {@object.Value} (LVL {@object.Level})";;
+		container.Text = $"[color=red]{@object.Name}[/color]: \n{@object.Value}([color=green]+{modifierValue}%[/color]) = {totalValue} (LVL {@object.Level})";;
 	}
 
 	public void SpawnDummies()

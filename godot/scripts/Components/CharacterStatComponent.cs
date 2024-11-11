@@ -5,15 +5,28 @@ public partial class CharacterStatComponent : Node2D
 {
 	public CharacterStatData CharacterStatData { get; set; }
 	public CharacterStatData StatModifierData { get; set; } = new CharacterStatData();
+	public event Action<UpgradableObject, float, float, float> OnAnyStatUpgraded;
 
     public override void _Ready()
     {
 		base._Ready();
 		var firstCharacterStatLevel = DataParser.GetCharacterStatDatabase()[0].DeepCopy();
 		CharacterStatData = firstCharacterStatLevel;
+		foreach(var statKey in GlobalConfigs.STATS)
+		{
+			var stat = GetStatFromName(statKey);
+			stat.OnLevelChanged += HandleOnStatLevelChanged; 
+		}
     }
 
-	public UpgradableObject GetStatFromName(string statKey = "Default", StatTypes statType = StatTypes.Stat)
+    private void HandleOnStatLevelChanged(UpgradableObject @object)
+    {
+        (float baseValue, float modifierValue, float totalValue) = GetAllStatFromName(@object.Name);
+
+		OnAnyStatUpgraded?.Invoke(@object, baseValue, modifierValue, totalValue);
+    }
+
+    public UpgradableObject GetStatFromName(string statKey = "Default", StatTypes statType = StatTypes.Stat)
 	{
 		if (statKey == "Default")
 		{
@@ -44,6 +57,16 @@ public partial class CharacterStatComponent : Node2D
 		}
 
 		return currentStatValue;
+	}
+
+	public (float baseValue, float modifierValue, float totalValue) GetAllStatFromName(string statKey)
+	{
+		UpgradableObject stat = GetStatFromName(statKey);
+		UpgradableObject modifier = GetStatFromName(statKey, StatTypes.Modifier);
+
+		float totalValue = stat.Value * (100 + modifier.Value) / 100;
+
+		return (stat.Value, modifier.Value, totalValue);
 	}
 
 	public void AddStat(string statKey, float amount = 0.0f, StatTypes statType = StatTypes.Stat)
