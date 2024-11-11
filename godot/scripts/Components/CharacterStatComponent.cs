@@ -4,6 +4,7 @@ using Godot;
 public partial class CharacterStatComponent : Node2D
 {
 	public CharacterStatData CharacterStatData { get; set; }
+	public CharacterStatData StatModifierData { get; set; } = new CharacterStatData();
 
     public override void _Ready()
     {
@@ -12,7 +13,7 @@ public partial class CharacterStatComponent : Node2D
 		CharacterStatData = firstCharacterStatLevel;
     }
 
-	public UpgradableObject GetStatFromName(string statKey = "Default")
+	public UpgradableObject GetStatFromName(string statKey = "Default", StatTypes statType = StatTypes.Stat)
 	{
 		if (statKey == "Default")
 		{
@@ -20,17 +21,19 @@ public partial class CharacterStatComponent : Node2D
 			return null;
 		}
 
+		CharacterStatData csd = statType == StatTypes.Stat ? CharacterStatData : StatModifierData;
+
 		UpgradableObject currentStatValue = statKey switch
 		{
-			"Health" => CharacterStatData.Health,
-			"Attack" => CharacterStatData.Attack,
-			"AttackRange" => CharacterStatData.AttackRange,
-			"AttackSpeed" => CharacterStatData.AttackSpeed,
-			"Speed" => CharacterStatData.Speed,
-			"Crit" => CharacterStatData.Crit,
-			"CritDamage" => CharacterStatData.CritDamage,
-			"Defense" => CharacterStatData.Defense,
-			"ElementalResistance" => CharacterStatData.ElementalResistance,
+			"Health" => csd.Health,
+			"Attack" => csd.Attack,
+			"AttackRange" => csd.AttackRange,
+			"AttackSpeed" => csd.AttackSpeed,
+			"Speed" => csd.Speed,
+			"Crit" => csd.Crit,
+			"CritDamage" => csd.CritDamage,
+			"Defense" => csd.Defense,
+			"ElementalResistance" => csd.ElementalResistance,
 			_ => null,
 		};
 
@@ -43,15 +46,15 @@ public partial class CharacterStatComponent : Node2D
 		return currentStatValue;
 	}
 
-	public void AddStat(string statKey, float amount = 0.0f)
+	public void AddStat(string statKey, float amount = 0.0f, StatTypes statType = StatTypes.Stat)
 	{
-		var currentStatValue = GetStatFromName(statKey);
+		var currentStatValue = GetStatFromName(statKey, statType);
 		currentStatValue.Value = currentStatValue.Value + amount;
 	}
 
-	public void ReduceStat(string statKey, float amount = 0.0f)
+	public void ReduceStat(string statKey, float amount = 0.0f, StatTypes statType = StatTypes.Stat)
 	{
-		var currentStatValue = GetStatFromName(statKey);
+		var currentStatValue = GetStatFromName(statKey, statType);
 		if (currentStatValue.Value - amount <= 0)
 		{
 			LoggingUtils.Debug("Reduced stat to lower than 0");

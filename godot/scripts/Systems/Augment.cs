@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 
 public partial class Augment : Node2D
 {
+    public static readonly string[] STATS = { "Health", "Attack", "AttackRange", "AttackSpeed", "Speed", "Crit", "CritDamage", "Defense", "ElementalResistance", };
     // Delegate
     private Action<bool> _onGamePausedHandler;
 
@@ -42,13 +44,15 @@ public partial class Augment : Node2D
         UtilGetter.GetMainHUD().TurnOffAugmentHUD();
     }
 
-    public static void OnSelectedAugmentCard(AugmentType augmentType, string statKey = "Default")
+    public static void OnSelectedAugmentCard(AugmentType augmentType, string statKey = "Default", float statModifierValue = 0.0f)
     {
         switch(augmentType)
         {
             case AugmentType.Stat:
                 Player player = UtilGetter.GetMainPlayer();
                 UpgradableObject stat = player.CharacterStatComponent.GetStatFromName(statKey);
+                player.CharacterStatComponent.AddStat(statKey, statModifierValue, StatTypes.Modifier);
+                LoggingUtils.Debug($"Modifier {statKey}: {player.CharacterStatComponent.StatModifierData}");
                 stat.Upgrade(UpgradableObjectTypes.Stat, 1);
                 break;
             // TODO: Doesn't have these implemented yet!
@@ -66,36 +70,54 @@ public partial class Augment : Node2D
         Player player = UtilGetter.GetMainPlayer();
         int level = player.CharacterLevelComponent.CurrentCharacterLevel.Level;
 
+        // Determine rarity
         AugmentRateData augmentRate = DataParser.GetAugmentRateFromLevel(level);
         LoggingUtils.Debug($"Common: {augmentRate.CommonRate}, Rare: {augmentRate.RareRate}, Epic: {augmentRate.EpicRate}, Legendary: {augmentRate.LegendaryRate}, Mythic: {augmentRate.MythicRate}, ");
         int rareRate = augmentRate.CommonRate + augmentRate.RareRate;
         int epicRate = rareRate + augmentRate.EpicRate;
         int legendaryRate = epicRate + augmentRate.LegendaryRate;
 
+        // Set stat priority to prioritize stats upgrade to spawn
+        List<UpgradableObject> characterStats = new List<UpgradableObject>();
+        foreach (var statKey in STATS)
+        {
+            UpgradableObject stat = player.CharacterStatComponent.GetStatFromName(statKey);
+            characterStats.Add(stat);
+        }
+        characterStats = characterStats.OrderBy(s => s.Level).ToList();
+
+        // Setting each card
         foreach (var ac in augmentCards)
         {
             Random random = new Random();
             int randomNumber = random.Next(1, 101);
-            LoggingUtils.Debug($"Generated number: {randomNumber}");
+            int randomChanceOfStatPriority = random.Next(0, 10);
+            int randomIndex = random.Next(0, 3);
+            int randomIndex2 = random.Next(3, STATS.Length);
+            
+            // We want to prioritize stats that have been upgraded but the chances of getting other stats are never 0
+            int indexOfStatToUpgrade = randomChanceOfStatPriority <= 8 ? randomIndex : randomIndex2;            
+            UpgradableObject statKeyToUpgrade = characterStats[indexOfStatToUpgrade];
+
             if (randomNumber <= augmentRate.CommonRate)
             {
-                ac.SetAugmentCard(CardRarity.Common, AugmentType.Stat, Colors.BLUE, 1, 5.0f);
+                ac.SetAugmentCard(CardRarity.Common, AugmentType.Stat, Colors.BLUE, statKeyToUpgrade.Level, 5.0f, statKeyToUpgrade.Name);
             }
             else if (randomNumber > augmentRate.CommonRate && randomNumber <= rareRate)
             {
-                ac.SetAugmentCard(CardRarity.Rare, AugmentType.Stat, Colors.GREEN, 1, 10.0f);
+                ac.SetAugmentCard(CardRarity.Rare, AugmentType.Stat, Colors.GREEN, statKeyToUpgrade.Level, 10.0f, statKeyToUpgrade.Name);
             }
             else if (randomNumber > rareRate && randomNumber <= epicRate)
             {
-                ac.SetAugmentCard(CardRarity.Epic, AugmentType.Stat, Colors.PURPLE, 1, 20.0f);
+                ac.SetAugmentCard(CardRarity.Epic, AugmentType.Stat, Colors.PURPLE, statKeyToUpgrade.Level, 20.0f, statKeyToUpgrade.Name);
             }
             else if (randomNumber > epicRate && randomNumber <= legendaryRate)
             {
-                ac.SetAugmentCard(CardRarity.Legendary, AugmentType.Stat, Colors.YELLOW, 1, 50.0f);
+                ac.SetAugmentCard(CardRarity.Legendary, AugmentType.Stat, Colors.YELLOW, statKeyToUpgrade.Level, 50.0f, statKeyToUpgrade.Name);
             }
             else
             {
-                ac.SetAugmentCard(CardRarity.Mythic, AugmentType.Stat, Colors.RED, 1, 10.0f);
+                ac.SetAugmentCard(CardRarity.Mythic, AugmentType.Stat, Colors.RED, statKeyToUpgrade.Level, 75.0f, statKeyToUpgrade.Name);
             }
         }
         

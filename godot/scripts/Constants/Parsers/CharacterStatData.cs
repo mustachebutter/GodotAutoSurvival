@@ -83,15 +83,15 @@ public class CharacterLevelData
 
 public class CharacterStatData
 {
-	public UpgradableObject Attack { get; set;} = new UpgradableObject { Level = 1, Value = 100.0f };
-	public UpgradableObject AttackRange { get; set; } = new UpgradableObject { Level = 1, Value = 500.0f };
-	public UpgradableObject AttackSpeed { get; set; } = new UpgradableObject { Level = 1, Value = 1.0f };
-	public UpgradableObject Health { get; set;} = new UpgradableObject { Level = 1, Value = 100.0f };
-	public UpgradableObject Defense { get; set; } = new UpgradableObject { Level = 1, Value = 50.0f };
-	public UpgradableObject ElementalResistance { get; set; } = new UpgradableObject { Level = 1, Value = 50.0f };
-	public UpgradableObject Speed { get; set; } = new UpgradableObject { Level = 1, Value = 100.0f };
-	public UpgradableObject Crit { get; set; } = new UpgradableObject { Level = 1, Value = 1.0f };
-	public UpgradableObject CritDamage { get; set; } = new UpgradableObject { Level = 1, Value = 100.0f };
+	public UpgradableObject Attack { get; set;} = new UpgradableObject { Level = 1, Value = 0.0f };
+	public UpgradableObject AttackRange { get; set; } = new UpgradableObject { Level = 1, Value = 0.0f };
+	public UpgradableObject AttackSpeed { get; set; } = new UpgradableObject { Level = 1, Value = 0.0f };
+	public UpgradableObject Health { get; set;} = new UpgradableObject { Level = 1, Value = 0.0f };
+	public UpgradableObject Defense { get; set; } = new UpgradableObject { Level = 1, Value = 0.0f };
+	public UpgradableObject ElementalResistance { get; set; } = new UpgradableObject { Level = 1, Value = 0.0f };
+	public UpgradableObject Speed { get; set; } = new UpgradableObject { Level = 1, Value = 0.0f };
+	public UpgradableObject Crit { get; set; } = new UpgradableObject { Level = 1, Value = 0.0f };
+	public UpgradableObject CritDamage { get; set; } = new UpgradableObject { Level = 1, Value = 0.0f };
 
     public CharacterStatData DeepCopy()
     {
