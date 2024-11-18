@@ -18,7 +18,7 @@ public partial class Weapon : CharacterBody2D
         }
         float characterDamage = SourceCharacter == null ? 
 			0
-			: SourceCharacter.CharacterStatComponent.CharacterStatData.Attack.Value;
+			: SourceCharacter.CharacterStatComponent.GetCompleteStatFromName("Attack").totalValue;
 
 		return WeaponData.Damage + characterDamage;
 	}

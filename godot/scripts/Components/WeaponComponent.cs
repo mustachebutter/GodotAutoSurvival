@@ -34,6 +34,17 @@ public partial class WeaponComponent : Node2D
 		}
 	}
 
+	public void OverrideTimer(float seconds = 0.0f)
+	{
+		if (!_timer.IsStopped())
+		{
+			_timer.Stop();
+		}
+
+		_timer.WaitTime = seconds;
+		_timer.Start();
+	}
+
 	private void StartWeapon()
 	{
 		Node2D closestTarget = Utils.FindClosestTarget(_player.Position, _player.Area2D);

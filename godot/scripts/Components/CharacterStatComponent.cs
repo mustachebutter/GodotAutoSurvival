@@ -21,7 +21,7 @@ public partial class CharacterStatComponent : Node2D
 
     private void HandleOnStatLevelChanged(UpgradableObject @object)
     {
-        (float baseValue, float modifierValue, float totalValue) = GetAllStatFromName(@object.Name);
+        (float baseValue, float modifierValue, float totalValue) = GetCompleteStatFromName(@object.Name);
 
 		OnAnyStatUpgraded?.Invoke(@object, baseValue, modifierValue, totalValue);
     }
@@ -59,7 +59,7 @@ public partial class CharacterStatComponent : Node2D
 		return currentStatValue;
 	}
 
-	public (float baseValue, float modifierValue, float totalValue) GetAllStatFromName(string statKey)
+	public (float baseValue, float modifierValue, float totalValue) GetCompleteStatFromName(string statKey)
 	{
 		UpgradableObject stat = GetStatFromName(statKey);
 		UpgradableObject modifier = GetStatFromName(statKey, StatTypes.Modifier);

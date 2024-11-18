@@ -86,7 +86,7 @@ public partial class MainHUD : CanvasLayer
 		{
 			var (hBoxContainer, container, buttonUp, buttonDown) = CreateDebugStatContainer();
 			var statValue = characterStatComponent.GetStatFromName(stat);
-			(float baseValue, float modifierValue, float totalValue) = characterStatComponent.GetAllStatFromName(stat);
+			(float baseValue, float modifierValue, float totalValue) = characterStatComponent.GetCompleteStatFromName(stat);
 
 			if (statValue == null) return;
 

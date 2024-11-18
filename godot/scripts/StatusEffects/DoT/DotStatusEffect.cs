@@ -26,7 +26,7 @@ public class DotStatusEffect : StatusEffect
 
 		float characterDamage = SourceCharacter == null ? 
 			0
-			: SourceCharacter.CharacterStatComponent.CharacterStatData.Attack.Value;
+			: SourceCharacter.CharacterStatComponent.GetCompleteStatFromName("Attack").totalValue;
 
 		return (float) Math.Round(
 			StatusEffectData.Damage + (characterDamage * STATUS_EFFECT_DAMAGE_MULTIPLIER),

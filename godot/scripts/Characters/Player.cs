@@ -12,9 +12,28 @@ public partial class Player : BaseCharacter
 		base._Ready();
 		WeaponComponent = GetNode<WeaponComponent>("WeaponComponent");
 		CharacterLevelComponent = GetNode<CharacterLevelComponent>("CharacterLevelComponent");
-		WeaponComponent.StartTimer(1 / CharacterStatComponent.CharacterStatData.AttackSpeed.Value);
+
+		// This use of AttackRange is used for determining the Area2D that detects the closest enemy
+		// Essentially, what this means is that it would detect targets further away as AttackRange increases
+		CharacterStatComponent.OnAnyStatUpgraded += HandleStatUpgraded;
+		_circle.Radius = CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 2;
+		WeaponComponent.StartTimer(1 / CharacterStatComponent.GetCompleteStatFromName("AttackSpeed").totalValue);
+
 		var MainHUD = UtilGetter.GetMainHUD();
 		MainHUD.SetDebugStats(CharacterStatComponent);
+	}
+
+	private void HandleStatUpgraded(UpgradableObject @object, float baseValue, float modifierValue, float totalValue)
+	{
+		switch (@object.Name)
+		{
+			case "AttackRange":
+				_circle.Radius = CharacterStatComponent.GetCompleteStatFromName(@object.Name).totalValue / 2;
+				break;
+			case "AttackSpeed":
+				WeaponComponent.OverrideTimer(1 / CharacterStatComponent.GetCompleteStatFromName(@object.Name).totalValue);
+				break;
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -65,7 +84,7 @@ public partial class Player : BaseCharacter
 		
 
 		// Normalized the Vector
-		velocity = velocity.Normalized() * CharacterStatComponent.CharacterStatData.Speed.Value;
+		velocity = velocity.Normalized() * CharacterStatComponent.GetCompleteStatFromName("Speed").totalValue;
 
 		Velocity = velocity;
 		MoveAndSlide();
@@ -75,7 +94,9 @@ public partial class Player : BaseCharacter
 	{
 		if (weapon is Projectile projectile)
 		{
-			projectile.ShootAtTarget(Position, closestTarget.Position, CharacterStatComponent.CharacterStatData.AttackRange.Value, this);
+			// This use of AttackRange is used for determining the travel distance of projectile
+			// What this means in simple term is that it would travel further if the AttackRange is greater
+			projectile.ShootAtTarget(Position, closestTarget.Position, CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue, this);
 		}
 		else if (weapon is Beam beam)
 		{

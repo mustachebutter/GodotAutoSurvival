@@ -3,6 +3,8 @@ using Godot;
 
 public partial class BaseCharacter : CharacterBody2D
 {
+	public Area2D Area2D;
+	protected CircleShape2D _circle;
 	private Godot.Vector2 _textOffset = new Godot.Vector2(0.0f, 0.0f);
 	private Label _healthLabel;
 	private bool _isDead = false;
@@ -15,13 +17,11 @@ public partial class BaseCharacter : CharacterBody2D
 	public StatusEffectComponent StatusEffectComponent { get; private set; }
 	public VisualEffectComponent VisualEffectComponent { get; private set; }
 
-	public Area2D Area2D;
-
 	public bool IsDead
 	{
 		get
 		{
-			if (CharacterStatComponent.CharacterStatData.Health.Value <= 0)
+			if (CharacterStatComponent.GetCompleteStatFromName("Health").totalValue <= 0)
 				return true;
 			
 			return false;
@@ -35,10 +35,8 @@ public partial class BaseCharacter : CharacterBody2D
 		StatusEffectComponent = GetNode<StatusEffectComponent>("StatusEffectComponent");
 		VisualEffectComponent = GetNode<VisualEffectComponent>("VisualEffectComponent");
 		CharacterStatComponent = GetNode<CharacterStatComponent>("CharacterStatComponent");
-
 		Area2D = GetNode<Area2D>("Area2D");
-		var circle = (CircleShape2D) Area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
-		circle.Radius = CharacterStatComponent.CharacterStatData.AttackRange.Value / 2;
+		_circle = (CircleShape2D) Area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
 
 		_healthLabel = GetNode<Label>("HealthLabel");
 	}
@@ -46,7 +44,7 @@ public partial class BaseCharacter : CharacterBody2D
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
-		_healthLabel.Text = $"{CharacterStatComponent.CharacterStatData.Health.Value}"; 
+		_healthLabel.Text = $"{CharacterStatComponent.GetCompleteStatFromName("Health").totalValue}"; 
 	}
 
 	public void DealDamageToCharacter(float damage = 0.0f, DamageTypes damageType = DamageTypes.Normal)
