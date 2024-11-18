@@ -120,11 +120,11 @@ parameters/conditions/isWalking = false
 parameters/Idle/blend_position = Vector2(0.0601625, 0.151291)
 parameters/Walk/blend_position = Vector2(-0.108943, 0.549816)
 
-[node name="Area2D" parent="." index="10"]
+[node name="Camera2D" type="Camera2D" parent="." index="11"]
+
+[node name="Area2D" parent="." index="12"]
 collision_layer = 8
 collision_mask = 4
 
 [node name="CollisionShape2D" parent="Area2D" index="0"]
-debug_color = Color(1, 0, 0, 0.129412)
-
-[node name="Camera2D" type="Camera2D" parent="." index="12"]
+debug_color = Color(1, 0, 0.00784314, 0.0470588)

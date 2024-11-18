@@ -37,6 +37,7 @@ public partial class BaseCharacter : CharacterBody2D
 		CharacterStatComponent = GetNode<CharacterStatComponent>("CharacterStatComponent");
 		Area2D = GetNode<Area2D>("Area2D");
 		_circle = (CircleShape2D) Area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
+		_circle.ResourceLocalToScene = true;
 
 		_healthLabel = GetNode<Label>("HealthLabel");
 	}

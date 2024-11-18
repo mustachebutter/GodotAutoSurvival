@@ -34,8 +34,8 @@ text = "test"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Area2D" parent="." index="7"]
+[node name="Area2D" parent="." index="8"]
 collision_layer = 8
 
 [node name="CollisionShape2D" parent="Area2D" index="0"]
-debug_color = Color(0.643137, 0.521569, 0, 0.129412)
+debug_color = Color(1, 1, 0.00784314, 0.0470588)
