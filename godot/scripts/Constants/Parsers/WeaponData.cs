@@ -7,13 +7,23 @@ public struct WeaponData
     public string WeaponId { get; set; }
     public string WeaponName { get; set; }
     public string WeaponDescription { get; set; }
-	public float Damage { get; set; }
     public WeaponTypes WeaponType { get; set; }
-    public DamageTypes DamageType { get; set; }
-    public float AttackSpeed { get; set; }
-    public float Speed { get; set; }
-	public string AnimationName { get; set; }
+    public string AnimationName { get; set; }
     public PackedScene ProjectileScene { get; set; }
+    public WeaponDamageData WeaponDamageData { get; set; }
+    public WeaponData DeepCopy()
+    {
+        return new WeaponData
+        {
+            WeaponId = this.WeaponId,
+            WeaponName = this.WeaponName,
+            WeaponDescription = this.WeaponDescription,
+            WeaponType = this.WeaponType,
+            AnimationName = this.AnimationName,
+            ProjectileScene = this.ProjectileScene,
+            WeaponDamageData = WeaponDamageData.DeepCopy(),
+        };
+    }
 }
 
 public class WeaponDamageData
@@ -24,11 +34,23 @@ public class WeaponDamageData
 	public UpgradableObject Damage { get; set; }
     public UpgradableObject AttackSpeed { get; set; }
     public UpgradableObject Speed { get; set; }
+    public WeaponDamageData DeepCopy()
+    {
+        return new WeaponDamageData
+        {
+            WeaponId = this.WeaponId,
+            MainLevel = this.MainLevel,
+            DamageType = this.DamageType,
+            Damage = this.Damage,
+            AttackSpeed = this.AttackSpeed,
+            Speed = this.Speed
+        };
+    }
 }
 
 public static class WeaponDataParser
 {
-    public static List<WeaponData> ParseData(string path)
+    public static (List<WeaponData>, List<WeaponDamageData>) ParseData(string path, string damagePath)
     {
         var projectiles = new List<WeaponData>();
         var file = FileAccess.Open(path, FileAccess.ModeFlags.Read);
@@ -37,6 +59,9 @@ public static class WeaponDataParser
         
         // Skip the first header line
         file.GetLine();
+
+        var projectilesDamageDatabase = ParseDamageData(damagePath);
+        
         try
         {
             LoggingUtils.Info("WeaponData Parsing!!!", isBold: true, fontSize: 20);
@@ -54,14 +79,14 @@ public static class WeaponDataParser
                     WeaponId = content[0],
                     WeaponName = content[1],
                     WeaponDescription = content[2],
-                    Damage = float.Parse(content[3]),
-                    DamageType = Enum.Parse<DamageTypes>(content[4].Split(".")[1]),
                     WeaponType = Enum.Parse<WeaponTypes>(content[5].Split(".")[1]),
-                    AttackSpeed = float.Parse(content[6]),
-                    Speed = float.Parse(content[7]),
                     AnimationName = content[8],
                     ProjectileScene = GD.Load<PackedScene>(content[9]),
                 };
+
+                var projectileDamageData = projectilesDamageDatabase.Find(pdd => pdd.WeaponId == projectileData.WeaponId);
+                projectileData.WeaponDamageData = projectileDamageData.DeepCopy();
+
                 LoggingUtils.Info($"{projectileData.WeaponId}, {projectileData.AnimationName}");
                 projectiles.Add(projectileData);
             }
@@ -70,7 +95,7 @@ public static class WeaponDataParser
             if(projectiles.Count == 0)
                 LoggingUtils.Error("Wasn't able to parsed any projectile data!");
     
-            return projectiles;
+            return (projectiles, projectilesDamageDatabase);
         }
         catch(FormatException ex)
         {
@@ -86,7 +111,7 @@ public static class WeaponDataParser
         }
 
 
-        return null;
+        return (null, null);
     }
 
     public static List<WeaponDamageData> ParseDamageData(string path)

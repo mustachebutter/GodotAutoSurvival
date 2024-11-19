@@ -51,8 +51,9 @@ public partial class MainHUD : CanvasLayer
 			Debug_CurrentWeapon.Text = projectileData.WeaponName;
 		
 		string weaponDetails = "";
-		weaponDetails += $"[b][color=red]Damage[/color][/b]: {projectileData.Damage}\n";
-		weaponDetails += $"[b][color=blue]Attack Speed[/color][/b]: {projectileData.Speed}\n";
+		weaponDetails += $"[b][color=red]Damage[/color][/b]: {projectileData.WeaponDamageData.Damage.Value}\n";
+		weaponDetails += $"[b][color=blue]Attack Speed[/color][/b]: {projectileData.WeaponDamageData.AttackSpeed.Value}\n";
+		weaponDetails += $"[b][color=green]Travel Speed[/color][/b]: {projectileData.WeaponDamageData.Speed.Value}\n";
 		Debug_CurrentWeaponDetails.Text = weaponDetails;
 	}
 

@@ -20,6 +20,6 @@ public partial class Weapon : CharacterBody2D
 			0
 			: SourceCharacter.CharacterStatComponent.GetCompleteStatFromName("Attack").totalValue;
 
-		return WeaponData.Damage + characterDamage;
+		return WeaponData.WeaponDamageData.Damage.Value + characterDamage;
 	}
 }

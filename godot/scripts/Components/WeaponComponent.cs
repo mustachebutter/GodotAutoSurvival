@@ -17,8 +17,17 @@ public partial class WeaponComponent : Node2D
 	{
 		base._Ready();
 		_player = GetParent<Player>();
-		weaponData = DataParser.GetAllData();
+
+		foreach (var weapon in DataParser.GetWeaponDatabase())
+		{
+			if (weapon.Value.WeaponId != "Weapon_Default")
+			{
+				var temp_weapon = weapon.Value.DeepCopy();
+				weaponData.Add(weapon.Key, temp_weapon);
+			}
+		}
 		weapons = weaponData.Keys.Where(x => x != "Weapon_Default").ToList();
+
 		MainHUD = UtilGetter.GetMainHUD();
 		MainHUD.SetDebugWeapon(weaponData[weapons[index]]);
 	}

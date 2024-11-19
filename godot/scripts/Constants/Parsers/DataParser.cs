@@ -27,13 +27,13 @@ public static class DataParser
 			_statusEffectDictionary.Add(se.StatusEffectId, se);
 		}
 
-		var pList = WeaponDataParser.ParseData(FILE_METADATA_WEAPON);
+		var (pList, pdList) = WeaponDataParser.ParseData(FILE_METADATA_WEAPON, FILE_METADATA_WEAPON_DAMAGE);
+		_weaponDamageDatabase = pdList;
 		
 		foreach (var p in pList)
 		{
 			_weaponEffectDictionary.Add(p.WeaponId, p);
 		}
-		_weaponDamageDatabase = WeaponDataParser.ParseDamageData(FILE_METADATA_WEAPON_DAMAGE);
 
 		_characterStatDatabase = CharacterStatDataParser.ParseData(FILE_METADATA_STATS);
 		_characterLevelDatabase = CharacterStatDataParser.ParseLevelData(FILE_METADATA_CHARACTER_LEVEL);
@@ -71,7 +71,7 @@ public static class DataParser
 		}
 	}
 
-	public static Dictionary<string, WeaponData> GetAllData()
+	public static Dictionary<string, WeaponData> GetWeaponDatabase()
 	{
 		return _weaponEffectDictionary;
 	}

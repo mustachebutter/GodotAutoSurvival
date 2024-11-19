@@ -65,7 +65,7 @@ public partial class Projectile : Weapon
 		Vector2 direction = (targetPosition - sourcePosition).Normalized();
 		LookAt(GlobalPosition + direction);
 		// LookAt(Vector2.Left);
-		Velocity = direction * WeaponData.Speed;
+		Velocity = direction * WeaponData.WeaponDamageData.Speed.Value;
 		// Play the animation
 		_animatedSprite.Play(WeaponData.AnimationName);
 
