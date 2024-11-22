@@ -7,6 +7,7 @@ public enum EnemySpawnMode
 }
 public static class GlobalConfigs
 {
+    public static int MAX_WEAPON_LEVEL = 12;
     public static EnemySpawnMode EnemySpawnMode { get; set; } = EnemySpawnMode.Dummy;
     private static bool _isGamePaused = false;
     public static bool IsGamePaused 

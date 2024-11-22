@@ -46,6 +46,31 @@ public class WeaponDamageData
             Speed = this.Speed
         };
     }
+
+    public void UpgradeLevel(int levelToUpgrade = 1)
+    {
+        if (MainLevel + levelToUpgrade > GlobalConfigs.MAX_WEAPON_LEVEL)
+        {
+            LoggingUtils.Debug($"[{typeof(WeaponData)}] At max weapon level already. Returning");
+            // We can assume we will upgrade one by one. But if it was upgraded with an amount greater than 1
+            // Then we can just set the level to max (and discard the remaining)
+            if (levelToUpgrade > 1)
+            {
+                levelToUpgrade = GlobalConfigs.MAX_WEAPON_LEVEL - MainLevel;
+                MainLevel = GlobalConfigs.MAX_WEAPON_LEVEL;
+
+                Damage.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade);
+                AttackSpeed.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade);
+                Speed.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade);
+            }
+            return;
+        }
+
+        MainLevel += levelToUpgrade;
+        Damage.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade);
+        AttackSpeed.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade);
+        Speed.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade);
+    }
 }
 
 public static class WeaponDataParser

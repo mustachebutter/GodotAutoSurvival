@@ -20,7 +20,7 @@ public class UpgradableObject
         int maxLevel = type switch
         {
             UpgradableObjectTypes.Stat => 30,
-            UpgradableObjectTypes.Weapon => 12,
+            UpgradableObjectTypes.Weapon => GlobalConfigs.MAX_WEAPON_LEVEL,
             UpgradableObjectTypes.StatusEffect => 10,
             _ => 1
         };

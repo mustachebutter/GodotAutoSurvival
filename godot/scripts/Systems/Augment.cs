@@ -45,18 +45,19 @@ public partial class Augment : Node2D
 
     public static void OnSelectedAugmentCard(AugmentType augmentType, string statKey = "Default", float statModifierValue = 0.0f)
     {
+        Player player = UtilGetter.GetMainPlayer();
         switch(augmentType)
         {
             case AugmentType.Stat:
-                Player player = UtilGetter.GetMainPlayer();
                 UpgradableObject stat = player.CharacterStatComponent.GetStatFromName(statKey);
                 player.CharacterStatComponent.AddStat(statKey, statModifierValue, StatTypes.Modifier);
                 LoggingUtils.Debug($"Modifier {statKey}: {player.CharacterStatComponent.StatModifierData}");
                 stat.Upgrade(UpgradableObjectTypes.Stat, 1);
                 break;
+            case AugmentType.Weapon:
+                player.WeaponComponent.Weapon.WeaponData.WeaponDamageData.UpgradeLevel(1);
+                break;
             // TODO: Doesn't have these implemented yet!
-            // case AugmentType.Weapon:
-            //     break;
             // case AugmentType.Item:
             //     break;
             default:
