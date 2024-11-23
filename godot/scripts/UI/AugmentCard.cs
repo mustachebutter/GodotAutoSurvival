@@ -39,19 +39,10 @@ public partial class AugmentCard : MarginContainer
 		}
 	}
 
-	public void SetAugmentCard(CardRarity cardRarity, AugmentType cardType, Color backgroundColor, int currentLevel, float value = 0.0f, string statKey = "Default")
+	public void SetAugmentCard(AugmentCardData augmentCardData)
 	{
-		if(cardType == AugmentType.Stat && statKey == "Default")
-		{
-			LoggingUtils.Error($"[{typeof(AugmentCard)}] AugmentType: {cardType}, StatType: {statKey}");
-			throw new Exception("No stat type was specified to set augment card. Please check the logs");
-		}
-
-		LoggingUtils.Debug($"{backgroundColor}");
-		BackgroundColor.Color = backgroundColor;
-		LevelText.Text = $"Lv. {currentLevel}";
-		CardValue = (statKey, value);
-		// AugmentIcon
-		AugmentDescription.Text = $"Level up {statKey} stats. +{value}%";
+		augmentCardData.VerifyCardData(BackgroundColor, LevelText, AugmentDescription);
+		CardType = augmentCardData.AugmentType;
+		CardValue = (augmentCardData.StatKeyToUpgrade, augmentCardData.StatUpgradeValue);
 	}
 }

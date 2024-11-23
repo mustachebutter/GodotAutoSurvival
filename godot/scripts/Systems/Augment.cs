@@ -10,6 +10,7 @@ public partial class Augment : Node2D
 
     // TODO: Probably refactor this to hold some data
     // public List<AugmentData> augmentDataList;
+    
 
     public override void _Ready()
     {
@@ -97,31 +98,87 @@ public partial class Augment : Node2D
             int randomChanceOfStatPriority = random.Next(0, 10);
             int randomIndex = random.Next(0, 2);
             int randomIndex2 = random.Next(2, GlobalConfigs.STATS.Length);
-            
+            int randomChanceOfAugmentType = random.Next(1, 10);
+                        
             // We want to prioritize stats that have been upgraded but the chances of getting other stats are never 0
             int indexOfStatToUpgrade = randomChanceOfStatPriority <= 7 ? randomIndex : randomIndex2;            
             UpgradableObject statKeyToUpgrade = characterStats[indexOfStatToUpgrade];
+            WeaponData weaponData = player.WeaponComponent.Weapon.WeaponData;
 
+            AugmentType augmentType = randomChanceOfAugmentType > 7 ? AugmentType.Weapon : AugmentType.Stat;
+            int currentLevel = randomChanceOfAugmentType > 7 ? weaponData.WeaponDamageData.MainLevel : statKeyToUpgrade.Level;
+
+            AugmentCardData augmentCardData = null; 
             if (randomNumber <= augmentRate.CommonRate)
             {
-                ac.SetAugmentCard(CardRarity.Common, AugmentType.Stat, Colors.BLUE, statKeyToUpgrade.Level, 5.0f, statKeyToUpgrade.Name);
+                // ac.SetAugmentCard(CardRarity.Common, augmentType, Colors.BLUE, statKeyToUpgrade.Level, 5.0f, statKeyToUpgrade.Name);
+                augmentCardData = new AugmentCardData
+                {
+                    CardRarity = CardRarity.Common,
+                    AugmentType = augmentType,
+                    BackgroundColor = Colors.BLUE,
+                    CurrentLevel = currentLevel,
+                    StatUpgradeValue = 5.0f,
+                    StatKeyToUpgrade = statKeyToUpgrade.Name,
+                };
             }
             else if (randomNumber > augmentRate.CommonRate && randomNumber <= rareRate)
             {
-                ac.SetAugmentCard(CardRarity.Rare, AugmentType.Stat, Colors.GREEN, statKeyToUpgrade.Level, 10.0f, statKeyToUpgrade.Name);
+                // ac.SetAugmentCard(CardRarity.Rare, augmentType, Colors.GREEN, statKeyToUpgrade.Level, 10.0f, statKeyToUpgrade.Name);
+                augmentCardData = new AugmentCardData
+                {
+                    CardRarity = CardRarity.Rare,
+                    AugmentType = augmentType,
+                    BackgroundColor = Colors.GREEN,
+                    CurrentLevel = currentLevel,
+                    StatUpgradeValue = 10.0f,
+                    StatKeyToUpgrade = statKeyToUpgrade.Name,
+                };
+
             }
             else if (randomNumber > rareRate && randomNumber <= epicRate)
             {
-                ac.SetAugmentCard(CardRarity.Epic, AugmentType.Stat, Colors.PURPLE, statKeyToUpgrade.Level, 20.0f, statKeyToUpgrade.Name);
+                // ac.SetAugmentCard(CardRarity.Epic, augmentType, Colors.PURPLE, statKeyToUpgrade.Level, 20.0f, statKeyToUpgrade.Name);
+                augmentCardData = new AugmentCardData
+                {
+                    CardRarity = CardRarity.Epic,
+                    AugmentType = augmentType,
+                    BackgroundColor = Colors.PURPLE,
+                    CurrentLevel = currentLevel,
+                    StatUpgradeValue = 20.0f,
+                    StatKeyToUpgrade = statKeyToUpgrade.Name,
+                };
             }
             else if (randomNumber > epicRate && randomNumber <= legendaryRate)
             {
-                ac.SetAugmentCard(CardRarity.Legendary, AugmentType.Stat, Colors.YELLOW, statKeyToUpgrade.Level, 50.0f, statKeyToUpgrade.Name);
+                // ac.SetAugmentCard(CardRarity.Legendary, augmentType, Colors.YELLOW, statKeyToUpgrade.Level, 50.0f, statKeyToUpgrade.Name);
+                augmentCardData = new AugmentCardData
+                {
+                    CardRarity = CardRarity.Legendary,
+                    AugmentType = augmentType,
+                    BackgroundColor = Colors.YELLOW,
+                    CurrentLevel = currentLevel,
+                    StatUpgradeValue = 50.0f,
+                    StatKeyToUpgrade = statKeyToUpgrade.Name,
+                };
+
             }
             else
             {
-                ac.SetAugmentCard(CardRarity.Mythic, AugmentType.Stat, Colors.RED, statKeyToUpgrade.Level, 75.0f, statKeyToUpgrade.Name);
+                // ac.SetAugmentCard(CardRarity.Mythic, augmentType, Colors.RED, statKeyToUpgrade.Level, 75.0f, statKeyToUpgrade.Name);
+                augmentCardData = new AugmentCardData
+                {
+                    CardRarity = CardRarity.Mythic,
+                    AugmentType = augmentType,
+                    BackgroundColor = Colors.RED,
+                    CurrentLevel = currentLevel,
+                    StatUpgradeValue = 75.0f,
+                    StatKeyToUpgrade = statKeyToUpgrade.Name,
+                };
+
             }
+
+            ac.SetAugmentCard(augmentCardData);
         }
         
     }

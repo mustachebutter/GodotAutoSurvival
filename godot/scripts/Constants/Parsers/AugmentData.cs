@@ -25,6 +25,73 @@ public class AugmentRateData
     }
 }
 
+public class AugmentCardData
+{
+    public CardRarity CardRarity { get; set; }
+    public AugmentType AugmentType { get; set; }
+    public Texture2D CardIcon { get; set; }
+    public Color BackgroundColor { get; set; }
+    public int CurrentLevel { get; set; }
+    // Stat specific
+    public float StatUpgradeValue { get; set; }
+    public string StatKeyToUpgrade { get; set; } = "Default";
+    // Weapon specific
+    // Item specific
+    // public AugmentCardData(
+    //     CardRarity cardRarity,
+    //     AugmentType augmentType,
+    //     // Texture2D CardIcon,
+    //     Color backgroundColor,
+    //     int currentLevel
+    // )
+    // {
+    //     CardRarity = cardRarity;
+    //     AugmentType = augmentType;
+    //     BackgroundColor = backgroundColor;
+    //     CurrentLevel = currentLevel;
+    // }
+
+    public AugmentCardData DeepCopy()
+    {
+        return new AugmentCardData
+        {
+            CardRarity = this.CardRarity,
+            AugmentType = this.AugmentType,
+            CardIcon = this.CardIcon,
+            BackgroundColor = this.BackgroundColor,
+            CurrentLevel = this.CurrentLevel,
+        };
+    }
+
+    public void VerifyCardData(ColorRect backgroundColor, Label levelText, RichTextLabel augmentDescription)
+    {
+        switch(AugmentType)
+        {
+            case AugmentType.Stat:
+                if(StatKeyToUpgrade == "Default")
+                {
+                    LoggingUtils.Error($"[{typeof(AugmentCardData)}] AugmentType: {AugmentType}, StatType: {StatKeyToUpgrade}");
+                    throw new Exception("No stat type was specified to set augment card. Please check the logs");
+                }
+
+                augmentDescription.Text = $"Level up {StatKeyToUpgrade} stats. +{StatUpgradeValue}%";
+            break;
+            case AugmentType.Weapon:
+                augmentDescription.Text = $"Upgrade weapon [weaponName]\n\n";
+                augmentDescription.Text += $"Damage: [color=red][oldDamage][/color] => [color=green][newDamage][/color]\n";
+                augmentDescription.Text += $"Attack Speed: [color=red][oldAttackSpeed][/color] => [color=green][newAttackSpeed][/color]\n";
+                augmentDescription.Text += $"Missile Speed: [color=red][oldMissileSpeed][/color] => [color=green][newMissileSpeed][/color]\n";
+            break;
+            case AugmentType.Item:
+            break;
+        }
+
+        backgroundColor.Color = BackgroundColor;
+        levelText.Text = $"Lv. {CurrentLevel}";
+
+    }
+}
+
 public static class AugmentRateDataParser
 {
     public static List<AugmentRateData> ParseData(string path)
