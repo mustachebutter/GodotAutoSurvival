@@ -7,7 +7,10 @@ public enum EnemySpawnMode
 }
 public static class GlobalConfigs
 {
+    public static int MAX_CHARACTER_LEVEL = 100;
+    public static int MAX_STAT_LEVEL = 30;
     public static int MAX_WEAPON_LEVEL = 12;
+    
     public static EnemySpawnMode EnemySpawnMode { get; set; } = EnemySpawnMode.Dummy;
     private static bool _isGamePaused = false;
     public static bool IsGamePaused 
@@ -26,5 +29,5 @@ public static class GlobalConfigs
     public static event Action<bool> OnGamePausedChanged;
 
     public static readonly string[] STATS = { "Health", "Attack", "AttackRange", "AttackSpeed", "Speed", "Crit", "CritDamage", "Defense", "ElementalResistance", };
-
+    public static readonly string[] WEAPON_STATS = { "WStat_Damage", "WStat_AttackSpeed", "WStat_Speed" };
 }

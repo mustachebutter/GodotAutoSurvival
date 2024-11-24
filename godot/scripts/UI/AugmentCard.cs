@@ -41,7 +41,7 @@ public partial class AugmentCard : MarginContainer
 
 	public void SetAugmentCard(AugmentCardData augmentCardData)
 	{
-		augmentCardData.VerifyCardData(BackgroundColor, LevelText, AugmentDescription);
+		augmentCardData.SetCardData(BackgroundColor, LevelText, AugmentDescription);
 		CardType = augmentCardData.AugmentType;
 		CardValue = (augmentCardData.StatKeyToUpgrade, augmentCardData.StatUpgradeValue);
 	}

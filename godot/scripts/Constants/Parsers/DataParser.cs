@@ -96,7 +96,7 @@ public static class DataParser
 		return _augmentRateDatabase;
 	}
 
-	public static UpgradableObject GetStatFromDatabase(string statKey = "Default", int level = 1)
+	public static UpgradableObject GetStatByLevel(string statKey = "Default", int level = 1)
 	{
 
 		if (statKey == "Default")
@@ -135,6 +135,52 @@ public static class DataParser
 		}
 
 		return currentStatValue;
+	}
+
+	public static UpgradableObject GetWeaponDamageByLevel(string weaponId = "Weapon_Default", string weaponDamageStat = "WStat_Default", int level = 1)
+	{
+		if (weaponId == "Weapon_Default")
+		{
+			LoggingUtils.Error("Did not supply any weapon ID");
+			return null;
+		}
+
+		if (weaponDamageStat == "WStat_Default")
+		{
+			LoggingUtils.Error("Did not supply any weapon damage stat");
+			return null;
+		}
+
+		if (level <= 0)
+		{
+			LoggingUtils.Error($"Tried to retrieve weapon with an impossible level {level}");
+			return null;
+		}
+
+		var weaponDamageDatabse = GetWeaponDamageDatabase();
+		var currentWeaponDamageData = weaponDamageDatabse.Find(x => level == x.MainLevel);
+
+		if (currentWeaponDamageData == null)
+		{
+			LoggingUtils.Error($"Could not find weapon {weaponId} with stat {weaponDamageStat} with level {level} in the database");
+			throw new Exception("Failed to get value of weapon, please check the log");
+		}
+
+		UpgradableObject wds = weaponDamageStat switch 
+		{
+			"WStat_Damage" => currentWeaponDamageData.Damage,
+			"WStat_AttackSpeed" => currentWeaponDamageData.AttackSpeed,
+			"WStat_Speed" => currentWeaponDamageData.Speed,
+			_ => null
+		};
+
+		if (wds == null)
+		{
+			LoggingUtils.Error($"Could not find stat {weaponDamageStat}, please double check the key");
+			throw new Exception("Failed to get value of weapon, please check the log");
+		}
+
+		return wds;
 	}
 
 	public static AugmentRateData GetAugmentRateFromLevel(int level)

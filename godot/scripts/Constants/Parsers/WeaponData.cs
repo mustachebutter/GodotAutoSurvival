@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Godot;
 
-public struct WeaponData
+public class WeaponData
 {
     public string WeaponId { get; set; }
     public string WeaponName { get; set; }
@@ -59,17 +59,17 @@ public class WeaponDamageData
                 levelToUpgrade = GlobalConfigs.MAX_WEAPON_LEVEL - MainLevel;
                 MainLevel = GlobalConfigs.MAX_WEAPON_LEVEL;
 
-                Damage.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade);
-                AttackSpeed.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade);
-                Speed.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade);
+                Damage.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade, WeaponId);
+                AttackSpeed.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade, WeaponId);
+                Speed.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade, WeaponId);
             }
             return;
         }
 
         MainLevel += levelToUpgrade;
-        Damage.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade);
-        AttackSpeed.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade);
-        Speed.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade);
+        Damage.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade, WeaponId);
+        AttackSpeed.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade, WeaponId);
+        Speed.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade, WeaponId);
     }
 }
 
@@ -170,11 +170,11 @@ public static class WeaponDataParser
                 var projectileDamageData = new WeaponDamageData
                 {
                     WeaponId = currentWeaponId,
-                    MainLevel = 1,
-                    DamageType = Enum.Parse<DamageTypes>(content[1].Split(".")[1]),
-                    Damage = new UpgradableObject { Name = "Damage", Level = 1, Value = float.Parse(content[2]) },
-                    AttackSpeed = new UpgradableObject { Name = "AttackSpeed", Level = 1, Value = float.Parse(content[3]) },
-                    Speed = new UpgradableObject { Name = "Speed", Level = 1, Value = float.Parse(content[4]) },
+                    MainLevel = int.Parse(content[1]),
+                    DamageType = Enum.Parse<DamageTypes>(content[2].Split(".")[1]),
+                    Damage = new UpgradableObject { Name = "WStat_Damage", Level = 1, Value = float.Parse(content[3]) },
+                    AttackSpeed = new UpgradableObject { Name = "WStat_AttackSpeed", Level = 1, Value = float.Parse(content[4]) },
+                    Speed = new UpgradableObject { Name = "WStat_Speed", Level = 1, Value = float.Parse(content[5]) },
                 };
                 
                 LoggingUtils.Info($"{projectileDamageData.WeaponId}, {projectileDamageData.DamageType}");

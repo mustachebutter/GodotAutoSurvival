@@ -15,11 +15,11 @@ public class UpgradableObject
         return new UpgradableObject { Name = this.Name, Level = this.Level, Value = this.Value };
     }
 
-    public void Upgrade(UpgradableObjectTypes type, int levelToUpgrade = 1)
+    public void Upgrade(UpgradableObjectTypes type, int levelToUpgrade = 1, string weaponId = "Weapon_Default")
     {
         int maxLevel = type switch
         {
-            UpgradableObjectTypes.Stat => 30,
+            UpgradableObjectTypes.Stat => GlobalConfigs.MAX_STAT_LEVEL,
             UpgradableObjectTypes.Weapon => GlobalConfigs.MAX_WEAPON_LEVEL,
             UpgradableObjectTypes.StatusEffect => 10,
             _ => 1
@@ -41,7 +41,18 @@ public class UpgradableObject
 
 		LoggingUtils.Debug($"Before upgrade: LVL {Level} - {Value}");
 		Level = Level + levelToUpgrade;
-		Value = DataParser.GetStatFromDatabase(Name, Level).Value;
+
+        switch(type)
+        {
+            case UpgradableObjectTypes.Stat:
+                Value = DataParser.GetStatByLevel(Name, Level).Value;
+            break;
+            case UpgradableObjectTypes.Weapon:
+                Value = DataParser.GetWeaponDamageByLevel(weaponId, Name, Level).Value;
+            break;
+            case UpgradableObjectTypes.StatusEffect:
+            break;
+        }
 		LoggingUtils.Debug($"After upgrade: LVL {Level} - {Value}");
 
         OnLevelChanged?.Invoke(this);
@@ -59,7 +70,7 @@ public class UpgradableObject
 
         LoggingUtils.Debug($"Before downgrade: LVL {Level} - {Value}");
 		Level = Level - levelToDowngrade;
-		Value = DataParser.GetStatFromDatabase(Name, Level).Value;
+		Value = DataParser.GetStatByLevel(Name, Level).Value;
 		LoggingUtils.Debug($"After downgrade: LVL {Level} - {Value}");
 
         OnLevelChanged?.Invoke(this);

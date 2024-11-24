@@ -35,22 +35,11 @@ public class AugmentCardData
     // Stat specific
     public float StatUpgradeValue { get; set; }
     public string StatKeyToUpgrade { get; set; } = "Default";
+    public UpgradableObject StatToUpgrade { get; set; }
     // Weapon specific
+    public string WeaponName { get; set; }
+    public WeaponData WeaponData { get; set; }
     // Item specific
-    // public AugmentCardData(
-    //     CardRarity cardRarity,
-    //     AugmentType augmentType,
-    //     // Texture2D CardIcon,
-    //     Color backgroundColor,
-    //     int currentLevel
-    // )
-    // {
-    //     CardRarity = cardRarity;
-    //     AugmentType = augmentType;
-    //     BackgroundColor = backgroundColor;
-    //     CurrentLevel = currentLevel;
-    // }
-
     public AugmentCardData DeepCopy()
     {
         return new AugmentCardData
@@ -63,9 +52,15 @@ public class AugmentCardData
         };
     }
 
-    public void VerifyCardData(ColorRect backgroundColor, Label levelText, RichTextLabel augmentDescription)
+    public AugmentType VerifyCardData(int randomChanceOfAugmentType, WeaponData weaponData, UpgradableObject statData)
     {
-        switch(AugmentType)
+        AugmentType = randomChanceOfAugmentType > 7 ? AugmentType.Weapon : AugmentType.Stat;
+        CurrentLevel = randomChanceOfAugmentType > 7 ? weaponData.WeaponDamageData.MainLevel : statData.Level;
+        WeaponData = weaponData;
+        StatToUpgrade = statData;
+        StatKeyToUpgrade = statData.Name;
+
+        switch (AugmentType)
         {
             case AugmentType.Stat:
                 if(StatKeyToUpgrade == "Default")
@@ -73,14 +68,36 @@ public class AugmentCardData
                     LoggingUtils.Error($"[{typeof(AugmentCardData)}] AugmentType: {AugmentType}, StatType: {StatKeyToUpgrade}");
                     throw new Exception("No stat type was specified to set augment card. Please check the logs");
                 }
-
+            break;
+            case AugmentType.Weapon:
+                if(WeaponData == null)
+                {
+                    LoggingUtils.Error($"[{typeof(AugmentCardData)}] AugmentType: {AugmentType}, Weapon: null");
+                    throw new Exception("No weapon was specified to set augment card. Please check the logs");
+                }
+            break;
+            case AugmentType.Item:
+            break;
+        }
+        return AugmentType;
+    }
+    public void SetCardData(ColorRect backgroundColor, Label levelText, RichTextLabel augmentDescription)
+    {
+        switch(AugmentType)
+        {
+            case AugmentType.Stat:
                 augmentDescription.Text = $"Level up {StatKeyToUpgrade} stats. +{StatUpgradeValue}%";
             break;
             case AugmentType.Weapon:
-                augmentDescription.Text = $"Upgrade weapon [weaponName]\n\n";
-                augmentDescription.Text += $"Damage: [color=red][oldDamage][/color] => [color=green][newDamage][/color]\n";
-                augmentDescription.Text += $"Attack Speed: [color=red][oldAttackSpeed][/color] => [color=green][newAttackSpeed][/color]\n";
-                augmentDescription.Text += $"Missile Speed: [color=red][oldMissileSpeed][/color] => [color=green][newMissileSpeed][/color]\n";
+                augmentDescription.Text = $"Upgrade weapon {WeaponData.WeaponName}\n\n";
+
+                foreach (var item in GlobalConfigs.WEAPON_STATS)
+                {
+                    var currentLevelDamageData = DataParser.GetWeaponDamageByLevel(WeaponName, item, CurrentLevel);
+                    var nextLevelDamageData = DataParser.GetWeaponDamageByLevel(WeaponName, item, CurrentLevel + 1);
+                    augmentDescription.Text += $"{currentLevelDamageData.Name.Split("_")[1]}:";
+                    augmentDescription.Text += $"[color=red]{currentLevelDamageData.Value}[/color] => [color=green]{nextLevelDamageData.Value}[/color]\n";
+                }
             break;
             case AugmentType.Item:
             break;
