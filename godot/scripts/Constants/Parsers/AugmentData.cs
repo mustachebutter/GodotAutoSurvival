@@ -52,10 +52,15 @@ public class AugmentCardData
         };
     }
 
-    public AugmentType VerifyCardData(int randomChanceOfAugmentType, WeaponData weaponData, UpgradableObject statData)
+    public AugmentType VerifyCardData(int randomChanceOfAugmentType, WeaponData weaponData, UpgradableObject statData, bool weaponAugmentHasAppeared)
     {
         AugmentType = randomChanceOfAugmentType > 7 ? AugmentType.Weapon : AugmentType.Stat;
         CurrentLevel = randomChanceOfAugmentType > 7 ? weaponData.WeaponDamageData.MainLevel : statData.Level;
+
+        // Changed it to a stat augment if there is already a card that appears as a weapon
+        if (weaponAugmentHasAppeared)
+            AugmentType = AugmentType.Stat;
+
         WeaponData = weaponData;
         StatToUpgrade = statData;
         StatKeyToUpgrade = statData.Name;

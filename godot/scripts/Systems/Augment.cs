@@ -67,6 +67,9 @@ public partial class Augment : Node2D
 
     public static void SetUpAugmentCards(List<AugmentCard> augmentCards)
     {
+        Random random = new Random();
+        bool weaponAugmentHasAppeared = false;
+
         Player player = UtilGetter.GetMainPlayer();
         int level = player.CharacterLevelComponent.CurrentCharacterLevel.Level;
 
@@ -92,7 +95,6 @@ public partial class Augment : Node2D
         // Setting each card
         foreach (var ac in augmentCards)
         {
-            Random random = new Random();
             int randomNumber = random.Next(1, 101);
             int randomChanceOfStatPriority = random.Next(0, 10);
             int randomIndex = random.Next(0, 2);
@@ -106,7 +108,7 @@ public partial class Augment : Node2D
 
 
             AugmentCardData augmentCardData = new AugmentCardData();
-            var augmentType = augmentCardData.VerifyCardData(randomChanceOfAugmentType, weaponData, statKeyToUpgrade);
+            var augmentType = augmentCardData.VerifyCardData(randomChanceOfAugmentType, weaponData, statKeyToUpgrade, weaponAugmentHasAppeared);
             
             if (augmentType == AugmentType.Stat)
             {
@@ -145,6 +147,7 @@ public partial class Augment : Node2D
             else if (augmentType == AugmentType.Weapon)
             {
                 augmentCardData.BackgroundColor = Colors.BLACK;
+                weaponAugmentHasAppeared = true;
             }
 
             ac.SetAugmentCard(augmentCardData);

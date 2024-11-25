@@ -48,7 +48,7 @@ public partial class MainHUD : CanvasLayer
 	public void SetDebugWeapon(WeaponData projectileData)
 	{
 		if (projectileData.WeaponName != null || projectileData.WeaponName != "")
-			Debug_CurrentWeapon.Text = projectileData.WeaponName;
+			Debug_CurrentWeapon.Text = $"{projectileData.WeaponName} - Lv. {projectileData.WeaponDamageData.MainLevel}";
 		
 		string weaponDetails = "";
 		weaponDetails += $"[b][color=red]Damage[/color][/b]: {projectileData.WeaponDamageData.Damage.Value}\n";
