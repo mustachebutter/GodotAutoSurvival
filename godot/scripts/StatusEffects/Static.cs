@@ -81,10 +81,10 @@ public class Static : StatusEffect
             vfxRootNode.AddChild(animatedSprite);
             animatedSprite.Play();
 
-            currentEnemy.DealDamageToCharacter(0.5f, DamageTypes.Electric);
+            currentEnemy.DealDamageToCharacter(CalculateTotalDamage(), DamageTypes.Electric);
             // Also deal damage to the last character because there's no iteration for it
             if (i == enemies.Count - 2)
-                nextEnemy.DealDamageToCharacter(0.5f, DamageTypes.Electric);
+                nextEnemy.DealDamageToCharacter(CalculateTotalDamage(), DamageTypes.Electric);
 
             _lightningStrikesToDispose.Add(line);
             _lightningStrikesToDispose.Add(animatedSprite);

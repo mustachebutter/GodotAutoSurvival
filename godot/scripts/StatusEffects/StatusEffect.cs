@@ -7,6 +7,9 @@ public class StatusEffect
     public Timer MainTimer { get; private set; }
     public BaseCharacter SourceCharacter { get; set; }
     public StatusEffectData StatusEffectData { get; protected set; }
+    // Multiplier for status effect damage
+    public const float STATUS_EFFECT_DAMAGE_MULTIPLIER = 0.1f;
+
     public virtual void StartStatusEffect () 
     {
 		if (Target.IsDead)
@@ -23,6 +26,22 @@ public class StatusEffect
         Utils.DestroyTimer(MainTimer);
     }
 
+	public virtual float CalculateTotalDamage()
+	{
+		if (SourceCharacter == null)
+		{
+			LoggingUtils.Error("Source character for status effect is null, will have 0 character damage");
+		}
+
+		float characterDamage = SourceCharacter == null ? 
+			0
+			: SourceCharacter.CharacterStatComponent.GetCompleteStatFromName("Attack").totalValue;
+
+		return (float) Math.Round(
+			StatusEffectData.Damage + (characterDamage * STATUS_EFFECT_DAMAGE_MULTIPLIER),
+			2
+		);
+	}
     public virtual void OnTargetDied() { }
 
     //Entry point for Status Effect, which is invoked in Projectile or any source of damage.

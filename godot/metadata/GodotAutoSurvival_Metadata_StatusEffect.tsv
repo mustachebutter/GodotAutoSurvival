@@ -1,5 +1,5 @@
 ID	Name	Description	VfxName	IsStackable	NumberOfStacks	Duration	Damage	DamageType	TickPerEverySecond
 Status_Default	Default	Default status effect. Some keys were entered wrong!	vfx_default	FALSE	0	0.00	0.00	DamageTypes.Normal	0.00
 Status_DOT_Burn	Burn	Burns the target, ticks damage every x seconds	vfx_burn	FALSE	0	3.00	5.00	DamageTypes.Fire	0.30
-Status_Zap	Zap	Marks the target with a zap effect. After a while it launches another lighting bolt to the next target in range.	vfx_zap	TRUE	1	2.00	0.00	DamageTypes.Electric	0.00
+Status_Zap	Zap	Marks the target with a zap effect. After a while it launches another lighting bolt to the next target in range.	vfx_zap	TRUE	1	2.00	10.00	DamageTypes.Electric	0.00
 Status_Focus	Focus	Doesn’t deal damage but lasts for Y seconds and is stackable. The stacks will fall off one by one. For every stack, the damage of the beam will be increased by A%, capping at B% (5 stacks). 	vfx_default	TRUE	0	5	0	DamageTypes.Normal	0

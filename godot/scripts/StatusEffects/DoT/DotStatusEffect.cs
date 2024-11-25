@@ -3,7 +3,6 @@ using Godot;
 
 public class DotStatusEffect : StatusEffect
 {
-	public const float STATUS_EFFECT_DAMAGE_MULTIPLIER = 0.1f;
 	protected Timer _tickTimer;
 
 	public override void StartStatusEffect()
@@ -15,23 +14,6 @@ public class DotStatusEffect : StatusEffect
 		
 		Target.OnCharacterDeadEvent -= OnTargetDied;
 		Target.OnCharacterDeadEvent += OnTargetDied;
-	}
-
-	public virtual float CalculateTotalDamage()
-	{
-		if (SourceCharacter == null)
-		{
-			LoggingUtils.Error("Source character for status effect is null, will have 0 character damage");
-		}
-
-		float characterDamage = SourceCharacter == null ? 
-			0
-			: SourceCharacter.CharacterStatComponent.GetCompleteStatFromName("Attack").totalValue;
-
-		return (float) Math.Round(
-			StatusEffectData.Damage + (characterDamage * STATUS_EFFECT_DAMAGE_MULTIPLIER),
-			2
-		);
 	}
 
 	public override void HandleStatusEffect()
