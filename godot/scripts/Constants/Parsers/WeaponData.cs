@@ -34,6 +34,8 @@ public class WeaponDamageData
 	public UpgradableObject Damage { get; set; }
     public UpgradableObject AttackSpeed { get; set; }
     public UpgradableObject Speed { get; set; }
+
+    public event Action OnWeaponLevelUpgraded;
     public WeaponDamageData DeepCopy()
     {
         return new WeaponDamageData
@@ -54,22 +56,19 @@ public class WeaponDamageData
             LoggingUtils.Debug($"[{typeof(WeaponData)}] At max weapon level already. Returning");
             // We can assume we will upgrade one by one. But if it was upgraded with an amount greater than 1
             // Then we can just set the level to max (and discard the remaining)
-            if (levelToUpgrade > 1)
-            {
-                levelToUpgrade = GlobalConfigs.MAX_WEAPON_LEVEL - MainLevel;
-                MainLevel = GlobalConfigs.MAX_WEAPON_LEVEL;
-
-                Damage.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade, WeaponId);
-                AttackSpeed.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade, WeaponId);
-                Speed.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade, WeaponId);
-            }
-            return;
+            if (levelToUpgrade <= 1)
+                return;
+            
+            levelToUpgrade = GlobalConfigs.MAX_WEAPON_LEVEL - MainLevel;
+            MainLevel = GlobalConfigs.MAX_WEAPON_LEVEL;
         }
 
         MainLevel += levelToUpgrade;
         Damage.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade, WeaponId);
         AttackSpeed.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade, WeaponId);
         Speed.Upgrade(UpgradableObjectTypes.Weapon, levelToUpgrade, WeaponId);
+
+        OnWeaponLevelUpgraded?.Invoke();
     }
 }
 

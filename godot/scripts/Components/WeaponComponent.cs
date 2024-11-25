@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -12,6 +13,7 @@ public partial class WeaponComponent : Node2D
 	private List<string> weapons = new List<string>();
 	int index = 0;
 	MainHUD MainHUD { get; set; }
+	public event Action<WeaponData> OnWeaponUpgradedRefreshHUD;
 
 	public override void _Ready()
 	{
@@ -30,9 +32,14 @@ public partial class WeaponComponent : Node2D
 
 		MainHUD = UtilGetter.GetMainHUD();
 		MainHUD.SetDebugWeapon(weaponData[weapons[index]]);
+		
+		foreach (var item in weaponData)
+		{
+			item.Value.WeaponDamageData.OnWeaponLevelUpgraded += () => MainHUD.SetDebugWeapon(weaponData[weapons[index]]);
+		}
 	}
 
-	public void StartTimer(float seconds = 0.0f)
+    public void StartTimer(float seconds = 0.0f)
 	{
 		if (seconds > 0)
 		{	
