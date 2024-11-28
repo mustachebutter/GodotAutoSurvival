@@ -98,8 +98,8 @@ public class AugmentCardData
 
                 foreach (var item in GlobalConfigs.WEAPON_STATS)
                 {
-                    var currentLevelDamageData = DataParser.GetWeaponDamageByLevel(WeaponName, item, CurrentLevel);
-                    var nextLevelDamageData = DataParser.GetWeaponDamageByLevel(WeaponName, item, CurrentLevel + 1);
+                    var currentLevelDamageData = DataParser.GetWeaponDamageByLevel(WeaponData.WeaponId, item, CurrentLevel);
+                    var nextLevelDamageData = DataParser.GetWeaponDamageByLevel(WeaponData.WeaponId, item, CurrentLevel + 1);
                     augmentDescription.Text += $"{currentLevelDamageData.Name.Split("_")[1]}:";
                     augmentDescription.Text += $"[color=red]{currentLevelDamageData.Value}[/color] => [color=green]{nextLevelDamageData.Value}[/color]\n";
                 }

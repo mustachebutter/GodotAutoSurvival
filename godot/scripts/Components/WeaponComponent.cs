@@ -39,7 +39,7 @@ public partial class WeaponComponent : Node2D
 		}
 	}
 
-    public void StartTimer(float seconds = 0.0f)
+	public void StartTimer(float seconds = 0.0f)
 	{
 		if (seconds > 0)
 		{	

@@ -176,7 +176,7 @@ public static class WeaponDataParser
                     Speed = new UpgradableObject { Name = "WStat_Speed", Level = 1, Value = float.Parse(content[5]) },
                 };
                 
-                LoggingUtils.Info($"{projectileDamageData.WeaponId}, {projectileDamageData.DamageType}");
+                LoggingUtils.Info($"{projectileDamageData.WeaponId}, {projectileDamageData.DamageType} ({projectileDamageData.Damage.Value} - {projectileDamageData.AttackSpeed.Value} - {projectileDamageData.Speed.Value})");
                 damageDatas.Add(projectileDamageData);
             }
 

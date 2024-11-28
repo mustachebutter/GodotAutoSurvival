@@ -158,7 +158,7 @@ public static class DataParser
 		}
 
 		var weaponDamageDatabse = GetWeaponDamageDatabase();
-		var currentWeaponDamageData = weaponDamageDatabse.Find(x => level == x.MainLevel);
+		var currentWeaponDamageData = weaponDamageDatabse.Find(x => level == x.MainLevel && weaponId == x.WeaponId);
 
 		if (currentWeaponDamageData == null)
 		{
