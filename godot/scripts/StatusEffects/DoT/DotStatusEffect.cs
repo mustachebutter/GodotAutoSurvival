@@ -5,15 +5,23 @@ public class DotStatusEffect : StatusEffect
 {
 	protected Timer _tickTimer;
 
+	// ######################################################
+	// CONSTRUCTOR
+	// ######################################################
+	#region CONSTRUCTOR
+
+	#endregion
+
+	// ######################################################
+	// STATUS EFFECT TIMELINE
+	// ######################################################
+	#region STATUS EFFECT TIMELINE
 	public override void StartStatusEffect()
 	{
 		base.StartStatusEffect();
 		
 		_tickTimer = Utils.CreateTimer(Target, HandleStatusEffect, StatusEffectData.TickPerEverySecond, false);
-		_tickTimer?.Start();
-		
-		Target.OnCharacterDeadEvent -= OnTargetDied;
-		Target.OnCharacterDeadEvent += OnTargetDied;
+		_tickTimer?.Start();		
 	}
 
 	public override void HandleStatusEffect()
@@ -22,9 +30,9 @@ public class DotStatusEffect : StatusEffect
 		Target.DealDamageToCharacter(CalculateTotalDamage(), StatusEffectData.DamageType);
 	}
 
-	public override void OnStatusEffectEnd()
+	public override void EndStatusEffect()
 	{
-		base.OnStatusEffectEnd();
+		base.EndStatusEffect();
 		if (Target != null)
 		{
 			Target.OnCharacterDeadEvent -= OnTargetDied;
@@ -35,5 +43,24 @@ public class DotStatusEffect : StatusEffect
 		//!!! since this is called last.
 		Target = null;
 		SourceCharacter = null;
-	}
+	}	
+	#endregion
+
+	// ######################################################
+	// EVENT HANDLING
+	// ######################################################
+	#region EVENT HANDLING
+	#endregion
+
+	// ######################################################
+	// HELPER METHODS
+	// ######################################################
+	#region HELPER METHODS
+	#endregion
+
+	// ######################################################
+	// DECONSTRUCTOR/ CLEAN UP
+	// ######################################################
+	#region DECONSTRUCTOR/ CLEAN UP
+	#endregion
 }

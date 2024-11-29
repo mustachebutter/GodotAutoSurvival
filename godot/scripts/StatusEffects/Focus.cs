@@ -38,8 +38,8 @@ public class Focus : StatusEffect
         base.HandleStatusEffect();
     }
 
-    public override void OnStatusEffectEnd()
+    public override void EndStatusEffect()
     {
-        base.OnStatusEffectEnd();
+        base.EndStatusEffect();
     }
 }

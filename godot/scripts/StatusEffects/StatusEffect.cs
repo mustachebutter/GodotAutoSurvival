@@ -10,22 +10,42 @@ public class StatusEffect
     // Multiplier for status effect damage
     public const float STATUS_EFFECT_DAMAGE_MULTIPLIER = 0.1f;
 
-    public virtual void StartStatusEffect () 
+    // ######################################################
+    // CONSTRUCTOR
+    // ######################################################
+    #region CONSTRUCTOR
+
+    #endregion
+
+    // ######################################################
+    // STATUS EFFECT TIMELINE
+    // ######################################################
+    #region STATUS EFFECT TIMELINE
+    public virtual void StartStatusEffect ()
     {
-		if (Target.IsDead)
-		{
-			OnTargetDied();
-			return;
-		}
+        Target.OnCharacterDeadEvent -= OnTargetDied;
+		Target.OnCharacterDeadEvent += OnTargetDied;
     }
     public virtual void HandleStatusEffect () { }
-    public virtual void OnStatusEffectEnd () 
+    public virtual void EndStatusEffect () 
     {
         Target.StatusEffectComponent.ClearEffect(this);
         Target.VisualEffectComponent.ClearVisualEffect();
         Utils.DestroyTimer(MainTimer);
     }
+    #endregion
+    
+    // ######################################################
+    // EVENT HANDLING
+    // ######################################################
+    #region EVENT HANDLING
+    public virtual void OnTargetDied() { }
+    #endregion
 
+    // ######################################################
+    // HELPER METHODS
+    // ######################################################
+    #region HELPER METHODS
 	public virtual float CalculateTotalDamage()
 	{
 		if (SourceCharacter == null)
@@ -42,14 +62,11 @@ public class StatusEffect
 			2
 		);
 	}
-    public virtual void OnTargetDied() { }
-
-    //Entry point for Status Effect, which is invoked in Projectile or any source of damage.
 
     public void CreateMainTimer()
     {
         // This is the main timer for the buff/debuff
-        MainTimer = Utils.CreateTimer(Target, OnStatusEffectEnd, StatusEffectData.Duration, true);
+        MainTimer = Utils.CreateTimer(Target, EndStatusEffect, StatusEffectData.Duration, true);
     }
 
     public void StartMainTimer()
@@ -66,4 +83,11 @@ public class StatusEffect
         
         MainTimer?.Start();
     }
+    #endregion
+
+    // ######################################################
+    // DECONSTRUCTOR/ CLEAN UP
+    // ######################################################
+    #region DECONSTRUCTOR/ CLEAN UP
+    #endregion
 }

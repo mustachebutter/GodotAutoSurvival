@@ -27,16 +27,8 @@ public partial class Projectile : Weapon
 		{
 			Enemy enemy = (Enemy) collision.GetCollider();
 
+			HandleProjectileEffect(SourceCharacter, enemy);
 			enemy.DealDamageToCharacter(CalculateTotalDamage());
-			
-			if (!enemy.IsDead)
-			{
-				HandleProjectileEffect(SourceCharacter, enemy);
-			}
-			else
-			{
-				OnTargetDied(enemy);
-			}
 
 			// When the projectile hits, destroy itself
 			QueueFree();
@@ -79,6 +71,7 @@ public partial class Projectile : Weapon
 		mainNode.SpawnNode(node);
 	}
 
+	// This shouldn't take precedent of StatusEffect
 	public override void OnTargetDied(BaseCharacter target)
 	{
 		base.OnTargetDied(target);

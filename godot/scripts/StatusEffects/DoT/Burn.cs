@@ -5,6 +5,12 @@ using Godot;
 public class Burn : DotStatusEffect
 {
     private VfxBurnExplosion _burnExplosion;
+
+    // ######################################################
+    // CONSTRUCTOR
+    // ######################################################
+    #region CONSTRUCTOR
+
     public Burn(StatusEffectData statusEffectData)
     {
         try
@@ -22,7 +28,12 @@ public class Burn : DotStatusEffect
         _burnExplosion = (VfxBurnExplosion) Scenes.VfxBurnExplosion.Instantiate();
         _burnExplosion.ReportEnemies += AffectSideTargets;
     }
+    #endregion
 
+    // ######################################################
+    // STATUS EFFECT TIMELINE
+    // ######################################################
+    #region STATUS EFFECT TIMELINE
     public override void StartStatusEffect()
     {
         base.StartStatusEffect();
@@ -33,12 +44,17 @@ public class Burn : DotStatusEffect
         base.HandleStatusEffect();
 	}
 
-    public override void OnStatusEffectEnd()
+    public override void EndStatusEffect()
     {
-        base.OnStatusEffectEnd();
+        base.EndStatusEffect();
 
     }
+    #endregion
 
+    // ######################################################
+    // EVENT HANDLING
+    // ######################################################
+    #region EVENT HANDLING
     public override void OnTargetDied()
     {
         base.OnTargetDied();
@@ -58,7 +74,12 @@ public class Burn : DotStatusEffect
         _burnExplosion.ScanForEnemies(Target);        
         // Should theoretically clean up status effect when the target dies
     }
+    #endregion
 
+    // ######################################################
+    // HELPER METHODS
+    // ######################################################
+    #region HELPER METHODS
     public void AffectSideTargets(List<Enemy> enemies)
     {
         if (enemies.Count > 0)
@@ -78,7 +99,12 @@ public class Burn : DotStatusEffect
         }
 
     }
+    #endregion
 
+    // ######################################################
+    // DECONSTRUCTOR/ CLEAN UP
+    // ######################################################
+    #region DECONSTRUCTOR/ CLEAN UP
     public void CleanUpBurnExplosion()
     {
         _burnExplosion.QueueFree();
@@ -88,4 +114,5 @@ public class Burn : DotStatusEffect
     {
          
     }
+    #endregion
 }

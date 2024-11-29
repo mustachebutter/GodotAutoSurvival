@@ -10,14 +10,10 @@ public partial class StatusEffectComponent : Node2D
 	{	
 		currentStatusEffect.SourceCharacter = sourceCharacter;
 		currentStatusEffect.Target = targetCharacter;
-		if (currentStatusEffect.MainTimer == null && currentStatusEffect.Target != null)
-			currentStatusEffect.CreateMainTimer();
 		// Should do custom logic here
 		// eg. Stackable status
 		if (StatusEffectList == null) return;
 
-		// Currently there is no stackable status effect yet
-		// So we're doing it this way
 		// Find out if the status effect is already applied
 		var status = StatusEffectList.Find(x => x.StatusEffectData.StatusEffectId == currentStatusEffect.StatusEffectData.StatusEffectId);
 
@@ -47,6 +43,9 @@ public partial class StatusEffectComponent : Node2D
 		}
 
 		// This is the main timer for the buff/debuff
+		if (status.MainTimer == null && status.Target != null)
+			status.CreateMainTimer();
+
 		status.StartMainTimer();
 
 	}
