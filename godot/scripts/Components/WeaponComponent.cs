@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -12,15 +13,30 @@ public partial class WeaponComponent : Node2D
 	private List<string> weapons = new List<string>();
 	int index = 0;
 	MainHUD MainHUD { get; set; }
+	public event Action<WeaponData> OnWeaponUpgradedRefreshHUD;
 
 	public override void _Ready()
 	{
 		base._Ready();
 		_player = GetParent<Player>();
-		weaponData = WeaponParsedData.GetAllData();
+
+		foreach (var weapon in DataParser.GetWeaponDatabase())
+		{
+			if (weapon.Value.WeaponId != "Weapon_Default")
+			{
+				var temp_weapon = weapon.Value.DeepCopy();
+				weaponData.Add(weapon.Key, temp_weapon);
+			}
+		}
 		weapons = weaponData.Keys.Where(x => x != "Weapon_Default").ToList();
-		MainHUD = UtilGetter.GetSceneTree().Root.GetNode<MainHUD>("Node2D/MainHUD");
+
+		MainHUD = UtilGetter.GetMainHUD();
 		MainHUD.SetDebugWeapon(weaponData[weapons[index]]);
+		
+		foreach (var item in weaponData)
+		{
+			item.Value.WeaponDamageData.OnWeaponLevelUpgraded += () => MainHUD.SetDebugWeapon(weaponData[weapons[index]]);
+		}
 	}
 
 	public void StartTimer(float seconds = 0.0f)
@@ -32,6 +48,17 @@ public partial class WeaponComponent : Node2D
 			_timer?.Start();
 
 		}
+	}
+
+	public void OverrideTimer(float seconds = 0.0f)
+	{
+		if (!_timer.IsStopped())
+		{
+			_timer.Stop();
+		}
+
+		_timer.WaitTime = seconds;
+		_timer.Start();
 	}
 
 	private void StartWeapon()
@@ -53,7 +80,7 @@ public partial class WeaponComponent : Node2D
 
 		// Add the projectile to the main scene instead
 		if (Weapon.WeaponData.WeaponType == WeaponTypes.Projectile)
-			GetTree().Root.GetNode("Node2D").GetNode("ProjectileParentNode").AddChild(Weapon);
+			UtilGetter.GetProjectileParentNode().AddChild(Weapon);
 		else
 			_player.AddChild(Weapon);
 

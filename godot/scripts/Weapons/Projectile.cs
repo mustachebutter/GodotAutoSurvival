@@ -27,9 +27,9 @@ public partial class Projectile : Weapon
 		{
 			Enemy enemy = (Enemy) collision.GetCollider();
 
-			enemy.DealDamageToCharacter(WeaponData.Damage);
-			
-			HandleProjectileEffect(enemy);
+			HandleProjectileEffect(SourceCharacter, enemy);
+			enemy.DealDamageToCharacter(CalculateTotalDamage());
+
 			// When the projectile hits, destroy itself
 			QueueFree();
 
@@ -45,18 +45,19 @@ public partial class Projectile : Weapon
 			QueueFree();
 	}
 
-	public void ShootAtTarget(Vector2 sourcePosition, Vector2 targetPosition, float playerRange)
+	public void ShootAtTarget(Vector2 sourcePosition, Vector2 targetPosition, float playerRange, BaseCharacter sourceCharacter)
 	{
 		// This is set so that the projectile can shoot from the player
 		Position = sourcePosition;
 		_previousPosition = Position;
 		_playerRange = playerRange;
+		SourceCharacter = sourceCharacter;
 
 		// Determine the direction (look at rotation)
 		Vector2 direction = (targetPosition - sourcePosition).Normalized();
 		LookAt(GlobalPosition + direction);
 		// LookAt(Vector2.Left);
-		Velocity = direction * WeaponData.Speed;
+		Velocity = direction * WeaponData.WeaponDamageData.Speed.Value;
 		// Play the animation
 		_animatedSprite.Play(WeaponData.AnimationName);
 
@@ -70,9 +71,18 @@ public partial class Projectile : Weapon
 		mainNode.SpawnNode(node);
 	}
 
+	// This shouldn't take precedent of StatusEffect
+	public override void OnTargetDied(BaseCharacter target)
+	{
+		base.OnTargetDied(target);
+
+		target.DestroyCharacter();
+	}
+
 	public override void _ExitTree()
 	{
 		base._ExitTree();
 		StatusEffect = null;
+		SourceCharacter = null;
 	}
 }

@@ -5,7 +5,13 @@ using Godot;
 public class Burn : DotStatusEffect
 {
     private VfxBurnExplosion _burnExplosion;
-    public Burn(Node2D source, StatusEffectData statusEffectData)
+
+    // ######################################################
+    // CONSTRUCTOR
+    // ######################################################
+    #region CONSTRUCTOR
+
+    public Burn(StatusEffectData statusEffectData)
     {
         try
         {
@@ -17,13 +23,17 @@ public class Burn : DotStatusEffect
             throw;
         }
 
-        Source = source;
         StatusEffectData = statusEffectData;
         // Initialize Explosion
         _burnExplosion = (VfxBurnExplosion) Scenes.VfxBurnExplosion.Instantiate();
         _burnExplosion.ReportEnemies += AffectSideTargets;
     }
+    #endregion
 
+    // ######################################################
+    // STATUS EFFECT TIMELINE
+    // ######################################################
+    #region STATUS EFFECT TIMELINE
     public override void StartStatusEffect()
     {
         base.StartStatusEffect();
@@ -34,18 +44,24 @@ public class Burn : DotStatusEffect
         base.HandleStatusEffect();
 	}
 
-    public override void OnStatusEffectEnd()
+    public override void EndStatusEffect()
     {
-        base.OnStatusEffectEnd();
+        base.EndStatusEffect();
 
     }
+    #endregion
 
+    // ######################################################
+    // EVENT HANDLING
+    // ######################################################
+    #region EVENT HANDLING
     public override void OnTargetDied()
     {
         base.OnTargetDied();
+        if (Target == null) LoggingUtils.Debug("TARGET NULL");
         // When the target died, spread to other closeby targets
         //Add to tree
-        UtilGetter.GetSceneTree().Root.GetNode("Node2D").GetNode("VFXParentNode").AddChild(_burnExplosion);
+        UtilGetter.GetVfxParentNode().AddChild(_burnExplosion);
         _burnExplosion.Position = Target.Position;
         
         var explosionAnimatedSprite = _burnExplosion.AnimatedSprite2D;
@@ -58,7 +74,12 @@ public class Burn : DotStatusEffect
         _burnExplosion.ScanForEnemies(Target);        
         // Should theoretically clean up status effect when the target dies
     }
+    #endregion
 
+    // ######################################################
+    // HELPER METHODS
+    // ######################################################
+    #region HELPER METHODS
     public void AffectSideTargets(List<Enemy> enemies)
     {
         if (enemies.Count > 0)
@@ -67,19 +88,24 @@ public class Burn : DotStatusEffect
             {
                 // Create new Burn instance
                 var burn = new Burn(
-                    enemy,
-                    StatusEffectParsedData.GetData("Status_DOT_Burn")
+                    DataParser.GetStatusEffectData("Status_DOT_Burn")
 		        );
 
                 // Deals damage to nearby targets
                 // Apply debuffs to nearby targets
-                enemy.StatusEffectComponent.ApplyEffectToCharacter(burn);
+                enemy.StatusEffectComponent.ApplyEffectToCharacter(burn, SourceCharacter, enemy);
+                // TODO: This explosion spread deals base damage of status effect
                 enemy.DealDamageToCharacter(burn.StatusEffectData.Damage, burn.StatusEffectData.DamageType);
             }
         }
 
     }
+    #endregion
 
+    // ######################################################
+    // DECONSTRUCTOR/ CLEAN UP
+    // ######################################################
+    #region DECONSTRUCTOR/ CLEAN UP
     public void CleanUpBurnExplosion()
     {
         _burnExplosion.QueueFree();
@@ -89,4 +115,5 @@ public class Burn : DotStatusEffect
     {
          
     }
+    #endregion
 }

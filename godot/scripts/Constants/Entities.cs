@@ -5,16 +5,22 @@ using Godot;
 
 public static class UtilGetter
 {
-	public static SceneTree GetSceneTree()
+	public static Node2D GetMotherNode()
 	{
 		var sceneTree = (SceneTree) Engine.GetMainLoop() ?? throw new InvalidOperationException($"ERROR [{nameof(UtilGetter)}] Could not get the Scene Tree");
-		
-		return sceneTree;
+		var motherNode = sceneTree.Root.GetNode<Node2D>("MotherNode");
+
+		return motherNode;
 	}
+
+	public static Node2D GetCharactersParentNode() { return GetMotherNode().GetNode<Node2D>("CharactersParentNode"); }
+	public static Node2D GetVfxParentNode() { return GetMotherNode().GetNode<Node2D>("VFXParentNode"); }
+	public static Node2D GetProjectileParentNode() { return GetMotherNode().GetNode<Node2D>("ProjectileParentNode"); }
+	public static MainHUD GetMainHUD() { return GetMotherNode().GetNode<MainHUD>("MainHUD"); }
 
 	public static Player GetMainPlayer()
 	{
-		var player = GetSceneTree().Root.GetNode<Node2D>("Node2D/CharactersParentNode").GetNode<CharacterBody2D>("Player");
+		var player = GetCharactersParentNode().GetNode<CharacterBody2D>("Player");
 		
 		if (player != null)
 		{
@@ -24,30 +30,35 @@ public static class UtilGetter
 		LoggingUtils.Error("Could not retrieved player node");
 		throw new Exception("Could not retrieved player node");
 	}
-}
-public static class ProjectileTypes
-{
-	// DEBUG: Do this for quick test
-	// Please change this to an actual database that reads from .csv
-	// Or a dictionary!
-	public static string Zap = "Zap";
-	public static string CrissCross = "CrissCross";
-	public static string Fireball = "Fireball";
+
+	public static MobSpawnerComponent GetMainMobSpawner()
+	{
+		var mobSpawner = GetMotherNode().GetNode<MobSpawnerComponent>("MobSpawnerComponent");
+
+		if (mobSpawner != null)
+		{
+			return (MobSpawnerComponent) mobSpawner;
+		}
+
+		LoggingUtils.Error("Could not retrieved mob spawner node");
+		throw new Exception("Could not retrieved mob spawner node");
+	}
+
+	public static bool GetPaused()
+	{
+		var sceneTree = (SceneTree) Engine.GetMainLoop() ?? throw new InvalidOperationException($"ERROR [{nameof(UtilGetter)}] Could not get the Scene Tree");
+		return sceneTree.Paused;
+	}
 }
 
-public enum DamageTypes
-{
-	Fire,
-	Electric,
-	Normal,
-	Light,
-}
+public enum DamageTypes { Fire, Electric, Normal, Light, }
+public enum WeaponTypes { Projectile, Beam, }
+public enum UpgradableObjectTypes { Stat, Weapon, StatusEffect, };
+public enum AugmentType { Stat, Weapon, Item };
+public enum CardRarity { Common, Rare, Epic, Legendary, Mythic }
+public enum StatTypes { Stat, Modifier };
 
-public enum WeaponTypes
-{
-	Projectile,
-	Beam,
-}
+
 
 public static class Scenes
 {
@@ -56,70 +67,8 @@ public static class Scenes
 	public static PackedScene UiDamageNumber = (PackedScene) GD.Load("res://scenes/ui/damage_number_component.tscn");
 	public static PackedScene VfxBurnExplosion = (PackedScene) GD.Load("res://scenes/vfx/vfx_burn_explosion.tscn");
 	public static PackedScene VfxChainLightning = (PackedScene) GD.Load("res://scenes/vfx/vfx_chain_lightning.tscn");
-}
+	public static PackedScene ExperienceOrb = (PackedScene) GD.Load("res://scenes/experience_orb.tscn");
+	public static PackedScene AugmentHud = (PackedScene) GD.Load("res://scenes/ui/augment_hud.tscn");
+	public static PackedScene AugmentCard = (PackedScene) GD.Load("res://scenes/ui/augment_card.tscn");
 
-public static class StatusEffectParsedData
-{
-	public static Dictionary<string, StatusEffectData> dictionary = new Dictionary<string, StatusEffectData>();
-	static StatusEffectParsedData()
-	{
-		var path  = "res://metadata/GodotAutoSurvival_Metadata_StatusEffect.tsv";
-		var seList = StatusEffectDataParser.ParseData(path);
-		
-		foreach (var se in seList)
-		{
-			dictionary.Add(se.StatusEffectId, se);
-		}
-	}
-
-	public static StatusEffectData GetData(string key)
-	{
-		StatusEffectData statusEffectData;
-		if(dictionary.TryGetValue(key, out statusEffectData))
-		{
-			// We have to return a DeepCopy because we are instantiating StatusEffect Data
-			// one time only. Deep copy will generate a new object with a different
-			// address and default state variables.
-			return statusEffectData.DeepCopy();
-		}
-		else
-		{
-			LoggingUtils.Error("No status effect was found, applying the default status effect values!");
-			return dictionary["Status_Default"];
-		}
-	}
-}
-
-public static class WeaponParsedData
-{
-	public static Dictionary<string, WeaponData> dictionary = new Dictionary<string, WeaponData>();
-	static WeaponParsedData()
-	{
-		var path  = "res://metadata/GodotAutoSurvival_Metadata_Weapon.tsv";
-		var pList = WeaponDataParser.ParseData(path);
-		
-		foreach (var p in pList)
-		{
-			dictionary.Add(p.WeaponId, p);
-		}
-	}
-
-	public static WeaponData GetData(string key)
-	{
-		WeaponData weaponData;
-		if(dictionary.TryGetValue(key, out weaponData))
-		{
-			return weaponData;
-		}
-		else
-		{
-			LoggingUtils.Error("No weapon was found, applying the default weapon values!");
-			return dictionary["Weapon_Default"];
-		}
-	}
-
-	public static Dictionary<string, WeaponData> GetAllData()
-	{
-		return dictionary;
-	}
 }

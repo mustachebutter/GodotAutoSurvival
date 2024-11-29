@@ -15,6 +15,11 @@ run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.1", "C#", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+BeehaveGlobalMetrics="*res://addons/beehave/metrics/beehave_global_metrics.gd"
+BeehaveGlobalDebugger="*res://addons/beehave/debug/global_debugger.gd"
+
 [display]
 
 window/size/viewport_width=1280
@@ -26,7 +31,7 @@ project/assembly_name="RustAutoSurvival"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/GameComponents/plugin.cfg", "res://addons/UI/plugin.cfg")
+enabled=PackedStringArray("res://addons/GameComponents/plugin.cfg", "res://addons/UI/plugin.cfg", "res://addons/beehave/plugin.cfg")
 
 [input]
 
@@ -68,7 +73,9 @@ SwitchWeapon={
 2d_physics/layer_3="Enemy"
 2d_physics/layer_4="Scanner"
 2d_physics/layer_5="StatusEffect"
+2d_physics/layer_6="ExperienceOrb"
 
 [rendering]
 
 renderer/rendering_method="mobile"
+environment/defaults/default_clear_color=Color(0.301961, 0.301961, 0.301961, 1)

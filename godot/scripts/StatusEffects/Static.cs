@@ -7,7 +7,13 @@ public class Static : StatusEffect
     private VfxChainLightning _chainLightning;
 
     private List<Node2D> _lightningStrikesToDispose = new List<Node2D>();
-    public Static(Node2D source, StatusEffectData statusEffectData)
+
+    // ######################################################
+    // CONSTRUCTOR
+    // ######################################################
+    #region CONSTRUCTOR
+
+    public Static(StatusEffectData statusEffectData)
     {
         try
         {
@@ -19,23 +25,27 @@ public class Static : StatusEffect
             throw;
         }
         
-        Source = source;
         StatusEffectData = statusEffectData;
 
         _chainLightning = (VfxChainLightning) Scenes.VfxChainLightning.Instantiate();
         _chainLightning.ReportEnemies += LightningStrikeTargets;
     }
+    #endregion
 
+    // ######################################################
+    // STATUS EFFECT TIMELINE
+    // ######################################################
+    #region STATUS EFFECT TIMELINE
     public override void StartStatusEffect()
     {
         base.StartStatusEffect();
         LoggingUtils.Debug($"Static stacks: {StatusEffectData.NumberOfStacks}");
-		if (StatusEffectData.NumberOfStacks != 0 && StatusEffectData.NumberOfStacks % 3 == 0)
+		if (StatusEffectData.NumberOfStacks != 0 && StatusEffectData.NumberOfStacks % 2 == 0)
 		{
             _chainLightning.Position = Target.Position;
             if (_chainLightning.GetParent() == null)
             {
-                UtilGetter.GetSceneTree().Root.GetNode("Node2D").GetNode("VFXParentNode").AddChild(_chainLightning);
+                UtilGetter.GetVfxParentNode().AddChild(_chainLightning);
             }
             // Trigger the lightning strike
 			_chainLightning.ScanForEnemies();
@@ -48,14 +58,19 @@ public class Static : StatusEffect
         base.HandleStatusEffect();
     }
     
-    public override void OnStatusEffectEnd()
+    public override void EndStatusEffect()
     {
-        base.OnStatusEffectEnd();
+        base.EndStatusEffect();
     }
+    #endregion
 
+    // ######################################################
+    // EVENT HANDLING
+    // ######################################################
+    #region EVENT HANDLING
     public void LightningStrikeTargets(List<Enemy> enemies)
     {
-        var vfxRootNode = UtilGetter.GetSceneTree().Root.GetNode("Node2D").GetNode("VFXParentNode");
+        var vfxRootNode = UtilGetter.GetVfxParentNode();
         for (int i = 0; i < enemies.Count - 1; i++)
         {
             var currentEnemy = enemies[i];
@@ -63,7 +78,6 @@ public class Static : StatusEffect
 
             var line = new Line2D();
             line.Points = new Vector2[] { currentEnemy.Position, nextEnemy.Position };
-            // line.DefaultColor = new Color(1, 1, 0, 0.5f);
             line.DefaultColor = new Color(1, 1, 0, 0.0f);
             vfxRootNode.AddChild(line);
 
@@ -74,24 +88,42 @@ public class Static : StatusEffect
             animatedSprite.Animation = "vfx_chain_lightning";
             animatedSprite.SpriteFrames.SetAnimationLoop("vfx_chain_lightning", false);
 
+            _lightningStrikesToDispose.Add(line);
+            _lightningStrikesToDispose.Add(animatedSprite);
+
             // So from what I can understand
             // This angle is between the 2 vectors has a starting point from origin
             // and to get the rotation of the line between the 2 points you need to rotate by an extra 90 degrees (Pi/2)
             var angle = currentEnemy.Position.AngleToPoint(nextEnemy.Position);
             animatedSprite.Rotation = angle - (Mathf.Pi / 2);
             vfxRootNode.AddChild(animatedSprite);
-            animatedSprite.Play();
 
-            currentEnemy.DealDamageToCharacter(0.5f, DamageTypes.Electric);
+            currentEnemy.DealDamageToCharacter(CalculateTotalDamage(), DamageTypes.Electric);
             // Also deal damage to the last character because there's no iteration for it
             if (i == enemies.Count - 2)
-                nextEnemy.DealDamageToCharacter(0.5f, DamageTypes.Electric);
+                nextEnemy.DealDamageToCharacter(CalculateTotalDamage(), DamageTypes.Electric);
 
-            _lightningStrikesToDispose.Add(line);
-            _lightningStrikesToDispose.Add(animatedSprite);
+            animatedSprite.Play();
         }
     }
 
+    public override void OnTargetDied()
+    {
+        base.OnTargetDied();
+        _chainLightning.QueueFree();
+    }
+    #endregion
+
+    // ######################################################
+    // HELPER METHODS
+    // ######################################################
+    #region HELPER METHODS
+    #endregion
+
+    // ######################################################
+    // DECONSTRUCTOR/ CLEAN UP
+    // ######################################################
+    #region DECONSTRUCTOR/ CLEAN UP
     private void CleanUpLightningStrike()
     {
         foreach (var element in _lightningStrikesToDispose)
@@ -101,5 +133,5 @@ public class Static : StatusEffect
 
         _lightningStrikesToDispose.Clear();
     }
-
+    #endregion
 }

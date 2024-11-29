@@ -19,6 +19,14 @@ public partial class GameComponentsPlugin : EditorPlugin
 		script = GD.Load<Script>("res://scripts/Components/WeaponComponent.cs");
 		texture = GD.Load<Texture2D>("res://assets/icons/Icon_Weapon.png");
 		AddCustomType("WeaponComponent", "Node2D", script, texture);
+
+		script = GD.Load<Script>("res://scripts/Components/CharacterStatComponent.cs");
+		texture = GD.Load<Texture2D>("res://assets/icons/Icon_Stat.png");
+		AddCustomType("CharacterStatComponent", "Node2D", script, texture);
+
+		script = GD.Load<Script>("res://scripts/Components/CharacterLevelComponent.cs");
+		texture = GD.Load<Texture2D>("res://assets/icons/Icon_Level.png");
+		AddCustomType("CharacterLevelComponent", "Node2D", script, texture);
 	}
 
 	public override void _ExitTree()
@@ -27,6 +35,8 @@ public partial class GameComponentsPlugin : EditorPlugin
 		RemoveCustomType("StatusEffectComponent");
 		RemoveCustomType("VisualEffectComponent");
 		RemoveCustomType("WeaponComponent");
+		RemoveCustomType("CharacterStatComponent");
+		RemoveCustomType("CharacterLevelComponent");
 	}
 }
 #endif

@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://cr752cyhod5wg"]
+[gd_scene load_steps=5 format=3 uid="uid://cr752cyhod5wg"]
 
 [ext_resource type="Script" path="res://scripts/Main.cs" id="1_byp4v"]
 [ext_resource type="PackedScene" uid="uid://bxswmkfhnml0w" path="res://scenes/ui/main_hud.tscn" id="2_qc52h"]
+[ext_resource type="Script" path="res://scripts/Components/MobSpawnerComponent.cs" id="3_nhxpr"]
+[ext_resource type="Script" path="res://scripts/Systems/Augment.cs" id="4_6737p"]
 
-[node name="Node2D" type="Node2D"]
+[node name="MotherNode" type="Node2D"]
 script = ExtResource("1_byp4v")
 
 [node name="Timer" type="Timer" parent="."]
@@ -15,3 +17,9 @@ script = ExtResource("1_byp4v")
 [node name="ProjectileParentNode" type="Node2D" parent="."]
 
 [node name="MainHUD" parent="." instance=ExtResource("2_qc52h")]
+
+[node name="MobSpawnerComponent" type="Node2D" parent="."]
+script = ExtResource("3_nhxpr")
+
+[node name="Augment" type="Node2D" parent="."]
+script = ExtResource("4_6737p")

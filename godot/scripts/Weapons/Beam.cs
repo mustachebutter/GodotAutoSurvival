@@ -36,20 +36,17 @@ public partial class Beam : Weapon
 		}
 	}
 
-	public void PrimeBeamAtTarget(Node2D closestTarget)
+	public void PrimeBeamAtTarget(Node2D closestTarget, BaseCharacter sourceCharacter)
 	{
 		if (_beamAnimationPlayer == null)
 			LoggingUtils.Error($"[{nameof(Beam)}] Beam animation player is null!");
 		else
 		{
+			SourceCharacter = sourceCharacter;
 			var angle = GlobalPosition.AngleToPoint(closestTarget.GlobalPosition);
 			GlobalRotation = angle - (float) Math.PI / 2;
 			_beamAnimationPlayer.Play(WeaponData.AnimationName);
 		}
-	}
-
-	public virtual float CalculateTotalDamage() { 
-		return WeaponData.Damage;
 	}
 
 	public virtual void DealDamageToCharacter()
@@ -58,14 +55,23 @@ public partial class Beam : Weapon
 		var bodies = _beamHitbox.GetOverlappingBodies();
 		if (bodies != null)
 		{
-			var totalDamageToDeal = CalculateTotalDamage();
-
 			foreach (var bd in bodies)
 			{
 				var enemy = (Enemy) bd;
-				enemy.DealDamageToCharacter(totalDamageToDeal);
+				enemy.DealDamageToCharacter(CalculateTotalDamage());
+
+				if (enemy.IsDead)
+				{
+					OnTargetDied(enemy);
+				}
 			}
 		}
 	}
 
+	public override void OnTargetDied(BaseCharacter target)
+	{
+		base.OnTargetDied(target);
+
+		target.DestroyCharacter();
+	}
 }

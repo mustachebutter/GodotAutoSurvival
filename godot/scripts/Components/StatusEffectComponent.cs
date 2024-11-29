@@ -4,20 +4,16 @@ using Godot;
 [Tool]
 public partial class StatusEffectComponent : Node2D
 {
-	public BaseCharacter Target { get; set; }
 	public List<StatusEffect> StatusEffectList { get; private set; } = new List<StatusEffect>();
 
-	public void ApplyEffectToCharacter(StatusEffect currentStatusEffect)
-	{
-		currentStatusEffect.Target = Target;
-		if (currentStatusEffect.MainTimer == null)
-			currentStatusEffect.CreateMainTimer();
+	public void ApplyEffectToCharacter(StatusEffect currentStatusEffect, BaseCharacter sourceCharacter, BaseCharacter targetCharacter)
+	{	
+		currentStatusEffect.SourceCharacter = sourceCharacter;
+		currentStatusEffect.Target = targetCharacter;
 		// Should do custom logic here
 		// eg. Stackable status
 		if (StatusEffectList == null) return;
 
-		// Currently there is no stackable status effect yet
-		// So we're doing it this way
 		// Find out if the status effect is already applied
 		var status = StatusEffectList.Find(x => x.StatusEffectData.StatusEffectId == currentStatusEffect.StatusEffectData.StatusEffectId);
 
@@ -36,7 +32,10 @@ public partial class StatusEffectComponent : Node2D
 		{
 			StatusEffectList.Add(currentStatusEffect);
 			if (currentStatusEffect.StatusEffectData.VisualEffectName != "vfx_default")
-				Target.VisualEffectComponent.PlayVisualEffect(currentStatusEffect.StatusEffectData.VisualEffectName, true);
+			{
+				LoggingUtils.Debug($"Playing visual effect on {currentStatusEffect.Target.Name}");
+				currentStatusEffect.Target.VisualEffectComponent.PlayVisualEffect(currentStatusEffect.StatusEffectData.VisualEffectName, true);
+			}
 			// Do logic of the status effect. Only DOT has special logic for now.
 			// Realistically, we want to do this once!
 			currentStatusEffect.StartStatusEffect();
@@ -44,6 +43,9 @@ public partial class StatusEffectComponent : Node2D
 		}
 
 		// This is the main timer for the buff/debuff
+		if (status.MainTimer == null && status.Target != null)
+			status.CreateMainTimer();
+
 		status.StartMainTimer();
 
 	}

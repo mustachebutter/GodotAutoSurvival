@@ -24,7 +24,7 @@ public partial class VfxChainLightning : Node2D
 		Area2D = GetNode<Area2D>("Area2D");
 		CollisionShape2D = Area2D.GetNode<CollisionShape2D>("CollisionShape2D");
 		CircleShape2D circleShape = (CircleShape2D) CollisionShape2D.Shape;
-		circleShape.Radius = 200.0f;
+		circleShape.Radius = 100.0f;
 		Line2D = GetNode<Line2D>("Line2D");
 
 	}
@@ -34,19 +34,12 @@ public partial class VfxChainLightning : Node2D
 		base._PhysicsProcess(delta);
 		if (_shouldPhysicsProcess)
 		{
-			// var overlappedNodes = Area2D.GetOverlappingBodies();
-			// if (overlappedNodes != null)
-			// {
-			// 	foreach (var node in overlappedNodes)
-			// 	{
-			// 		var enemy = node as Enemy;
-			// 		if (!enemies.Contains(enemy))
-			// 			enemies.Add(enemy);		
-			// 	}
-			// }
-
 			enemies = Utils.FindTargetsOrderedByDistance(Position, Area2D);
-				
+			
+			if (enemies == null)
+			{
+				QueueFree();
+			}
 			// We want to make sure that it runs for at least 10 frames
 			// Give or take this might not needed but just to make sure everything works.
 			_frameCount++;

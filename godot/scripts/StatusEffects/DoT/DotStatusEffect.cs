@@ -1,32 +1,66 @@
+using System;
 using Godot;
 
 public class DotStatusEffect : StatusEffect
 {
 	protected Timer _tickTimer;
-	public virtual void OnTargetDied() { }
 
+	// ######################################################
+	// CONSTRUCTOR
+	// ######################################################
+	#region CONSTRUCTOR
+
+	#endregion
+
+	// ######################################################
+	// STATUS EFFECT TIMELINE
+	// ######################################################
+	#region STATUS EFFECT TIMELINE
 	public override void StartStatusEffect()
 	{
 		base.StartStatusEffect();
-		if (Target.IsDead) return;
 		
 		_tickTimer = Utils.CreateTimer(Target, HandleStatusEffect, StatusEffectData.TickPerEverySecond, false);
-		_tickTimer?.Start();
-		
-		Target.OnCharacterDeadEvent -= OnTargetDied;
-		Target.OnCharacterDeadEvent += OnTargetDied;
+		_tickTimer?.Start();		
 	}
 
 	public override void HandleStatusEffect()
 	{
 		// Tick damage
-		Target.DealDamageToCharacter(StatusEffectData.Damage, StatusEffectData.DamageType);
+		Target.DealDamageToCharacter(CalculateTotalDamage(), StatusEffectData.DamageType);
 	}
 
-	public override void OnStatusEffectEnd()
+	public override void EndStatusEffect()
 	{
-		base.OnStatusEffectEnd();
-		Utils.DestroyTimer(_tickTimer);
-		Target.OnCharacterDeadEvent -= OnTargetDied;
-	}
+		base.EndStatusEffect();
+		if (Target != null)
+		{
+			Target.OnCharacterDeadEvent -= OnTargetDied;
+			Utils.DestroyTimer(_tickTimer);
+		}
+		
+		//!!! This should be at the bottom of inheritance
+		//!!! since this is called last.
+		Target = null;
+		SourceCharacter = null;
+	}	
+	#endregion
+
+	// ######################################################
+	// EVENT HANDLING
+	// ######################################################
+	#region EVENT HANDLING
+	#endregion
+
+	// ######################################################
+	// HELPER METHODS
+	// ######################################################
+	#region HELPER METHODS
+	#endregion
+
+	// ######################################################
+	// DECONSTRUCTOR/ CLEAN UP
+	// ######################################################
+	#region DECONSTRUCTOR/ CLEAN UP
+	#endregion
 }

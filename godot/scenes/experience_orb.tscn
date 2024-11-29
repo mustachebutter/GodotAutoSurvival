@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://c10jc8nfs1iej"]
+
+[ext_resource type="Script" path="res://scripts/ExperienceOrb.cs" id="1_for0p"]
+[ext_resource type="Texture2D" uid="uid://difr2iuq08i47" path="res://assets/Sprite_ExperienceOrb.png" id="2_ql35j"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_y72nw"]
+radius = 66.1891
+
+[node name="ExperienceOrb" type="CharacterBody2D"]
+texture_filter = 1
+texture_repeat = 1
+collision_layer = 32
+collision_mask = 9
+script = ExtResource("1_for0p")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_ql35j")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_y72nw")
+debug_color = Color(0, 0.6, 0.701961, 0.419608)
