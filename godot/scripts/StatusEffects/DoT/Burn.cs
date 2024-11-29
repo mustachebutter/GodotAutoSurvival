@@ -94,6 +94,7 @@ public class Burn : DotStatusEffect
                 // Deals damage to nearby targets
                 // Apply debuffs to nearby targets
                 enemy.StatusEffectComponent.ApplyEffectToCharacter(burn, SourceCharacter, enemy);
+                // TODO: This explosion spread deals base damage of status effect
                 enemy.DealDamageToCharacter(burn.StatusEffectData.Damage, burn.StatusEffectData.DamageType);
             }
         }
