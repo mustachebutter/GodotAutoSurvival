@@ -23,7 +23,7 @@ public partial class MobSpawnerComponent : Node2D
     public void SpawnEnemies()
     {
         Main mainNode = (Main) GetParent();
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 10; i++)
         {
             Vector2 randomSpawnPosition = mainNode.GetRandomOutOfViewportPosition();
             LoggingUtils.Info($"{randomSpawnPosition}");
