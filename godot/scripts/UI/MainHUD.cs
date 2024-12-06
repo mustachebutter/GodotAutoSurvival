@@ -137,7 +137,7 @@ public partial class MainHUD : CanvasLayer
 			{
 				int randomX = random.Next(0, 500);
 				int randomY = random.Next(0, 500);
-				var enemy = Utils.CreateDummy(new Vector2(randomX, randomY), Scenes.Enemy);
+				var enemy = Utils.CreateDummy(new Vector2(randomX, randomY), Scenes.Grunt);
 				enemy.OnCharacterDeadEvent += enemy.DestroyCharacter;
 				enemy.CharacterStatComponent.AddStat("Health", 100.0f);
 			}

@@ -79,6 +79,7 @@ states/Walk/position = Vector2(524, 101)
 transitions = ["Idle", "Walk", SubResource("AnimationNodeStateMachineTransition_2txs1"), "Walk", "Idle", SubResource("AnimationNodeStateMachineTransition_vvx55"), "Start", "Idle", SubResource("AnimationNodeStateMachineTransition_t3wc3")]
 
 [node name="Player" instance=ExtResource("1_748nw")]
+collision_mask = 5
 script = ExtResource("2_5kg0v")
 
 [node name="Sprite2D (Preview)" parent="." index="0"]
@@ -86,6 +87,7 @@ position = Vector2(0, 0)
 texture = ExtResource("3_op5oa")
 hframes = 8
 vframes = 8
+frame = 32
 
 [node name="CharacterLevelComponent" type="Node2D" parent="." index="3"]
 script = ExtResource("4_h2ko4")

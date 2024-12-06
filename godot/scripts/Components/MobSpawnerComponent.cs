@@ -27,7 +27,7 @@ public partial class MobSpawnerComponent : Node2D
         {
             Vector2 randomSpawnPosition = mainNode.GetRandomOutOfViewportPosition();
             LoggingUtils.Info($"{randomSpawnPosition}");
-            var enemy = Utils.CreateDummy(randomSpawnPosition, Scenes.Enemy);
+            var enemy = Utils.CreateDummy(randomSpawnPosition, Scenes.Grunt);
             enemy.OnCharacterDeadEvent += enemy.DestroyCharacter;
 
             enemy.CharacterStatComponent.AddStat("Health", 100.0f);
