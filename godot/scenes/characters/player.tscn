@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://jlhhk6jfrg8f" path="res://scenes/characters/base_character.tscn" id="1_748nw"]
 [ext_resource type="Script" path="res://scripts/Characters/Player.cs" id="2_5kg0v"]
-[ext_resource type="AnimationLibrary" uid="uid://bs7h2pvx5kxn4" path="res://assets/sprite_frames/Player_AnimationLibrary.res" id="3_lslaa"]
+[ext_resource type="AnimationLibrary" uid="uid://bs7h2pvx5kxn4" path="res://assets/sprite_frames/animation_library/Player_AnimationLibrary.res" id="3_lslaa"]
 [ext_resource type="Texture2D" uid="uid://cwr5vawlkhwbv" path="res://assets/Char_Base.png" id="3_op5oa"]
 [ext_resource type="Script" path="res://scripts/Components/CharacterLevelComponent.cs" id="4_h2ko4"]
 [ext_resource type="Script" path="res://scripts/Components/WeaponComponent.cs" id="4_stmua"]
@@ -87,7 +87,6 @@ position = Vector2(0, 0)
 texture = ExtResource("3_op5oa")
 hframes = 8
 vframes = 8
-frame = 32
 
 [node name="CharacterLevelComponent" type="Node2D" parent="." index="3"]
 script = ExtResource("4_h2ko4")
@@ -119,8 +118,8 @@ anim_player = NodePath("../AnimationPlayer")
 active = true
 parameters/conditions/idle = false
 parameters/conditions/isWalking = false
-parameters/Idle/blend_position = Vector2(0.0601625, 0.151291)
-parameters/Walk/blend_position = Vector2(-0.108943, 0.549816)
+parameters/Idle/blend_position = Vector2(-0.229249, 0.458515)
+parameters/Walk/blend_position = Vector2(-0.304348, 0.0655022)
 
 [node name="Camera2D" type="Camera2D" parent="." index="11"]
 

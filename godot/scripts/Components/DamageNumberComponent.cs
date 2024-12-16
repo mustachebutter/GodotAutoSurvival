@@ -14,7 +14,6 @@ public partial class DamageNumberComponent : Node2D
 	Label _label;
 	AnimationPlayer _animationPlayer;
 	AnimatedLabel animatedLabel = new AnimatedLabel();
-	AnimationLibrary animationLibrary = GD.Load<AnimationLibrary>("res://assets/sprite_frames/UI_AnimationLibrary.res");
 
 	public void UpdateText(string text, DamageTypes damageType)
 	{
@@ -39,7 +38,6 @@ public partial class DamageNumberComponent : Node2D
 		_label.Text = text;
 
 		_animationPlayer.AnimationFinished += OnFinishedAnimation;
-		// _animationPlayer.AddAnimationLibrary("UI", animationLibrary);
 		_animationPlayer.Play("UI_AnimationLibrary/text_start");
 	}
 

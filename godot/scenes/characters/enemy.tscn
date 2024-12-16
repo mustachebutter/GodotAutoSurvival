@@ -1,9 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://dgwblviegvs7j"]
+[gd_scene load_steps=6 format=3 uid="uid://dgwblviegvs7j"]
 
 [ext_resource type="PackedScene" uid="uid://jlhhk6jfrg8f" path="res://scenes/characters/base_character.tscn" id="1_su55c"]
 [ext_resource type="Script" path="res://scripts/Characters/Enemy.cs" id="2_4v0qc"]
 [ext_resource type="Texture2D" uid="uid://cwr5vawlkhwbv" path="res://assets/Char_Base.png" id="3_0dnh7"]
-[ext_resource type="Script" path="res://addons/beehave/blackboard.gd" id="4_8be5e"]
 
 [sub_resource type="Animation" id="Animation_hglce"]
 resource_name = "idle"
@@ -49,13 +48,10 @@ collision_layer = 8
 [node name="CollisionShape2D" parent="Area2D" index="0"]
 debug_color = Color(1, 1, 0.00784314, 0.0470588)
 
-[node name="Blackboard" type="Node" parent="." index="9"]
-script = ExtResource("4_8be5e")
-
-[node name="AnimationTree" type="AnimationTree" parent="." index="10"]
+[node name="AnimationTree" type="AnimationTree" parent="." index="9"]
 anim_player = NodePath("../AnimationPlayer")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="11"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="10"]
 libraries = {
 "": SubResource("AnimationLibrary_kjysx")
 }

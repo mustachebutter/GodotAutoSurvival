@@ -6,12 +6,14 @@ public partial class Player : BaseCharacter
 {
 	public WeaponComponent WeaponComponent { get; private set; }
 	public CharacterLevelComponent CharacterLevelComponent { get; private set; }
+	public AnimationTree AnimationTree { get; set; }
 
 	public override void _Ready()
 	{
 		base._Ready();
 		WeaponComponent = GetNode<WeaponComponent>("WeaponComponent");
 		CharacterLevelComponent = GetNode<CharacterLevelComponent>("CharacterLevelComponent");
+		AnimationTree = GetNode<AnimationTree>("AnimationTree");
 
 		// This use of AttackRange is used for determining the Area2D that detects the closest enemy
 		// Essentially, what this means is that it would detect targets further away as AttackRange increases
@@ -64,22 +66,19 @@ public partial class Player : BaseCharacter
 			WeaponComponent.SwitchNextWeapon();	
 		}
 
-		var animationTree = GetNode<AnimationTree>("AnimationTree");
-		var stateMachine = (AnimationNodeStateMachinePlayback) animationTree.Get("parameters/playback");
 
 		if (velocity == Vector2.Zero)
 		{	
-			// stateMachine.Travel("Idle");
-			animationTree.Set("parameters/conditions/idle", true);
-			animationTree.Set("parameters/conditions/isWalking", false);
+			AnimationTree.Set("parameters/conditions/idle", true);
+			AnimationTree.Set("parameters/conditions/isWalking", false);
 		}
 		else
 		{
-			animationTree.Set("parameters/conditions/idle", false);
-			animationTree.Set("parameters/conditions/isWalking", true);
+			AnimationTree.Set("parameters/conditions/idle", false);
+			AnimationTree.Set("parameters/conditions/isWalking", true);
 
-			animationTree.Set("parameters/Idle/blend_position", velocity);
-			animationTree.Set("parameters/Walk/blend_position", velocity);
+			AnimationTree.Set("parameters/Idle/blend_position", velocity);
+			AnimationTree.Set("parameters/Walk/blend_position", velocity);
 		}
 		
 
