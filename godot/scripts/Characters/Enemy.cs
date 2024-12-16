@@ -4,6 +4,7 @@ public partial class Enemy : BaseCharacter
 {
 	private Label _label;
 	private Player _player;
+	protected bool _isStopping = false;
 	public override void _Ready()
 	{
 		base._Ready();
@@ -15,7 +16,7 @@ public partial class Enemy : BaseCharacter
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
-		if (GlobalConfigs.EnemySpawnMode.Equals(EnemySpawnMode.Normal))
+		if (GlobalConfigs.EnemySpawnMode.Equals(EnemySpawnMode.Normal) && !_isStopping)
 			MoveTowardsThePlayer();
 	}
 
@@ -27,6 +28,12 @@ public partial class Enemy : BaseCharacter
 
 		Velocity = direction * speed;
 		MoveAndSlide();
+	}
+
+	public void StopInPlace()
+	{
+		_isStopping = true;
+		Velocity = Vector2.Zero;
 	}
 
 }
