@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://cafmbppvdl3c2"]
+[gd_scene load_steps=38 format=3 uid="uid://cafmbppvdl3c2"]
 
 [ext_resource type="PackedScene" uid="uid://dgwblviegvs7j" path="res://scenes/characters/enemy.tscn" id="1_ijxy2"]
 [ext_resource type="Script" path="res://scripts/Characters/Enemy/Grunt.cs" id="2_3ppnl"]
@@ -253,11 +253,16 @@ animations = [{
 "speed": 15.0
 }]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_34hbi"]
+
 [node name="Grunt" instance=ExtResource("1_ijxy2")]
 script = ExtResource("2_3ppnl")
 _isWalking = false
 _isAttacking = false
 _isIdle = false
+_orbitSpeed = 4.5
+_orbitRadius = 50.0
+AnimationLibraryName = "Enemy_AnimationLibrary"
 
 [node name="Sprite2D (Preview)" parent="." index="0"]
 visible = false
@@ -270,9 +275,13 @@ position = Vector2(4, -10)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_62d8t")
 animation = &"attack"
-frame = 6
 
 [node name="AnimationPlayer" parent="." index="10"]
 libraries = {
 "Enemy_AnimationLibrary": ExtResource("4_ug085")
 }
+
+[node name="HitArea2D" type="Area2D" parent="." index="11"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitArea2D" index="0"]
+shape = SubResource("CircleShape2D_34hbi")

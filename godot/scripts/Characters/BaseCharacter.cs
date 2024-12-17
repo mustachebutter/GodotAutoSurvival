@@ -11,6 +11,8 @@ public partial class BaseCharacter : CharacterBody2D
 	private bool _hasTriggeredOnDead = false;
 	public delegate void OnCharacterDeadHandler();
 	public event OnCharacterDeadHandler OnCharacterDeadEvent;
+	[Export]
+	public string AnimationLibraryName = "";
 
 	public CharacterStatComponent CharacterStatComponent { get; private set; }
 	public DamageNumberComponent DamageNumberComponent { get; private set; }
@@ -41,6 +43,11 @@ public partial class BaseCharacter : CharacterBody2D
 		_circle.Radius = CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 2;
 
 		_healthLabel = GetNode<Label>("HealthLabel");
+	}
+
+	protected string GetAnimation(string name)
+	{
+		return $"{AnimationLibraryName}/{name}";
 	}
 
 	public override void _Process(double delta)
