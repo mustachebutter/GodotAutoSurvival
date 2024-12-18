@@ -257,9 +257,6 @@ animations = [{
 
 [node name="Grunt" instance=ExtResource("1_ijxy2")]
 script = ExtResource("2_3ppnl")
-_isWalking = false
-_isAttacking = false
-_isIdle = false
 _orbitSpeed = 4.5
 _orbitRadius = 50.0
 AnimationLibraryName = "Enemy_AnimationLibrary"

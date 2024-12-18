@@ -10,6 +10,7 @@ public partial class Grunt : Enemy
 	private bool _isAttacking { get; set; } = false;
 	private bool _isIdle { get; set; } = false;
 	private bool _isFacingRight { get; set; } = true;
+	private bool _dealtDamage { get; set; } = false;
 	private Timer _mainTimer { get; set; }
 	private float _angle =  -(Mathf.Pi / 2);
 	[Export]
@@ -41,9 +42,8 @@ public partial class Grunt : Enemy
 	private void HandleAttackTimer()
 	{
 
-		if (DetectedPlayer(Area2D))
+		if (DetectedPlayer(Area2D, out Player player))
 		{
-			LoggingUtils.Debug("Found player");
 			// Attempt to attack
 			AnimationPlayer.Stop();
 			_isIdle = false;
@@ -51,8 +51,6 @@ public partial class Grunt : Enemy
 			_isAttacking = true;
 			AnimationPlayer.Play(GetAnimation("attack"));
 			StopInPlace();
-			// Deal Damage
-
 		}
 	}
 
@@ -92,9 +90,10 @@ public partial class Grunt : Enemy
 		}
 	}
 
-	public bool DetectedPlayer(Area2D area2D)
+	public bool DetectedPlayer(Area2D area2D, out Player player)
 	{
 		var bodies = area2D.GetOverlappingBodies();
+		player = null;
 		if (bodies == null)
 		{
 			LoggingUtils.Info("No bodies scanned with Area2D");
@@ -103,7 +102,11 @@ public partial class Grunt : Enemy
 
 		foreach (var bd in bodies)
 		{
-			if (bd is Player) return true;
+			if (bd is Player)
+			{
+				player = (Player) bd;
+				return true;
+			} 
 		}
 
 		return false;
@@ -127,9 +130,11 @@ public partial class Grunt : Enemy
 
 		HitDetectionArea2D.GlobalPosition = new Vector2(x, y);
 		// If it hits, do damage
-		if (DetectedPlayer(HitDetectionArea2D))
+		if (DetectedPlayer(HitDetectionArea2D, out Player player) && !_dealtDamage)
 		{
 			LoggingUtils.Debug("Hit Player");
+			player.DealDamageToCharacter(CharacterStatComponent.GetCompleteStatFromName("Attack").totalValue, DamageTypes.Normal);
+			_dealtDamage = true;
 		}
 	}
 
@@ -137,6 +142,7 @@ public partial class Grunt : Enemy
 	{
 		HitDetectionArea2D.Position = new Vector2(0.0f, -(CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 2));
 		_angle =  -(Mathf.Pi / 2);
+		_dealtDamage = false;
 	}
 	private void OnAnimationFinished(StringName anim_name)
 	{
