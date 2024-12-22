@@ -7,6 +7,7 @@
 [node name="Enemy" instance=ExtResource("1_su55c")]
 collision_layer = 4
 collision_mask = 23
+motion_mode = 1
 script = ExtResource("2_4v0qc")
 
 [node name="Sprite2D (Preview)" parent="." index="0"]
@@ -15,10 +16,12 @@ texture = ExtResource("3_0dnh7")
 hframes = 8
 vframes = 8
 
-[node name="CollisionShape2D" parent="." index="5"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." index="1"]
+
+[node name="CollisionShape2D" parent="." index="6"]
 position = Vector2(0, -5)
 
-[node name="Label2" type="Label" parent="." index="6"]
+[node name="Label2" type="Label" parent="." index="7"]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -34,10 +37,10 @@ text = "test"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Area2D" parent="." index="8"]
+[node name="Area2D" parent="." index="9"]
 collision_layer = 8
 
 [node name="CollisionShape2D" parent="Area2D" index="0"]
 debug_color = Color(1, 1, 0.00784314, 0.0470588)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="9"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="10"]

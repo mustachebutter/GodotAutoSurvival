@@ -65,11 +65,18 @@ public static class Scenes
 	public static PackedScene Player = (PackedScene) GD.Load("res://scenes/characters/player.tscn");
 	public static PackedScene Enemy = (PackedScene) GD.Load("res://scenes/characters/enemy.tscn");
 	public static PackedScene Grunt = (PackedScene) GD.Load("res://scenes/characters/enemies/grunt.tscn");
+	public static PackedScene Tanker = (PackedScene) GD.Load("res://scenes/characters/enemies/tanker.tscn");
 	public static PackedScene UiDamageNumber = (PackedScene) GD.Load("res://scenes/ui/damage_number_component.tscn");
 	public static PackedScene VfxBurnExplosion = (PackedScene) GD.Load("res://scenes/vfx/vfx_burn_explosion.tscn");
 	public static PackedScene VfxChainLightning = (PackedScene) GD.Load("res://scenes/vfx/vfx_chain_lightning.tscn");
 	public static PackedScene ExperienceOrb = (PackedScene) GD.Load("res://scenes/experience_orb.tscn");
 	public static PackedScene AugmentHud = (PackedScene) GD.Load("res://scenes/ui/augment_hud.tscn");
 	public static PackedScene AugmentCard = (PackedScene) GD.Load("res://scenes/ui/augment_card.tscn");
+
+}
+
+public static class SavedAnimationLibrary
+{
+	public static AnimationLibrary EnemyAnimationLibrary = GD.Load<AnimationLibrary>("res://assets/sprite_frames/animation_library/Enemy_AnimationLibrary_new.res");
 
 }

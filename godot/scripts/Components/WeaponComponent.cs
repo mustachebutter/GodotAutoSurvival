@@ -45,7 +45,7 @@ public partial class WeaponComponent : Node2D
 		{	
 			StartWeapon();
 			_timer = Utils.CreateTimer(this, OnTimerTimeout, seconds, false);
-			_timer?.Start();
+			// _timer?.Start();
 
 		}
 	}
