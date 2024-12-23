@@ -24,7 +24,7 @@ scale = Vector2(2, 2)
 sprite_frames = ExtResource("4_a003m")
 animation = &"attack"
 
-[node name="HitArea2D" type="Area2D" parent="." index="10"]
+[node name="HitArea2D" type="Area2D" parent="." index="9"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitArea2D" index="0"]
 shape = SubResource("CircleShape2D_34hbi")

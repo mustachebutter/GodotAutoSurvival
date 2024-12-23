@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dbdnns350c6vs"]
+[gd_scene load_steps=22 format=3 uid="uid://dbdnns350c6vs"]
 
 [ext_resource type="PackedScene" uid="uid://jlhhk6jfrg8f" path="res://scenes/characters/base_character.tscn" id="1_748nw"]
 [ext_resource type="Script" path="res://scripts/Characters/Player.cs" id="2_5kg0v"]
@@ -8,9 +8,6 @@
 [ext_resource type="Script" path="res://scripts/Components/WeaponComponent.cs" id="4_stmua"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_0qp7w"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_pbtwt"]
-size = Vector2(24, 58)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vjk7e"]
 animation = &"Player_AnimationLibrary/idle_left"
@@ -101,10 +98,6 @@ debug_color = Color(0.94902, 0.992157, 1, 0.121569)
 
 [node name="WeaponComponent" type="Node2D" parent="." index="5"]
 script = ExtResource("4_stmua")
-
-[node name="CollisionShape2D" parent="." index="7"]
-position = Vector2(0, -5)
-shape = SubResource("RectangleShape2D_pbtwt")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="8"]
 root_node = NodePath("../Sprite2D (Preview)")

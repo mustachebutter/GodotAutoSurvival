@@ -68,13 +68,14 @@ public partial class Enemy : BaseCharacter
 
 		if (_isAttacking)
 		{
+			LoggingUtils.Debug("Atacking");
 			Attack();
 		}
 	}
 
 	#endregion
 	#region ACTION
-	public void MoveTowardsThePlayer()
+	public bool MoveTowardsThePlayer()
 	{
 		Vector2 direction = _player.GlobalPosition - GlobalPosition;
 		direction = direction.Normalized();
@@ -82,6 +83,18 @@ public partial class Enemy : BaseCharacter
 
 		Velocity = direction * speed;
 		MoveAndSlide();
+
+		if (GetSlideCollisionCount() > 0)
+		{
+			for (int i = 0; i < GetSlideCollisionCount() - 1; i++)
+			{
+				Node2D otherBody = GetSlideCollision(i).GetCollider() as Node2D;
+
+				if (otherBody is Player) return true;
+			}
+		}
+
+		return false;
 	}
 
 	public void StopInPlace()

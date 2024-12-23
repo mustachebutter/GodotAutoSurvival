@@ -42,9 +42,6 @@ sprite_frames = ExtResource("4_7m177")
 animation = &"vfx_default"
 script = ExtResource("4_dgpnq")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CapsuleShape2D_gcbs5")
-
 [node name="HealthLabel" type="Label" parent="."]
 anchors_preset = 7
 anchor_left = 0.5
@@ -60,6 +57,9 @@ grow_vertical = 0
 text = "100"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_gcbs5")
 
 [node name="Area2D" type="Area2D" parent="."]
 

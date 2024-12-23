@@ -33,6 +33,25 @@ public partial class Grunt : Enemy
 		base._Process(delta);
 
 	}
+
+	public override void _PhysicsProcess(double delta)
+	{
+		base._PhysicsProcess(delta);
+		if (GetSlideCollisionCount() > 0)
+		{
+			for (int i = 0; i < GetSlideCollisionCount() - 1; i++)
+			{
+				KinematicCollision2D collision2D = GetSlideCollision(i);
+				RigidBody2D otherBody = collision2D.GetCollider() as RigidBody2D;
+
+				if (otherBody != null)
+				{
+					Vector2 knockbackDirection = collision2D.GetNormal();
+					otherBody.ApplyCentralImpulse(knockbackDirection * 100.0f);
+				}
+			}
+		}
+	}
 	#endregion
 
 	#region ACTION
@@ -73,6 +92,9 @@ public partial class Grunt : Enemy
 	{
 		base.SetUpEnemy(overrideStats, out attackRange);
 
+		var hitDetectionCircle = (CircleShape2D) HitDetectionArea2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
+		hitDetectionCircle.ResourceLocalToScene = true;
+		hitDetectionCircle.Radius = 5.0f;
 		HitDetectionArea2D.Position = new Vector2(0.0f, -(attackRange));
 		_orbitRadius = attackRange;
 

@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://nbb3v15k8tu3"]
+[gd_scene load_steps=6 format=3 uid="uid://nbb3v15k8tu3"]
 
 [ext_resource type="PackedScene" uid="uid://dgwblviegvs7j" path="res://scenes/characters/enemy.tscn" id="1_o34qx"]
 [ext_resource type="Script" path="res://scripts/Characters/Enemy/Tanker.cs" id="2_d470p"]
 [ext_resource type="SpriteFrames" uid="uid://cvykc2va34ku3" path="res://assets/sprite_frames/grunt.tres" id="3_ri0aq"]
 [ext_resource type="AnimationLibrary" uid="uid://bvr7oyj3gbxlm" path="res://assets/sprite_frames/animation_library/Enemy_AnimationLibrary_new.res" id="4_0smyj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_djlws"]
+radius = 59.4138
 
 [node name="Tanker" instance=ExtResource("1_o34qx")]
 script = ExtResource("2_d470p")
@@ -17,7 +20,14 @@ scale = Vector2(3, 3)
 sprite_frames = ExtResource("3_ri0aq")
 animation = &"attack"
 
-[node name="AnimationPlayer" parent="." index="10"]
+[node name="ChargeArea2D" type="Area2D" parent="." index="10"]
+collision_layer = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ChargeArea2D" index="0"]
+shape = SubResource("CircleShape2D_djlws")
+debug_color = Color(1, 1, 0.00784314, 0.0470588)
+
+[node name="AnimationPlayer" parent="." index="11"]
 libraries = {
 "Enemy_AnimationLibrary": ExtResource("4_0smyj")
 }
