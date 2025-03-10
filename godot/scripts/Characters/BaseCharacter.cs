@@ -11,7 +11,6 @@ public partial class BaseCharacter : CharacterBody2D
 	private bool _hasTriggeredOnDead = false;
 	public delegate void OnCharacterDeadHandler();
 	public event OnCharacterDeadHandler OnCharacterDeadEvent;
-	[Export]
 	public string AnimationLibraryName = "";
 
 	public CharacterStatComponent CharacterStatComponent { get; private set; }

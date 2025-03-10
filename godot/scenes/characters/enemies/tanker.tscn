@@ -1,12 +1,44 @@
-[gd_scene load_steps=6 format=3 uid="uid://nbb3v15k8tu3"]
+[gd_scene load_steps=8 format=3 uid="uid://nbb3v15k8tu3"]
 
 [ext_resource type="PackedScene" uid="uid://dgwblviegvs7j" path="res://scenes/characters/enemy.tscn" id="1_o34qx"]
 [ext_resource type="Script" path="res://scripts/Characters/Enemy/Tanker.cs" id="2_d470p"]
-[ext_resource type="SpriteFrames" uid="uid://cvykc2va34ku3" path="res://assets/sprite_frames/grunt.tres" id="3_ri0aq"]
-[ext_resource type="AnimationLibrary" uid="uid://bvr7oyj3gbxlm" path="res://assets/sprite_frames/animation_library/Enemy_AnimationLibrary_new.res" id="4_0smyj"]
+[ext_resource type="SpriteFrames" uid="uid://ckwkot1s0i168" path="res://assets/sprite_frames/tanker.tres" id="3_ht3lc"]
+[ext_resource type="AnimationLibrary" uid="uid://cnjtr43awygub" path="res://assets/sprite_frames/animation_library/Enemy_Tanker_AnimationLibrary.res" id="5_tuwke"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_djlws"]
 radius = 59.4138
+
+[sub_resource type="Animation" id="Animation_l27po"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"attack"]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mqbon"]
+_data = {
+"RESET": SubResource("Animation_l27po")
+}
 
 [node name="Tanker" instance=ExtResource("1_o34qx")]
 script = ExtResource("2_d470p")
@@ -17,7 +49,7 @@ visible = false
 [node name="AnimatedSprite2D" parent="." index="1"]
 position = Vector2(5, -20)
 scale = Vector2(3, 3)
-sprite_frames = ExtResource("3_ri0aq")
+sprite_frames = ExtResource("3_ht3lc")
 animation = &"attack"
 
 [node name="ChargeArea2D" type="Area2D" parent="." index="10"]
@@ -29,5 +61,6 @@ debug_color = Color(1, 1, 0.00784314, 0.0470588)
 
 [node name="AnimationPlayer" parent="." index="11"]
 libraries = {
-"Enemy_AnimationLibrary": ExtResource("4_0smyj")
+"": SubResource("AnimationLibrary_mqbon"),
+"Enemy_Tanker_AnimationLibrary": ExtResource("5_tuwke")
 }
