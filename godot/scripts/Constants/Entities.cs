@@ -77,6 +77,6 @@ public static class Scenes
 
 public static class SavedAnimationLibrary
 {
-	public static AnimationLibrary EnemyAnimationLibrary = GD.Load<AnimationLibrary>("res://assets/sprite_frames/animation_library/Enemy_AnimationLibrary_new.res");
+	public static AnimationLibrary EnemyAnimationLibrary = GD.Load<AnimationLibrary>("res://assets/sprite_frames/animation_library/Enemy_Tanker_AnimationLibrary.res");
 
 }

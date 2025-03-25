@@ -196,7 +196,6 @@ public partial class Enemy : BaseCharacter
 	{
 		AnimationLibraryName = name;
 		var animationList = AnimationPlayer.GetAnimationLibraryList();
-		LoggingUtils.Debug(string.Join(System.Environment.NewLine, animationList));
 		if (animationList.Count == 0)
 		{
 			AnimationPlayer.AddAnimationLibrary(name, animationLibrary);

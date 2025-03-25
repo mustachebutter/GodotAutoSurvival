@@ -59,7 +59,7 @@ collision_layer = 8
 shape = SubResource("CircleShape2D_djlws")
 debug_color = Color(1, 1, 0.00784314, 0.0470588)
 
-[node name="AnimationPlayer" parent="." index="11"]
+[node name="AnimationPlayer" parent="." index="12"]
 libraries = {
 "": SubResource("AnimationLibrary_mqbon"),
 "Enemy_Tanker_AnimationLibrary": ExtResource("5_tuwke")

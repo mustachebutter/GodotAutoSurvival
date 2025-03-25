@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://dgwblviegvs7j"]
+[gd_scene load_steps=5 format=3 uid="uid://dgwblviegvs7j"]
 
 [ext_resource type="PackedScene" uid="uid://jlhhk6jfrg8f" path="res://scenes/characters/base_character.tscn" id="1_su55c"]
 [ext_resource type="Script" path="res://scripts/Characters/Enemy.cs" id="2_4v0qc"]
 [ext_resource type="Texture2D" uid="uid://cwr5vawlkhwbv" path="res://assets/Char_Base.png" id="3_0dnh7"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lh6rp"]
 
 [node name="Enemy" instance=ExtResource("1_su55c")]
 collision_layer = 4
@@ -34,10 +36,16 @@ text = "test"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Area2D" parent="." index="9"]
+[node name="HitArea2D" type="Area2D" parent="." index="9"]
+collision_layer = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitArea2D" index="0"]
+shape = SubResource("CircleShape2D_lh6rp")
+
+[node name="Area2D" parent="." index="10"]
 collision_layer = 8
 
 [node name="CollisionShape2D" parent="Area2D" index="0"]
 debug_color = Color(1, 1, 0.00784314, 0.0470588)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="10"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="11"]
