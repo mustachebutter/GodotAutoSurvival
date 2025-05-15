@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Godot;
 using Godot.Collections;
@@ -8,6 +9,7 @@ public partial class Tanker : Enemy
 	private bool _isChargingAbility { get; set; } = false;
 	private bool _isAbilityOnCooldown { get; set; } = false;
 	private bool _isAbilityInProgress { get; set; } = false;
+	private bool _isAbilityStarting { get; set; } = false;
 	private float _chargeDistance { get; set; } = 0.0f;
 	private Vector2 _previousFramePosition = Vector2.Zero;
 	private Timer _chargeTimer { get; set; }
@@ -15,7 +17,10 @@ public partial class Tanker : Enemy
 	private readonly float CHARGE_DURATION = 1.0f;
 	private readonly float CHARGE_COOLDOWN = 10.0f;
 	private readonly float CHARGE_DISTANCE = 500.0f;
-	
+
+	private Blackboard _blackboard { get; set; } = new Blackboard();
+	private BehaviorTree _behaviorTree { get; set; } = new BehaviorTree();
+
 	#region GODOT
 	public override void _Ready()
 	{
@@ -34,18 +39,51 @@ public partial class Tanker : Enemy
 		SetUpEnemy(overrideStats, out float attackRange);
 
 		StartAttackTimer();
-		_chargeTimer = Utils.CreateTimer(this, () => Ability_Charge(), CHARGE_DURATION, true);
+		_chargeTimer = Utils.CreateTimer(this, () => {
+			_isAbilityInProgress = true;
+			LoggingUtils.Debug("Ability Charged~");
+		}, CHARGE_DURATION, true);
+
 		_chargeCooldownTimer = Utils.CreateTimer(this, () => _isAbilityOnCooldown = false, CHARGE_COOLDOWN, true);
+
+		_blackboard.SetValue("State", EnemyState.Idle);
+		_behaviorTree.AddNode(new ConditionalNode("State", EnemyState.Idle));
+		_behaviorTree.AddNode(new ActionNode(() => ResetCharge()));
+
+		_behaviorTree.AddNode(new ConditionalNode("State", EnemyState.Charging));
+		_behaviorTree.AddNode(new ActionNode(() => _chargeTimer.Start()));
+
+		_behaviorTree.AddNode(new ConditionalNode("State", EnemyState.ChargingAtPlayer));
+		_behaviorTree.AddNode(new ActionNode(() => ResetCharge()));
+
+		_behaviorTree.AddNode(new ConditionalNode("State", EnemyState.Cooldown));
+		_behaviorTree.AddNode(new ActionNode(() => ResetCharge()));
 	}
 
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
-		if (_isAbilityInProgress) return;
 		
-		if (DetectedPlayer(ChargeArea2D, out Player player)) 
-			_isAbilityInProgress = true;
-		else return;
+		if (_isAbilityStarting)
+		{
+			// DO ONCE!
+			// Pause the attack timer
+			if (!_mainTimer.IsStopped())
+				_mainTimer.Stop();
+
+			LoggingUtils.Debug("CHAAAARGE");
+			// Play animation of charging up
+
+			// Dash towards target
+			CharacterStatComponent.AddStat("Speed", 50.0f, StatTypes.Stat);
+			_isAbilityStarting = false;
+		}
+		
+		if (_isAbilityInProgress)
+		{
+			Ability_Charge();
+			return;
+		}
 
 		if (!_isAbilityOnCooldown)
 		{
@@ -55,6 +93,8 @@ public partial class Tanker : Enemy
 		{
 			_chargeCooldownTimer.Start();
 		}
+
+
 	}
 	#endregion
 	
@@ -65,23 +105,14 @@ public partial class Tanker : Enemy
 		// base.Attack();
 	}
 
-	public IEnumerator Ability_Charge()
+	public void Ability_Charge()
 	{
-		// Pause the attack timer
-		if (!_mainTimer.IsStopped())
-			_mainTimer.Stop();
-
-		LoggingUtils.Debug("CHAAAARGE");
-		// Play animation of charging up
-		// Dash towards target
-		CharacterStatComponent.AddStat("Speed", 50.0f, StatTypes.Stat);
 
 		if (MoveTowardsThePlayer())
 		{
 			LoggingUtils.Debug("Hit a player");
 			// TODO: If hit players then knock them back
 			ResetCharge();
-			yield break;
 		}
 
 		_chargeDistance += _previousFramePosition.DistanceTo(Position);
@@ -90,10 +121,7 @@ public partial class Tanker : Enemy
 		if (_chargeDistance >= CHARGE_DISTANCE)
 		{
 			ResetCharge();
-			yield break;
 		}
-
-		yield return null;
 	}
 
 	public override void ResetAttack()
