@@ -6,10 +6,8 @@ using System.Collections.Generic;
 public partial class Tanker : Enemy
 {
 	public Area2D ChargeArea2D { get; set; }
-	private bool _isChargingAbility { get; set; } = false;
 	private bool _isAbilityOnCooldown { get; set; } = false;
-	private bool _isAbilityInProgress { get; set; } = false;
-	private bool _isAbilityStarting { get; set; } = false;
+	private bool _finishedChargingAbility { get; set; } = false;
 	private float _chargeDistance { get; set; } = 0.0f;
 	private Vector2 _previousFramePosition = Vector2.Zero;
 	private Timer _chargeTimer { get; set; }
@@ -39,34 +37,42 @@ public partial class Tanker : Enemy
 		StartAttackTimer();
 		_chargeTimer = Utils.CreateTimer(this, () =>
 		{
-			_isAbilityInProgress = true;
 			LoggingUtils.Debug("Ability Charged~");
+			CharacterStatComponent.AddStat("Speed", 150.0f, StatTypes.Stat);
+			_finishedChargingAbility = true;
 		}, CHARGE_DURATION, true);
 
 		_chargeCooldownTimer = Utils.CreateTimer(this, () => _isAbilityOnCooldown = false, CHARGE_COOLDOWN, true);
 
 		// AI Behavior set up
+		_blackboard.SetValue("playerPosition", new Vector3());
+
+		BTNode abilitySequenceCondition = new ConditionalNode(() =>
+		{
+			return DetectedPlayer(ChargeArea2D, out _) && !_isAbilityOnCooldown;
+		});
+
 		BTNode abilityChargeUp = new ActionNode((float delta) =>
 		{
-			return false;
+			_chargeTimer.Start();
+			// Do the charging animation
+			return true;
 		});
-		BTNode abilityDashTowardsPlayer = new ActionNode((float delta) =>
-		{
-			return false;
-		});
-		BTNode abilityEndOfDash = new ActionNode((float delta) =>
-		{
-			return false;
-		});
+		BTNode abilityDashTowardsPlayer = new ActionNode(Ability_Charge);
+		BTNode abilityEndOfDash = new ActionNode((float delta) => ResetCharge());
 		BTNode abilityCooldown = new ActionNode((float delta) =>
 		{
-			return false;
+			_chargeCooldownTimer.Start();
+			return true;
 		});
 
 
 		BTNode detectPlayer = new SequenceNode(new List<BTNode>
 		{
+			abilitySequenceCondition,
 			abilityChargeUp,
+			// Should finished charging then continue with the rest
+			new ConditionalNode(() => _finishedChargingAbility),
 			abilityDashTowardsPlayer,
 			abilityEndOfDash,
 			abilityCooldown,
@@ -105,14 +111,14 @@ public partial class Tanker : Enemy
 		// base.Attack();
 	}
 
-	public void Ability_Charge()
+	public bool Ability_Charge(float delta)
 	{
 
 		if (MoveTowardsThePlayer())
 		{
 			LoggingUtils.Debug("Hit a player");
 			// TODO: If hit players then knock them back
-			ResetCharge();
+			return true;
 		}
 
 		_chargeDistance += _previousFramePosition.DistanceTo(Position);
@@ -120,8 +126,10 @@ public partial class Tanker : Enemy
 
 		if (_chargeDistance >= CHARGE_DISTANCE)
 		{
-			ResetCharge();
+			return true;
 		}
+
+		return false;
 	}
 
 	public override void ResetAttack()
@@ -130,15 +138,16 @@ public partial class Tanker : Enemy
 
 	}
 
-	public void ResetCharge()
+	public bool ResetCharge()
 	{
-		_isChargingAbility = false;
+		LoggingUtils.Debug("Resetting");
 		_isAbilityOnCooldown = true;
-		_isAbilityInProgress = false;
+		_finishedChargingAbility = false;
 		_chargeDistance = 0.0f;
 		CharacterStatComponent.ReduceStat("Speed", 50.0f, StatTypes.Stat);
-
 		_mainTimer.Start();
+
+		return true;
 	}
 	#endregion
 
