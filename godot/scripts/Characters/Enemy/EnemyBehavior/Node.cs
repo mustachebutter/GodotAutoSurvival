@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 public enum EnemyState
 {
     Idle,
@@ -9,30 +10,27 @@ public enum EnemyState
 
 public abstract class BTNode
 {
-    public abstract bool Execute(Blackboard blackboard);
+    public abstract bool Execute(float delta);
 }
 
 public class ConditionalNode : BTNode
 {
-    private string _key;
-    private object _expectedValue;
-
-    public ConditionalNode(string key, object value)
+    private Func<bool> _condition;
+    public ConditionalNode(Func<bool> condition)
     {
-        _key = key;
-        _expectedValue = value;
+        _condition = condition;
     }
-    public override bool Execute(Blackboard blackboard)
+    public override bool Execute(float delta)
     {
-        return blackboard.GetValue<object>(_key)?.Equals(_expectedValue) ?? false;
+        return _condition();
     }
 }
 
 public class ActionNode : BTNode
 {
-    private Action _action;
+    private Func<float, bool> _action;
 
-    public ActionNode(Action action)
+    public ActionNode(Func<float, bool> action)
     {
         if (action == null)
         {
@@ -42,12 +40,11 @@ public class ActionNode : BTNode
         _action = action;
     }
 
-    public override bool Execute(Blackboard blackboard)
+    public override bool Execute(float delta)
     {
         try
         {
-            _action?.Invoke();
-            return true;
+            return _action(delta);
         }
         catch
         {
@@ -55,4 +52,51 @@ public class ActionNode : BTNode
             return false;
         }
     }
+}
+
+public class SelectorNode : BTNode
+{
+    private List<BTNode> _children = new List<BTNode>();
+    public SelectorNode(List<BTNode> children)
+    {
+        _children = children;
+    }
+    public override bool Execute(float delta)
+    {
+        foreach (var child in _children)
+        {
+            if (child.Execute(delta))
+                return true;
+        }
+        return false;
+    }
+
+}
+
+public class SequenceNode : BTNode
+{
+    private List<BTNode> _children = new List<BTNode>();
+    private int _currentIndex = 0;
+
+    public SequenceNode(List<BTNode> children)
+    {
+        _children = children;
+    }
+
+    public override bool Execute(float delta)
+    {
+        while (_currentIndex < _children.Count)
+        {
+            bool childDone = _children[_currentIndex].Execute(delta);
+
+            if (childDone)
+                _currentIndex++;
+            else
+                return false;
+        }
+
+        _currentIndex = 0;
+        return true;
+    }
+
 }

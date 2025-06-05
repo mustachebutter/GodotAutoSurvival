@@ -1,5 +1,5 @@
 using Godot;
-using Godot.Collections;
+using System.Collections.Generic;
 
 public partial class Enemy : BaseCharacter
 {
@@ -11,6 +11,9 @@ public partial class Enemy : BaseCharacter
 	private bool _isIdle { get; set; } = false;
 	protected bool _isFacingRight { get; set; } = true;
 	private bool _dealtDamage { get; set; } = false;
+	protected Blackboard _blackboard { get; set; } = new Blackboard();
+	protected BTNode _behaviorTree { get; set; }
+
 	protected Timer _mainTimer { get; set; }
 
 	public AnimatedSprite2D AnimatedSprite2D { get; set; }

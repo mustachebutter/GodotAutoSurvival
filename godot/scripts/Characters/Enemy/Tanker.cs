@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using Godot;
-using Godot.Collections;
+using System.Collections.Generic;
 
 public partial class Tanker : Enemy
 {
@@ -18,8 +18,6 @@ public partial class Tanker : Enemy
 	private readonly float CHARGE_COOLDOWN = 10.0f;
 	private readonly float CHARGE_DISTANCE = 500.0f;
 
-	private Blackboard _blackboard { get; set; } = new Blackboard();
-	private BehaviorTree _behaviorTree { get; set; } = new BehaviorTree();
 
 	#region GODOT
 	public override void _Ready()
@@ -30,7 +28,7 @@ public partial class Tanker : Enemy
 		LoggingUtils.Debug(GetAnimation("attack"));
 
 		var overrideStats = new Dictionary<string, float>
-		{ 
+		{
 			{ "AttackRange", 150.0f },
 			{ "Speed", 40.0f },
 			{ "Health", 200.0f },
@@ -39,62 +37,64 @@ public partial class Tanker : Enemy
 		SetUpEnemy(overrideStats, out float attackRange);
 
 		StartAttackTimer();
-		_chargeTimer = Utils.CreateTimer(this, () => {
+		_chargeTimer = Utils.CreateTimer(this, () =>
+		{
 			_isAbilityInProgress = true;
 			LoggingUtils.Debug("Ability Charged~");
 		}, CHARGE_DURATION, true);
 
 		_chargeCooldownTimer = Utils.CreateTimer(this, () => _isAbilityOnCooldown = false, CHARGE_COOLDOWN, true);
 
-		_blackboard.SetValue("State", EnemyState.Idle);
-		_behaviorTree.AddNode(new ConditionalNode("State", EnemyState.Idle));
-		_behaviorTree.AddNode(new ActionNode(() => ResetCharge()));
+		// AI Behavior set up
+		BTNode abilityChargeUp = new ActionNode((float delta) =>
+		{
+			return false;
+		});
+		BTNode abilityDashTowardsPlayer = new ActionNode((float delta) =>
+		{
+			return false;
+		});
+		BTNode abilityEndOfDash = new ActionNode((float delta) =>
+		{
+			return false;
+		});
+		BTNode abilityCooldown = new ActionNode((float delta) =>
+		{
+			return false;
+		});
 
-		_behaviorTree.AddNode(new ConditionalNode("State", EnemyState.Charging));
-		_behaviorTree.AddNode(new ActionNode(() => _chargeTimer.Start()));
 
-		_behaviorTree.AddNode(new ConditionalNode("State", EnemyState.ChargingAtPlayer));
-		_behaviorTree.AddNode(new ActionNode(() => ResetCharge()));
+		BTNode detectPlayer = new SequenceNode(new List<BTNode>
+		{
+			abilityChargeUp,
+			abilityDashTowardsPlayer,
+			abilityEndOfDash,
+			abilityCooldown,
+		});
 
-		_behaviorTree.AddNode(new ConditionalNode("State", EnemyState.Cooldown));
-		_behaviorTree.AddNode(new ActionNode(() => ResetCharge()));
+		// TODO: These should be in the Enemy.cs
+		BTNode attackPlayer = new ActionNode((float delta) =>
+		{
+			return false;
+		});
+
+		BTNode chasePlayer = new ActionNode((float delta) =>
+		{
+			return false;
+		});
+
+		_behaviorTree = new SelectorNode(new List<BTNode>
+		{
+			chasePlayer,
+			detectPlayer,
+			attackPlayer,
+		});
 	}
 
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
-		
-		if (_isAbilityStarting)
-		{
-			// DO ONCE!
-			// Pause the attack timer
-			if (!_mainTimer.IsStopped())
-				_mainTimer.Stop();
-
-			LoggingUtils.Debug("CHAAAARGE");
-			// Play animation of charging up
-
-			// Dash towards target
-			CharacterStatComponent.AddStat("Speed", 50.0f, StatTypes.Stat);
-			_isAbilityStarting = false;
-		}
-		
-		if (_isAbilityInProgress)
-		{
-			Ability_Charge();
-			return;
-		}
-
-		if (!_isAbilityOnCooldown)
-		{
-			_chargeTimer.Start();
-		}
-		else
-		{
-			_chargeCooldownTimer.Start();
-		}
-
-
+		_behaviorTree.Execute((float) delta);
 	}
 	#endregion
 	
