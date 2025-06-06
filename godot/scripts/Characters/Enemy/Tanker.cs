@@ -12,9 +12,9 @@ public partial class Tanker : Enemy
 	private Vector2 _previousFramePosition = Vector2.Zero;
 	private Timer _chargeTimer { get; set; }
 	private Timer _chargeCooldownTimer { get; set; }
-	private readonly float CHARGE_DURATION = 1.0f;
+	private readonly float CHARGE_DURATION = 2.0f;
 	private readonly float CHARGE_COOLDOWN = 10.0f;
-	private readonly float CHARGE_DISTANCE = 500.0f;
+	private readonly float CHARGE_DISTANCE = 700.0f;
 
 
 	#region GODOT
@@ -23,7 +23,6 @@ public partial class Tanker : Enemy
 		base._Ready();
 		ChargeArea2D = GetNode<Area2D>("ChargeArea2D");
 		AssignAnimationLibrary("Enemy_Tanker_AnimationLibrary", SavedAnimationLibrary.EnemyAnimationLibrary);
-		LoggingUtils.Debug(GetAnimation("attack"));
 
 		var overrideStats = new Dictionary<string, float>
 		{
@@ -33,11 +32,13 @@ public partial class Tanker : Enemy
 		};
 
 		SetUpEnemy(overrideStats, out float attackRange);
-
 		StartAttackTimer();
+
 		_chargeTimer = Utils.CreateTimer(this, () =>
 		{
 			LoggingUtils.Debug("Ability Charged~");
+			StatusEffectHUD.Visible = false;
+
 			CharacterStatComponent.AddStat("Speed", 150.0f, StatTypes.Stat);
 			_finishedChargingAbility = true;
 		}, CHARGE_DURATION, true);
@@ -47,15 +48,11 @@ public partial class Tanker : Enemy
 		// AI Behavior set up
 		_blackboard.SetValue("playerPosition", new Vector3());
 
-		BTNode abilitySequenceCondition = new ConditionalNode(() =>
-		{
-			return DetectedPlayer(ChargeArea2D, out _) && !_isAbilityOnCooldown;
-		});
-
 		BTNode abilityChargeUp = new ActionNode((float delta) =>
 		{
 			_chargeTimer.Start();
 			// Do the charging animation
+			StatusEffectHUD.Visible = true;
 			return true;
 		});
 		BTNode abilityDashTowardsPlayer = new ActionNode(Ability_Charge);
@@ -69,7 +66,6 @@ public partial class Tanker : Enemy
 
 		BTNode detectPlayer = new SequenceNode(new List<BTNode>
 		{
-			abilitySequenceCondition,
 			abilityChargeUp,
 			// Should finished charging then continue with the rest
 			new ConditionalNode(() => _finishedChargingAbility),
@@ -92,7 +88,13 @@ public partial class Tanker : Enemy
 		_behaviorTree = new SelectorNode(new List<BTNode>
 		{
 			chasePlayer,
-			detectPlayer,
+			// If the condition failed, it would go up the chain and run the next sibling node instead
+			new SequenceConditionalNode(() =>
+				{
+					return DetectedPlayer(ChargeArea2D, out _) && !_isAbilityOnCooldown;
+				},
+				detectPlayer
+			),
 			attackPlayer,
 		});
 	}
@@ -113,7 +115,6 @@ public partial class Tanker : Enemy
 
 	public bool Ability_Charge(float delta)
 	{
-
 		if (MoveTowardsThePlayer())
 		{
 			LoggingUtils.Debug("Hit a player");
@@ -146,6 +147,8 @@ public partial class Tanker : Enemy
 		_chargeDistance = 0.0f;
 		CharacterStatComponent.ReduceStat("Speed", 50.0f, StatTypes.Stat);
 		_mainTimer.Start();
+
+		StopInPlace();
 
 		return true;
 	}

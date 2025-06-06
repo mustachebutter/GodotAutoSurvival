@@ -19,6 +19,7 @@ public partial class Enemy : BaseCharacter
 	public AnimatedSprite2D AnimatedSprite2D { get; set; }
 	public AnimationPlayer AnimationPlayer { get; set; }
 	public Area2D HitDetectionArea2D { get; set; }
+	public RichTextLabel StatusEffectHUD { get; set; }
 
 
 	#region GODOT
@@ -35,6 +36,8 @@ public partial class Enemy : BaseCharacter
 		AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		AnimationPlayer.AnimationFinished += OnAnimationFinished;
 
+		StatusEffectHUD = GetNode<RichTextLabel>("StatusEffectHUD");
+		StatusEffectHUD.Visible = false;
 	}
 
 	public override void _Process(double delta)

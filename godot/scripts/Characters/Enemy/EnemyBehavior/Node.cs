@@ -26,6 +26,30 @@ public class ConditionalNode : BTNode
     }
 }
 
+public class SequenceConditionalNode : ConditionalNode
+{
+    private BTNode _childSequenceNode;
+    public SequenceConditionalNode(Func<bool> condition, BTNode child) : base(condition)
+    {
+        _childSequenceNode = child;
+    }
+
+    public override bool Execute(float delta)
+    {
+        if (base.Execute(delta))
+        {
+            return _childSequenceNode.Execute(delta);
+        }
+        else
+        {
+            return false;
+        }
+        
+    }
+
+
+}
+
 public class ActionNode : BTNode
 {
     private Func<float, bool> _action;
