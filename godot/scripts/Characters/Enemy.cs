@@ -38,6 +38,33 @@ public partial class Enemy : BaseCharacter
 
 		StatusEffectHUD = GetNode<RichTextLabel>("StatusEffectHUD");
 		StatusEffectHUD.Visible = false;
+
+		// Behavior Tree set up
+		BTNode attack = new ActionNode((float delta) =>
+		{
+			return false;
+		});
+
+		BTNode chase = new ActionNode((float delta) =>
+		{
+			MoveTowardsThePlayer();
+			if (DetectedPlayer(Area2D, out _))
+			{
+				return true;
+			}
+
+			return false;
+		});
+
+		BTNode chasePlayer = new SequenceConditionalNode(() =>
+			{
+				return GlobalConfigs.EnemySpawnMode.Equals(EnemySpawnMode.Normal) && !_isStopping;
+			},
+			new SequenceNode(new List<BTNode>
+			{
+				chase
+			})
+		);
 	}
 
 	public override void _Process(double delta)

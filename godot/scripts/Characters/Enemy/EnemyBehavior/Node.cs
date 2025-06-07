@@ -13,6 +13,30 @@ public abstract class BTNode
     public abstract bool Execute(float delta);
 }
 
+public class WaitNode : BTNode
+{
+    private float _waitDuration;
+    private float _timeElased = 0.0f;
+
+
+    public WaitNode(float waitDuration)
+    {
+        _waitDuration = waitDuration;
+    }
+
+    public override bool Execute(float delta)
+    {
+        if (_timeElased <= _waitDuration)
+        {
+            _timeElased += delta;
+            return false;
+        }
+
+        _timeElased = 0.0f;
+        return true;
+    }
+}
+
 public class ConditionalNode : BTNode
 {
     private Func<bool> _condition;
@@ -122,5 +146,4 @@ public class SequenceNode : BTNode
         _currentIndex = 0;
         return true;
     }
-
 }
