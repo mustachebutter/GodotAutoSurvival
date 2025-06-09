@@ -32,18 +32,29 @@ public partial class Tanker : Enemy
 		};
 
 		SetUpEnemy(overrideStats, out float attackRange);
-		StartAttackTimer();
 
-		_chargeTimer = Utils.CreateTimer(this, () =>
-		{
-			LoggingUtils.Debug("Ability Charged~");
-			StatusEffectHUD.Visible = false;
+		_chargeTimer = Utils.CreateTimer
+		(
+			this,
+			() =>
+			{
+				LoggingUtils.Debug("Ability Charged~");
+				StatusEffectHUD.Visible = false;
 
-			CharacterStatComponent.AddStat("Speed", 150.0f, StatTypes.Stat);
-			_finishedChargingAbility = true;
-		}, CHARGE_DURATION, true);
+				CharacterStatComponent.AddStat("Speed", 150.0f, StatTypes.Stat);
+				_finishedChargingAbility = true;
+			},
+			CHARGE_DURATION,
+			true
+		);
 
-		_chargeCooldownTimer = Utils.CreateTimer(this, () => _isAbilityOnCooldown = false, CHARGE_COOLDOWN, true);
+		_chargeCooldownTimer = Utils.CreateTimer
+		(
+			this,
+			() => _isAbilityOnCooldown = false,
+			CHARGE_COOLDOWN,
+			true
+		);
 
 		// AI Behavior set up
 		_blackboard.SetValue("playerPosition", new Vector3());
@@ -74,29 +85,14 @@ public partial class Tanker : Enemy
 			abilityCooldown,
 		});
 
-		// TODO: These should be in the Enemy.cs
-		BTNode attackPlayer = new ActionNode((float delta) =>
-		{
-			return false;
-		});
+		BTNode castAbility = new ConditionalControllerNode(() =>
+			{
+				return DetectedPlayer(ChargeArea2D, out _) && !_isAbilityOnCooldown;
+			},
+			detectPlayer
+		);
 
-		BTNode chasePlayer = new ActionNode((float delta) =>
-		{
-			return false;
-		});
-
-		_behaviorTree = new SelectorNode(new List<BTNode>
-		{
-			chasePlayer,
-			// If the condition failed, it would go up the chain and run the next sibling node instead
-			new SequenceConditionalNode(() =>
-				{
-					return DetectedPlayer(ChargeArea2D, out _) && !_isAbilityOnCooldown;
-				},
-				detectPlayer
-			),
-			attackPlayer,
-		});
+		_rootNodes.Insert(0, castAbility);
 	}
 
 	public override void _Process(double delta)
@@ -131,12 +127,6 @@ public partial class Tanker : Enemy
 		}
 
 		return false;
-	}
-
-	public override void ResetAttack()
-	{
-		base.ResetAttack();
-
 	}
 
 	public bool ResetCharge()

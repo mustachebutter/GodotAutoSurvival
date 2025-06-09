@@ -50,10 +50,10 @@ public class ConditionalNode : BTNode
     }
 }
 
-public class SequenceConditionalNode : ConditionalNode
+public class ConditionalControllerNode : ConditionalNode
 {
     private BTNode _childSequenceNode;
-    public SequenceConditionalNode(Func<bool> condition, BTNode child) : base(condition)
+    public ConditionalControllerNode(Func<bool> condition, BTNode child) : base(condition)
     {
         _childSequenceNode = child;
     }
@@ -70,9 +70,8 @@ public class SequenceConditionalNode : ConditionalNode
         }
         
     }
-
-
 }
+
 
 public class ActionNode : BTNode
 {

@@ -43,10 +43,10 @@ _data = {
 [node name="Tanker" instance=ExtResource("1_o34qx")]
 script = ExtResource("2_d470p")
 
-[node name="Sprite2D (Preview)" parent="." index="0"]
+[node name="Sprite2D (Preview)" parent="." index="1"]
 visible = false
 
-[node name="AnimatedSprite2D" parent="." index="1"]
+[node name="AnimatedSprite2D" parent="." index="2"]
 position = Vector2(5, -20)
 scale = Vector2(3, 3)
 sprite_frames = ExtResource("3_ht3lc")
@@ -59,7 +59,7 @@ collision_layer = 8
 shape = SubResource("CircleShape2D_djlws")
 debug_color = Color(1, 1, 0.00784314, 0.0470588)
 
-[node name="AnimationPlayer" parent="." index="12"]
+[node name="AnimationPlayer" parent="." index="13"]
 libraries = {
 "": SubResource("AnimationLibrary_mqbon"),
 "Enemy_Tanker_AnimationLibrary": ExtResource("5_tuwke")

@@ -9,19 +9,19 @@
 [node name="Grunt" instance=ExtResource("1_ijxy2")]
 script = ExtResource("2_3ppnl")
 
-[node name="Sprite2D (Preview)" parent="." index="0"]
+[node name="Sprite2D (Preview)" parent="." index="1"]
 visible = false
 texture = ExtResource("3_vxtq4")
 hframes = 14
 vframes = 6
 
-[node name="AnimatedSprite2D" parent="." index="1"]
+[node name="AnimatedSprite2D" parent="." index="2"]
 position = Vector2(4, -10)
 scale = Vector2(2, 2)
 sprite_frames = ExtResource("4_a003m")
 animation = &"attack"
 
-[node name="AnimationPlayer" parent="." index="11"]
+[node name="AnimationPlayer" parent="." index="12"]
 libraries = {
 "Enemy_AnimationLibrary": ExtResource("4_ug085")
 }

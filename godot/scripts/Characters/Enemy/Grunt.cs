@@ -25,8 +25,6 @@ public partial class Grunt : Enemy
 		};
 
 		SetUpEnemy(overrideStats, out float attackRange);
-
-		StartAttackTimer();
 	}
 
 	public override void _Process(double delta)
@@ -76,12 +74,16 @@ public partial class Grunt : Enemy
 		base.Attack();
 	}
 
-	public override void ResetAttack()
+	public override bool ResetAttack()
 	{
-		base.ResetAttack();
-		HitDetectionArea2D.Position = new Vector2(0.0f, -(CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 2));
-		_angle =  -(Mathf.Pi / 2);
+		if (base.ResetAttack())
+		{
+			HitDetectionArea2D.Position = new Vector2(0.0f, -(CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 2));
+			_angle = -(Mathf.Pi / 2);
+			return true;
+		}
 
+		return false;
 	}
 	#endregion
 
