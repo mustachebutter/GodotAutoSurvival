@@ -17,14 +17,15 @@ public partial class BaseCharacter : CharacterBody2D
 	public DamageNumberComponent DamageNumberComponent { get; private set; }
 	public StatusEffectComponent StatusEffectComponent { get; private set; }
 	public VisualEffectComponent VisualEffectComponent { get; private set; }
-
+	protected BTNode _animationBehaviorTree { get; set; }
+	
 	public bool IsDead
 	{
 		get
 		{
 			if (CharacterStatComponent.GetCompleteStatFromName("Health").totalValue <= 0)
 				return true;
-			
+
 			return false;
 		}
 		private set { _isDead = value; }
@@ -44,9 +45,15 @@ public partial class BaseCharacter : CharacterBody2D
 		_healthLabel = GetNode<Label>("HealthLabel");
 	}
 
-	protected string GetAnimation(string name)
+	protected BTNode CreatePlayAnimationNode(AnimationPlayer animationPlayer, string name)
 	{
-		return $"{AnimationLibraryName}/{name}";
+		BTNode playAnimationNode = new ActionNode((float delta) =>
+		{
+			animationPlayer.Play($"{AnimationLibraryName}/{name}");
+			return BTNodeState.Success;
+		});
+
+		return playAnimationNode;
 	}
 
 	public override void _Process(double delta)

@@ -42,7 +42,7 @@ public partial class Enemy : BaseCharacter
 		_mainTimer = Utils.CreateTimer
 		(
 			this,
-			() =>  _blackboard.SetValue("bCanAttack", true),
+			() => _blackboard.SetValue("bCanAttack", true),
 			CharacterStatComponent.GetStatFromName("AttackSpeed").Value,
 			true
 		);
@@ -78,7 +78,7 @@ public partial class Enemy : BaseCharacter
 			AnimationPlayer.Stop();
 			_isIdle = false;
 			_isWalking = false;
-			AnimationPlayer.Play(GetAnimation("attack"));
+			AnimationPlayer.Play(PlayAnimation("attack"));
 			LoggingUtils.Debug(AnimationPlayer.CurrentAnimation);
 			StopInPlace();
 
@@ -114,29 +114,52 @@ public partial class Enemy : BaseCharacter
 		};
 
 		_behaviorTree = new SelectorNode(_rootNodes);
+
+		// ANIMATIONS
+		BTNode movementAnimationNode = new SequenceNode(new List<BTNode>
+		{
+			new ConditionalNode(() => Velocity > Vector2.Zero),
+			new ActionNode((float delta) => {
+				SetSpriteFlipDirection();
+				return BTNodeState.Success;
+			}),
+			new SelectorNode(new List<BTNode> {
+				new SequenceNode(new List<BTNode> {
+					new ConditionalNode(() => CharacterStatComponent.GetCompleteStatFromName("Speed").totalValue > 150),
+					CreatePlayAnimationNode(AnimationPlayer, "run"),
+				}),
+				CreatePlayAnimationNode(AnimationPlayer, "walk"),
+			})
+
+		});
+
+		BTNode attackAnimationNode = new SequenceNode(new List<BTNode>
+		{
+			new ConditionalNode(() => DetectedPlayer(Area2D, out _) && _blackboard.GetValue<bool>("bCanAttack")),
+			CreatePlayAnimationNode(AnimationPlayer, "attack"),
+		});
+
+
+		_animationBehaviorTree = new SelectorNode(new List<BTNode>
+		{
+			CreatePlayAnimationNode(AnimationPlayer, "idle"),
+			movementAnimationNode,
+			attackAnimationNode,
+		});
 	}
 
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
-		var _canAttack = _blackboard.GetValue<bool>("bCanAttack");
 
 		if (GlobalConfigs.EnemySpawnMode.Equals(EnemySpawnMode.Normal) && !_isStopping)
-			MoveTowardsThePlayer();
-		
-		if (Velocity == Vector2.Zero && _isIdle == false && _canAttack == false)
-		{	
-			_isIdle = true;
-			_isWalking = false;
-			AnimationPlayer.Play(GetAnimation("idle"));
-		}
-		else if (Velocity != Vector2.Zero && _isWalking == false&& _canAttack == false)
-		{
-			_isIdle = false;
-			_isWalking = true;
-			AnimationPlayer.Play(GetAnimation("run"));
-		}
-		
+			MoveTowardsThePlayer();		
+	}
+
+	#endregion
+	#region ACTION
+	public void SetSpriteFlipDirection()
+	{
 		if (Velocity.X > 0)
 		{
 			AnimatedSprite2D.FlipH = false;
@@ -148,9 +171,6 @@ public partial class Enemy : BaseCharacter
 			_isFacingRight = false;
 		}
 	}
-
-	#endregion
-	#region ACTION
 	public bool MoveTowardsThePlayer()
 	{
 		Vector2 direction = _player.GlobalPosition - GlobalPosition;
@@ -171,7 +191,7 @@ public partial class Enemy : BaseCharacter
 					LoggingUtils.Debug($"Hitt player {player.Name}");
 					return true;
 				}
-					
+
 			}
 		}
 
@@ -215,11 +235,10 @@ public partial class Enemy : BaseCharacter
 	private void OnAnimationFinished(StringName anim_name)
 	{
 		LoggingUtils.Error(anim_name);
-		if (anim_name == GetAnimation("attack"))
+		if (anim_name == PlayAnimation("attack"))
 		{
 			LoggingUtils.Error("Finished attacking animation");
 			_blackboard.SetValue("bFinishedAttackAnimation", true);
-			AnimationPlayer.Play(GetAnimation("idle"));
 		}
 	}
 
