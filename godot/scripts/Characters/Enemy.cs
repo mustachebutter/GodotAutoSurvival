@@ -6,8 +6,6 @@ public partial class Enemy : BaseCharacter
 	private Label _label;
 	private Player _player;
 	protected bool _isStopping = false;
-	private bool _isWalking { get; set; } = false;
-	private bool _isIdle { get; set; } = false;
 	protected bool _isFacingRight { get; set; } = true;
 	private bool _dealtDamage { get; set; } = false;
 	protected Blackboard _blackboard { get; set; } = new Blackboard();
@@ -54,57 +52,43 @@ public partial class Enemy : BaseCharacter
 
 		BTNode chase = new ActionNode((float delta) =>
 		{
-			if (DetectedPlayer(Area2D, out _))
-			{
-				LoggingUtils.Error("Should be here");
-				return false;
-			}
-
 			MoveTowardsThePlayer();
-
-			return true;
+			return BTNodeState.Success;
 		});
 
-		BTNode chasePlayer = new ConditionalControllerNode(() =>
+		BTNode chasePlayer = new SequenceNode(new List<BTNode>
 			{
-				return GlobalConfigs.EnemySpawnMode.Equals(EnemySpawnMode.Normal) && !_isStopping;
-			},
-			chase
+				new ConditionalNode(() => GlobalConfigs.EnemySpawnMode.Equals(EnemySpawnMode.Normal) && !_isStopping),
+				chase,
+			}
 		);
 
 		BTNode attackSetUp = new ActionNode((float delta) =>
 		{
 			LoggingUtils.Debug("Setting up Attack");
 			AnimationPlayer.Stop();
-			_isIdle = false;
-			_isWalking = false;
-			AnimationPlayer.Play(PlayAnimation("attack"));
 			LoggingUtils.Debug(AnimationPlayer.CurrentAnimation);
 			StopInPlace();
 
-			return true;
+			return BTNodeState.Success;
 		});
 
 		BTNode attack = new ActionNode((float delta) =>
 		{
 			LoggingUtils.Debug("Attack");
 			Attack();
-			return true;
+			return BTNodeState.Success;
 		});
 
 		BTNode attackReset = new ActionNode((float delta) => ResetAttack());
 
-		BTNode attackPlayer = new ConditionalControllerNode(() =>
+		BTNode attackPlayer = new SequenceNode(new List<BTNode>
 			{
-				return DetectedPlayer(Area2D, out _) && _blackboard.GetValue<bool>("bCanAttack");
-			},
-			new SequenceNode(new List<BTNode>
-			{
+				new ConditionalNode(() => DetectedPlayer(Area2D, out _) && _blackboard.GetValue<bool>("bCanAttack")),
 				attackSetUp,
 				attack,
-				new ConditionalNode(() => _blackboard.GetValue<bool>("bFinishedAttackAnimation")),
 				attackReset,
-			})
+			}
 		);
 
 		_rootNodes = new List<BTNode>
@@ -151,9 +135,9 @@ public partial class Enemy : BaseCharacter
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
+		_behaviorTree.Execute((float)delta);
+		_animationBehaviorTree.Execute((float)delta);
 
-		if (GlobalConfigs.EnemySpawnMode.Equals(EnemySpawnMode.Normal) && !_isStopping)
-			MoveTowardsThePlayer();		
 	}
 
 	#endregion
@@ -215,18 +199,23 @@ public partial class Enemy : BaseCharacter
 		}
 	}
 
-	public virtual bool ResetAttack()
+	public virtual BTNodeState ResetAttack()
 	{
-		LoggingUtils.Debug("ReSetting Attack");
+		if (_blackboard.GetValue<bool>("bFinishedAttackAnimation"))
+		{
+			LoggingUtils.Debug("ReSetting Attack");
 
-		_dealtDamage = false;
-		_blackboard.SetValue("bCanAttack", false);
-		_blackboard.SetValue("bFinishedAttackAnimation", false);
-		_isStopping = false;
+			_dealtDamage = false;
+			_blackboard.SetValue("bCanAttack", false);
+			_blackboard.SetValue("bFinishedAttackAnimation", false);
+			_isStopping = false;
 
-		_mainTimer.Start();
+			_mainTimer.Start();
 
-		return true;
+			return BTNodeState.Success;
+		}
+
+		return BTNodeState.Running;
 	}
 
 	#endregion
@@ -235,7 +224,7 @@ public partial class Enemy : BaseCharacter
 	private void OnAnimationFinished(StringName anim_name)
 	{
 		LoggingUtils.Error(anim_name);
-		if (anim_name == PlayAnimation("attack"))
+		if (anim_name == GetAnimation("attack"))
 		{
 			LoggingUtils.Error("Finished attacking animation");
 			_blackboard.SetValue("bFinishedAttackAnimation", true);

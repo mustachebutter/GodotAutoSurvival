@@ -74,16 +74,18 @@ public partial class Grunt : Enemy
 		base.Attack();
 	}
 
-	public override bool ResetAttack()
+	public override BTNodeState ResetAttack()
 	{
-		if (base.ResetAttack())
+		BTNodeState status = base.ResetAttack();
+		if (status == BTNodeState.Success)
 		{
 			HitDetectionArea2D.Position = new Vector2(0.0f, -(CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 2));
 			_angle = -(Mathf.Pi / 2);
-			return true;
+			return BTNodeState.Success ;
 		}
 
-		return false;
+		LoggingUtils.Error("Grunt: Failed to Reset Attack");
+		return BTNodeState.Failure;
 	}
 	#endregion
 

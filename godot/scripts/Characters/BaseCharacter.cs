@@ -45,11 +45,15 @@ public partial class BaseCharacter : CharacterBody2D
 		_healthLabel = GetNode<Label>("HealthLabel");
 	}
 
+	public string GetAnimation(string name)
+	{
+		return $"{AnimationLibraryName}/{name}";
+	}
 	protected BTNode CreatePlayAnimationNode(AnimationPlayer animationPlayer, string name)
 	{
 		BTNode playAnimationNode = new ActionNode((float delta) =>
 		{
-			animationPlayer.Play($"{AnimationLibraryName}/{name}");
+			animationPlayer.Play(GetAnimation(name));
 			return BTNodeState.Success;
 		});
 

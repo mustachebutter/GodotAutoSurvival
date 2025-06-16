@@ -7,10 +7,9 @@ public partial class Tanker : Enemy
 {
 	public Area2D ChargeArea2D { get; set; }
 	private bool _isAbilityOnCooldown { get; set; } = false;
-	private bool _finishedChargingAbility { get; set; } = false;
 	private float _chargeDistance { get; set; } = 0.0f;
 	private Vector2 _previousFramePosition = Vector2.Zero;
-	private Timer _chargeTimer { get; set; }
+	private float _chargeTimer { get; set; }
 	private Timer _chargeCooldownTimer { get; set; }
 	private readonly float CHARGE_DURATION = 2.0f;
 	private readonly float CHARGE_COOLDOWN = 10.0f;
@@ -33,21 +32,6 @@ public partial class Tanker : Enemy
 
 		SetUpEnemy(overrideStats, out float attackRange);
 
-		_chargeTimer = Utils.CreateTimer
-		(
-			this,
-			() =>
-			{
-				LoggingUtils.Debug("Ability Charged~");
-				StatusEffectHUD.Visible = false;
-
-				CharacterStatComponent.AddStat("Speed", 150.0f, StatTypes.Stat);
-				_finishedChargingAbility = true;
-			},
-			CHARGE_DURATION,
-			true
-		);
-
 		_chargeCooldownTimer = Utils.CreateTimer
 		(
 			this,
@@ -61,35 +45,48 @@ public partial class Tanker : Enemy
 
 		BTNode abilityChargeUp = new ActionNode((float delta) =>
 		{
-			_chargeTimer.Start();
+			_chargeTimer += delta;
 			// Do the charging animation
-			StatusEffectHUD.Visible = true;
-			return true;
+			if (!StatusEffectHUD.Visible)
+				StatusEffectHUD.Visible = true;
+
+			if (_chargeTimer >= CHARGE_DURATION)
+			{
+				LoggingUtils.Debug("Ability Charged~");
+				StatusEffectHUD.Visible = false;
+				CharacterStatComponent.AddStat("Speed", 150.0f, StatTypes.Stat);
+				return BTNodeState.Success;
+			}
+
+			if (IsDead)
+				return BTNodeState.Failure;
+
+			return BTNodeState.Running;
 		});
+
 		BTNode abilityDashTowardsPlayer = new ActionNode(Ability_Charge);
 		BTNode abilityEndOfDash = new ActionNode((float delta) => ResetCharge());
 		BTNode abilityCooldown = new ActionNode((float delta) =>
 		{
+			_isAbilityOnCooldown = true;
 			_chargeCooldownTimer.Start();
-			return true;
+			return BTNodeState.Success;
 		});
 
 
 		BTNode detectPlayer = new SequenceNode(new List<BTNode>
 		{
 			abilityChargeUp,
-			// Should finished charging then continue with the rest
-			new ConditionalNode(() => _finishedChargingAbility),
 			abilityDashTowardsPlayer,
 			abilityEndOfDash,
 			abilityCooldown,
 		});
 
-		BTNode castAbility = new ConditionalControllerNode(() =>
+		BTNode castAbility = new SequenceNode(new List<BTNode>
 			{
-				return DetectedPlayer(ChargeArea2D, out _) && !_isAbilityOnCooldown;
-			},
-			detectPlayer
+				new ConditionalNode(() => DetectedPlayer(ChargeArea2D, out _) && !_isAbilityOnCooldown),
+				detectPlayer
+			}
 		);
 
 		_rootNodes.Insert(0, castAbility);
@@ -98,7 +95,6 @@ public partial class Tanker : Enemy
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
-		_behaviorTree.Execute((float) delta);
 	}
 	#endregion
 	
@@ -109,13 +105,13 @@ public partial class Tanker : Enemy
 		// base.Attack();
 	}
 
-	public bool Ability_Charge(float delta)
+	public BTNodeState Ability_Charge(float delta)
 	{
 		if (MoveTowardsThePlayer())
 		{
 			LoggingUtils.Debug("Hit a player");
 			// TODO: If hit players then knock them back
-			return true;
+			return BTNodeState.Success;
 		}
 
 		_chargeDistance += _previousFramePosition.DistanceTo(Position);
@@ -123,24 +119,22 @@ public partial class Tanker : Enemy
 
 		if (_chargeDistance >= CHARGE_DISTANCE)
 		{
-			return true;
+			return BTNodeState.Success;
 		}
 
-		return false;
+		return BTNodeState.Running;
 	}
 
-	public bool ResetCharge()
+	public BTNodeState ResetCharge()
 	{
 		LoggingUtils.Debug("Resetting");
-		_isAbilityOnCooldown = true;
-		_finishedChargingAbility = false;
 		_chargeDistance = 0.0f;
 		CharacterStatComponent.ReduceStat("Speed", 50.0f, StatTypes.Stat);
 		_mainTimer.Start();
 
 		StopInPlace();
 
-		return true;
+		return BTNodeState.Success;
 	}
 	#endregion
 
