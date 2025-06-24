@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 
 public partial class Enemy : BaseCharacter
@@ -11,14 +12,14 @@ public partial class Enemy : BaseCharacter
 	protected Blackboard _blackboard { get; set; } = new Blackboard();
 	protected BTNode _behaviorTree { get; set; }
 	protected List<BTNode> _rootNodes { get; set; }
-
 	protected Timer _mainTimer { get; set; }
+	protected Dictionary<string, float> _overrideStats = new Dictionary<string, float>();
+
 
 	public AnimatedSprite2D AnimatedSprite2D { get; set; }
 	public AnimationPlayer AnimationPlayer { get; set; }
 	public Area2D HitDetectionArea2D { get; set; }
 	public RichTextLabel StatusEffectHUD { get; set; }
-
 
 	#region GODOT
 	public override void _Ready()
@@ -37,6 +38,13 @@ public partial class Enemy : BaseCharacter
 		StatusEffectHUD = GetNode<RichTextLabel>("StatusEffectHUD");
 		StatusEffectHUD.Visible = false;
 
+		SetUpEnemy();
+
+		// Behavior Tree set up
+		_blackboard.SetValue("bCanAttack", false);
+		_blackboard.SetValue("bFinishedAttackAnimation", false);
+		_blackboard.SetValue("bIsAttacking", false);
+
 		_mainTimer = Utils.CreateTimer
 		(
 			this,
@@ -45,90 +53,80 @@ public partial class Enemy : BaseCharacter
 			true
 		);
 
-		// Behavior Tree set up
-		_blackboard.SetValue("bCanAttack", false);
-		_blackboard.SetValue("bFinishedAttackAnimation", false);
-
-
-		BTNode chase = new ActionNode((float delta) =>
-		{
-			MoveTowardsThePlayer();
-			return BTNodeState.Success;
-		});
-
-		BTNode chasePlayer = new SequenceNode(new List<BTNode>
-			{
-				new ConditionalNode(() => GlobalConfigs.EnemySpawnMode.Equals(EnemySpawnMode.Normal) && !_isStopping),
-				chase,
-			}
-		);
-
-		BTNode attackSetUp = new ActionNode((float delta) =>
-		{
-			LoggingUtils.Debug("Setting up Attack");
-			AnimationPlayer.Stop();
-			LoggingUtils.Debug(AnimationPlayer.CurrentAnimation);
-			StopInPlace();
-
-			return BTNodeState.Success;
-		});
-
-		BTNode attack = new ActionNode((float delta) =>
-		{
-			LoggingUtils.Debug("Attack");
-			Attack();
-			return BTNodeState.Success;
-		});
-
-		BTNode attackReset = new ActionNode((float delta) => ResetAttack());
+		_mainTimer.Start();
 
 		BTNode attackPlayer = new SequenceNode(new List<BTNode>
 			{
 				new ConditionalNode(() => DetectedPlayer(Area2D, out _) && _blackboard.GetValue<bool>("bCanAttack")),
-				attackSetUp,
-				attack,
-				attackReset,
+				new ActionNode((float delta) =>
+				{
+					LoggingUtils.Debug("Setting up Attack");
+					_blackboard.SetValue("bIsAttacking", true);
+					StopInPlace();
+					return BTNodeState.Success;
+				}),
+				CreatePlayAnimationNode(AnimationPlayer, "attack"),
+				new ActionNode((float delta) =>
+				{
+					LoggingUtils.Debug("Attack");
+					Attack();
+					return BTNodeState.Success;
+				}),
+				new WaitUntilNode(() => _blackboard.GetValue<bool>("bFinishedAttackAnimation")),
+				new ActionNode((float delta) => ResetAttack()),
 			}
 		);
 
+		BTNode chasePlayer = new SequenceNode(new List<BTNode>
+			{
+				new ConditionalNode(() => GlobalConfigs.EnemySpawnMode.Equals(EnemySpawnMode.Normal) && !_isStopping),
+				new ActionNode((float delta) =>
+				{
+					MoveTowardsThePlayer();
+					return BTNodeState.Success;
+				}),
+			}
+		);
+
+		BTNode idle = new ActionNode((float delta) =>
+		{
+			Velocity = Vector2.Zero;
+			return BTNodeState.Success;
+		});
+
 		_rootNodes = new List<BTNode>
 		{
-			// chasePlayer,
 			attackPlayer,
+			chasePlayer,
+			idle,
 		};
 
 		_behaviorTree = new SelectorNode(_rootNodes);
 
 		// ANIMATIONS
-		BTNode movementAnimationNode = new SequenceNode(new List<BTNode>
-		{
-			new ConditionalNode(() => Velocity > Vector2.Zero),
-			new ActionNode((float delta) => {
-				SetSpriteFlipDirection();
-				return BTNodeState.Success;
-			}),
-			new SelectorNode(new List<BTNode> {
-				new SequenceNode(new List<BTNode> {
-					new ConditionalNode(() => CharacterStatComponent.GetCompleteStatFromName("Speed").totalValue > 150),
-					CreatePlayAnimationNode(AnimationPlayer, "run"),
-				}),
-				CreatePlayAnimationNode(AnimationPlayer, "walk"),
-			})
-
-		});
-
-		BTNode attackAnimationNode = new SequenceNode(new List<BTNode>
-		{
-			new ConditionalNode(() => DetectedPlayer(Area2D, out _) && _blackboard.GetValue<bool>("bCanAttack")),
-			CreatePlayAnimationNode(AnimationPlayer, "attack"),
-		});
-
-
 		_animationBehaviorTree = new SelectorNode(new List<BTNode>
 		{
+			new SequenceNode(new List<BTNode> {
+				new ConditionalNode(() => _blackboard.GetValue<bool>("bIsAttacking")),
+				// Return success to stop the selector and prevents idle
+				new ActionNode((f) => BTNodeState.Success),
+			}),
+			new SequenceNode(new List<BTNode>
+			{
+				new ConditionalNode(() => Velocity.LengthSquared() > 0),
+				new ActionNode((float delta) => {
+					SetSpriteFlipDirection();
+					return BTNodeState.Success;
+				}),
+				new SelectorNode(new List<BTNode> {
+					new SequenceNode(new List<BTNode> {
+						new ConditionalNode(() => CharacterStatComponent.GetCompleteStatFromName("Speed").totalValue > 150),
+						CreatePlayAnimationNode(AnimationPlayer, "run"),
+					}),
+					CreatePlayAnimationNode(AnimationPlayer, "walk"),
+				})
+			}),
 			CreatePlayAnimationNode(AnimationPlayer, "idle"),
-			movementAnimationNode,
-			attackAnimationNode,
 		});
 	}
 
@@ -201,21 +199,18 @@ public partial class Enemy : BaseCharacter
 
 	public virtual BTNodeState ResetAttack()
 	{
-		if (_blackboard.GetValue<bool>("bFinishedAttackAnimation"))
-		{
-			LoggingUtils.Debug("ReSetting Attack");
+		LoggingUtils.Debug("ReSetting Attack");
 
-			_dealtDamage = false;
-			_blackboard.SetValue("bCanAttack", false);
-			_blackboard.SetValue("bFinishedAttackAnimation", false);
-			_isStopping = false;
+		_dealtDamage = false;
+		_blackboard.SetValue("bCanAttack", false);
+		_blackboard.SetValue("bFinishedAttackAnimation", false);
+		_blackboard.SetValue("bIsAttacking", false);
 
-			_mainTimer.Start();
+		_isStopping = false;
 
-			return BTNodeState.Success;
-		}
+		_mainTimer.Start();
 
-		return BTNodeState.Running;
+		return BTNodeState.Success;
 	}
 
 	#endregion
@@ -256,18 +251,19 @@ public partial class Enemy : BaseCharacter
 		return false;
 	}
 
-	public virtual void SetUpEnemy(Dictionary<string, float> overrideStats, out float attackRange)
+	public virtual void SetUpEnemy()
 	{
-		if (overrideStats.Count > 0)
+		if (_overrideStats.Count > 0)
 		{
-			foreach (var statKey in overrideStats.Keys)
+			foreach (var statKey in _overrideStats.Keys)
 			{
 				var stat = CharacterStatComponent.GetStatFromName(statKey);
-				stat.Value = overrideStats[statKey];
+				stat.Value = _overrideStats[statKey];
 			}
 		}
 
-		attackRange = _circle.Radius = CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 2;
+		_circle.Radius = CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 2;
+		LoggingUtils.Debug($"Range {_circle.Radius}");
 	}
 
 	public void AssignAnimationLibrary(string name, AnimationLibrary animationLibrary)

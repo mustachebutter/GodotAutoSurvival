@@ -10,21 +10,22 @@ public partial class Grunt : Enemy
 	private float _orbitSpeed = 1.0f;
 	private float _orbitRadius = 50.0f;
 	private float _angle =  -(Mathf.Pi / 2);
-	
+	private readonly Dictionary<string, float> OVERRIDE_STATS = new Dictionary<string, float>
+	{
+		{ "AttackRange", 50.0f },
+		{ "Speed", 100.0f },
+		{ "Health", 100.0f },
+	};
+
 	#region GODOT
+	public Grunt()
+	{
+		_overrideStats = OVERRIDE_STATS;
+	}
 	public override void _Ready()
 	{
 		base._Ready();
 		AssignAnimationLibrary("Enemy_AnimationLibrary", SavedAnimationLibrary.EnemyAnimationLibrary);
-
-		var overrideStats = new Dictionary<string, float>
-		{ 
-			{ "AttackRange", 50.0f },
-			{ "Speed", 100.0f },
-			{ "Health", 100.0f },
-		};
-
-		SetUpEnemy(overrideStats, out float attackRange);
 	}
 
 	public override void _Process(double delta)
@@ -93,15 +94,15 @@ public partial class Grunt : Enemy
 	#endregion
 
 	#region HELPERS
-	public override void SetUpEnemy(Dictionary<string, float> overrideStats, out float attackRange)
+	public override void SetUpEnemy()
 	{
-		base.SetUpEnemy(overrideStats, out attackRange);
+		base.SetUpEnemy();
 
 		var hitDetectionCircle = (CircleShape2D) HitDetectionArea2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
 		hitDetectionCircle.ResourceLocalToScene = true;
 		hitDetectionCircle.Radius = 5.0f;
-		HitDetectionArea2D.Position = new Vector2(0.0f, -(attackRange));
-		_orbitRadius = attackRange;
+		HitDetectionArea2D.Position = new Vector2(0.0f, -(_circle.Radius));
+		_orbitRadius = _circle.Radius;
 
 	}
 	#endregion

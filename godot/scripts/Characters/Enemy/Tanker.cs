@@ -14,23 +14,25 @@ public partial class Tanker : Enemy
 	private readonly float CHARGE_DURATION = 2.0f;
 	private readonly float CHARGE_COOLDOWN = 10.0f;
 	private readonly float CHARGE_DISTANCE = 700.0f;
-
-
+	private readonly Dictionary<string, float> OVERRIDE_STATS = new Dictionary<string, float>
+	{
+		{ "AttackRange", 150.0f },
+		{ "Speed", 40.0f },
+		{ "Health", 200.0f },
+	};
+	
+	public Tanker()
+	{
+		_overrideStats = OVERRIDE_STATS;
+	}
 	#region GODOT
 	public override void _Ready()
 	{
-		base._Ready();
 		ChargeArea2D = GetNode<Area2D>("ChargeArea2D");
+
+		base._Ready();
+
 		AssignAnimationLibrary("Enemy_Tanker_AnimationLibrary", SavedAnimationLibrary.EnemyAnimationLibrary);
-
-		var overrideStats = new Dictionary<string, float>
-		{
-			{ "AttackRange", 150.0f },
-			{ "Speed", 40.0f },
-			{ "Health", 200.0f },
-		};
-
-		SetUpEnemy(overrideStats, out float attackRange);
 
 		_chargeCooldownTimer = Utils.CreateTimer
 		(
@@ -40,54 +42,42 @@ public partial class Tanker : Enemy
 			true
 		);
 
+		_chargeCooldownTimer.Start();
+
 		// AI Behavior set up
-		_blackboard.SetValue("playerPosition", new Vector3());
-
-		BTNode abilityChargeUp = new ActionNode((float delta) =>
-		{
-			_chargeTimer += delta;
-			// Do the charging animation
-			if (!StatusEffectHUD.Visible)
-				StatusEffectHUD.Visible = true;
-
-			if (_chargeTimer >= CHARGE_DURATION)
-			{
-				LoggingUtils.Debug("Ability Charged~");
-				StatusEffectHUD.Visible = false;
-				CharacterStatComponent.AddStat("Speed", 150.0f, StatTypes.Stat);
-				return BTNodeState.Success;
-			}
-
-			if (IsDead)
-				return BTNodeState.Failure;
-
-			return BTNodeState.Running;
-		});
-
-		BTNode abilityDashTowardsPlayer = new ActionNode(Ability_Charge);
-		BTNode abilityEndOfDash = new ActionNode((float delta) => ResetCharge());
-		BTNode abilityCooldown = new ActionNode((float delta) =>
-		{
-			_isAbilityOnCooldown = true;
-			_chargeCooldownTimer.Start();
-			return BTNodeState.Success;
-		});
-
-
-		BTNode detectPlayer = new SequenceNode(new List<BTNode>
-		{
-			abilityChargeUp,
-			abilityDashTowardsPlayer,
-			abilityEndOfDash,
-			abilityCooldown,
-		});
 
 		BTNode castAbility = new SequenceNode(new List<BTNode>
+		{
+			new ConditionalNode(() => DetectedPlayer(ChargeArea2D, out _) && !_isAbilityOnCooldown),
+			new ActionNode((float delta) =>
 			{
-				new ConditionalNode(() => DetectedPlayer(ChargeArea2D, out _) && !_isAbilityOnCooldown),
-				detectPlayer
-			}
-		);
+				_chargeTimer += delta;
+				// Do the charging animation
+				if (!StatusEffectHUD.Visible)
+					StatusEffectHUD.Visible = true;
+
+				if (_chargeTimer >= CHARGE_DURATION)
+				{
+					LoggingUtils.Debug("Ability Charged~");
+					StatusEffectHUD.Visible = false;
+					CharacterStatComponent.AddStat("Speed", 150.0f, StatTypes.Stat);
+					return BTNodeState.Success;
+				}
+
+				if (IsDead)
+					return BTNodeState.Failure;
+
+				return BTNodeState.Running;
+			}),
+			new ActionNode(Ability_Charge),
+			new ActionNode((float delta) => ResetCharge()),
+			new ActionNode((float delta) =>
+			{
+				_isAbilityOnCooldown = true;
+				_chargeCooldownTimer.Start();
+				return BTNodeState.Success;
+			}),
+		});
 
 		_rootNodes.Insert(0, castAbility);
 	}
@@ -129,10 +119,9 @@ public partial class Tanker : Enemy
 	{
 		LoggingUtils.Debug("Resetting");
 		_chargeDistance = 0.0f;
-		CharacterStatComponent.ReduceStat("Speed", 50.0f, StatTypes.Stat);
-		_mainTimer.Start();
-
+		CharacterStatComponent.ReduceStat("Speed", 150.0f, StatTypes.Stat);
 		StopInPlace();
+		_isStopping = false;
 
 		return BTNodeState.Success;
 	}
@@ -142,10 +131,10 @@ public partial class Tanker : Enemy
 	#endregion
 
 	#region HELPERS
-	public override void SetUpEnemy(Dictionary<string, float> overrideStats, out float attackRange)
+	public override void SetUpEnemy()
 	{
-		base.SetUpEnemy(overrideStats, out attackRange);
-
+		base.SetUpEnemy();
+		
 		var chargeRangeCircle = (CircleShape2D) ChargeArea2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
 		chargeRangeCircle.ResourceLocalToScene = true;
 		chargeRangeCircle.Radius = 300.0f;

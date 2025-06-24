@@ -12,29 +12,25 @@ public abstract class BTNode
     public abstract void Reset();
 }
 
-// public class WaitNode : BTNode
-// {
-//     private float _waitDuration;
-//     private float _timeElased = 0.0f;
+public class WaitUntilNode : BTNode
+{
+    private Func<bool> _condition;
 
+    public WaitUntilNode(Func<bool> condition)
+    {
+        _condition = condition;
+    }
 
-//     public WaitNode(float waitDuration)
-//     {
-//         _waitDuration = waitDuration;
-//     }
+    public override BTNodeState Execute(float delta)
+    {
+        return _condition() ? BTNodeState.Success : BTNodeState.Running;
+    }
 
-//     public override bool Execute(float delta)
-//     {
-//         if (_timeElased <= _waitDuration)
-//         {
-//             _timeElased += delta;
-//             return false;
-//         }
+    public override void Reset()
+    {
+    }
 
-//         _timeElased = 0.0f;
-//         return true;
-//     }
-// }
+}
 
 public class ConditionalNode : BTNode
 {
