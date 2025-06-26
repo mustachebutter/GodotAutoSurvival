@@ -119,6 +119,7 @@ public partial class Tanker : Enemy
 	{
 		LoggingUtils.Debug("Resetting");
 		_chargeDistance = 0.0f;
+		_chargeTimer = 0.0f;
 		CharacterStatComponent.ReduceStat("Speed", 150.0f, StatTypes.Stat);
 		StopInPlace();
 		_isStopping = false;

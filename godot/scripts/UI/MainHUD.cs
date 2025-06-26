@@ -133,7 +133,7 @@ public partial class MainHUD : CanvasLayer
 		{
 			Random random = new Random();
 
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; i < 0; i++)
 			{
 				int randomX = random.Next(0, 500);
 				int randomY = random.Next(0, 500);

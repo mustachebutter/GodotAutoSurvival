@@ -83,6 +83,9 @@ public partial class Enemy : BaseCharacter
 				new ActionNode((float delta) =>
 				{
 					MoveTowardsThePlayer();
+
+					LoggingUtils.Debug("IN CHASE");
+
 					return BTNodeState.Success;
 				}),
 			}
@@ -171,6 +174,7 @@ public partial class Enemy : BaseCharacter
 				if (otherBody is Player player)
 				{
 					LoggingUtils.Debug($"Hitt player {player.Name}");
+					Velocity = Vector2.Zero;
 					return true;
 				}
 
