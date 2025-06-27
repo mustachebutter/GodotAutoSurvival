@@ -42,10 +42,11 @@ public partial class WeaponComponent : Node2D
 	public void StartTimer(float seconds = 0.0f)
 	{
 		if (seconds > 0)
-		{	
+		{
 			StartWeapon();
 			_timer = Utils.CreateTimer(this, OnTimerTimeout, seconds, false);
-			// _timer?.Start();
+			// DISABLE_FEATURE: Start weapon here
+			_timer?.Start();
 
 		}
 	}

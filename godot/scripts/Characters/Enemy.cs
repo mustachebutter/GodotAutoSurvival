@@ -36,6 +36,7 @@ public partial class Enemy : BaseCharacter
 		SetUpEnemy();
 
 		// Behavior Tree set up
+		_blackboard.SetValue("bDealtDamage", false);
 		_blackboard.SetValue("bCanAttack", false);
 		_blackboard.SetValue("bFinishedAttackAnimation", false);
 		_blackboard.SetValue("bIsAttacking", false);
@@ -52,6 +53,12 @@ public partial class Enemy : BaseCharacter
 		);
 
 		_mainTimer.Start();
+
+		BTNode die = new SequenceNode(new List<BTNode>
+		{
+			new ConditionalNode(() => IsDead),
+			new ActionNode((_) => BTNodeState.Success)
+		});
 
 		BTNode attackPlayer = new SequenceNode(new List<BTNode>
 			{
@@ -92,6 +99,7 @@ public partial class Enemy : BaseCharacter
 
 		_rootNodes = new List<BTNode>
 		{
+			die,
 			attackPlayer,
 			chasePlayer,
 			idle,
@@ -102,6 +110,11 @@ public partial class Enemy : BaseCharacter
 		// ANIMATIONS
 		_animationBehaviorTree = new SelectorNode(new List<BTNode>
 		{
+			new SequenceNode(new List<BTNode> {
+				new ConditionalNode(() => IsDead),
+				CreatePlayAnimationNode(AnimationPlayer, "die"),
+			}),
+
 			new SequenceNode(new List<BTNode> {
 				new ConditionalNode(() => _blackboard.GetValue<bool>("bIsAttacking")),
 				// Return success to stop the selector and prevents idle
