@@ -58,10 +58,11 @@ public partial class Grunt : Enemy
 	public override void Attack()
 	{
 		// Swing and do hit detection
-		if (_isFacingRight)
-			_angle += _orbitSpeed * (float) GetProcessDeltaTime();
+		// If facing right
+		if (!AnimatedSprite2D.FlipH)
+			_angle += _orbitSpeed * (float)GetProcessDeltaTime();
 		else
-			_angle -= _orbitSpeed * (float) GetProcessDeltaTime();
+			_angle -= _orbitSpeed * (float)GetProcessDeltaTime();
 
 		if (_angle > (Mathf.Pi / 2))
 		{

@@ -41,6 +41,7 @@ _data = {
 }
 
 [node name="Tanker" instance=ExtResource("1_o34qx")]
+collision_mask = 19
 script = ExtResource("2_d470p")
 
 [node name="Sprite2D (Preview)" parent="." index="1"]

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 public partial class Tanker : Enemy
 {
 	public Area2D ChargeArea2D { get; set; }
-	private bool _isAbilityOnCooldown { get; set; } = false;
 	private float _chargeDistance { get; set; } = 0.0f;
 	private Vector2 _previousFramePosition = Vector2.Zero;
 	private float _chargeTimer { get; set; }
@@ -33,11 +32,11 @@ public partial class Tanker : Enemy
 		base._Ready();
 
 		AssignAnimationLibrary("Enemy_Tanker_AnimationLibrary", SavedAnimationLibrary.EnemyAnimationLibrary);
-
+		_blackboard.SetValue("bIsAbilityOnCooldown", false);
 		_chargeCooldownTimer = Utils.CreateTimer
 		(
 			this,
-			() => _isAbilityOnCooldown = false,
+			() => _blackboard.SetValue("bIsAbilityOnCooldown", false),
 			CHARGE_COOLDOWN,
 			true
 		);
@@ -48,7 +47,7 @@ public partial class Tanker : Enemy
 
 		BTNode castAbility = new SequenceNode(new List<BTNode>
 		{
-			new ConditionalNode(() => DetectedPlayer(ChargeArea2D, out _) && !_isAbilityOnCooldown),
+			new ConditionalNode(() => DetectedPlayer(ChargeArea2D, out _) && !_blackboard.GetValue<bool>("bIsAbilityOnCooldown")),
 			new ActionNode((_) => {
 				_blackboard.SetValue("bIsCharging", true);
 				return BTNodeState.Success;
@@ -82,7 +81,7 @@ public partial class Tanker : Enemy
 			new ActionNode((float delta) => ResetCharge()),
 			new ActionNode((float delta) =>
 			{
-				_isAbilityOnCooldown = true;
+				_blackboard.SetValue("bIsAbilityOnCooldown", true);
 				_chargeCooldownTimer.Start();
 				return BTNodeState.Success;
 			}),
@@ -131,7 +130,7 @@ public partial class Tanker : Enemy
 		_chargeTimer = 0.0f;
 		CharacterStatComponent.ReduceStat("Speed", 150.0f, StatTypes.Stat);
 		StopInPlace();
-		_isStopping = false;
+		_blackboard.SetValue("bIsStopping", false);
 
 		return BTNodeState.Success;
 	}

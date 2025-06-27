@@ -6,16 +6,11 @@ public partial class Enemy : BaseCharacter
 {
 	private Label _label;
 	private Player _player;
-	protected bool _isStopping = false;
-	protected bool _isFacingRight { get; set; } = true;
-	private bool _dealtDamage { get; set; } = false;
 	protected Blackboard _blackboard { get; set; } = new Blackboard();
 	protected BTNode _behaviorTree { get; set; }
 	protected List<BTNode> _rootNodes { get; set; }
 	protected Timer _mainTimer { get; set; }
 	protected Dictionary<string, float> _overrideStats = new Dictionary<string, float>();
-
-
 	public AnimatedSprite2D AnimatedSprite2D { get; set; }
 	public AnimationPlayer AnimationPlayer { get; set; }
 	public Area2D HitDetectionArea2D { get; set; }
@@ -45,6 +40,7 @@ public partial class Enemy : BaseCharacter
 		_blackboard.SetValue("bFinishedAttackAnimation", false);
 		_blackboard.SetValue("bIsAttacking", false);
 		_blackboard.SetValue("bIsCharging", false);
+		_blackboard.SetValue("bIsStopping", false);
 
 
 		_mainTimer = Utils.CreateTimer
@@ -62,7 +58,6 @@ public partial class Enemy : BaseCharacter
 				new ConditionalNode(() => DetectedPlayer(Area2D, out _) && _blackboard.GetValue<bool>("bCanAttack")),
 				new ActionNode((float delta) =>
 				{
-					LoggingUtils.Debug("Setting up Attack");
 					_blackboard.SetValue("bIsAttacking", true);
 					StopInPlace();
 					return BTNodeState.Success;
@@ -70,7 +65,6 @@ public partial class Enemy : BaseCharacter
 				CreatePlayAnimationNode(AnimationPlayer, "attack"),
 				new ActionNode((float delta) =>
 				{
-					LoggingUtils.Debug("Attack");
 					Attack();
 					return BTNodeState.Success;
 				}),
@@ -81,13 +75,10 @@ public partial class Enemy : BaseCharacter
 
 		BTNode chasePlayer = new SequenceNode(new List<BTNode>
 			{
-				new ConditionalNode(() => GlobalConfigs.EnemySpawnMode.Equals(EnemySpawnMode.Normal) && !_isStopping),
+				new ConditionalNode(() => GlobalConfigs.EnemySpawnMode.Equals(EnemySpawnMode.Normal) && !_blackboard.GetValue<bool>("bIsStopping")),
 				new ActionNode((float delta) =>
 				{
 					MoveTowardsThePlayer();
-
-					LoggingUtils.Debug("IN CHASE");
-
 					return BTNodeState.Success;
 				}),
 			}
@@ -154,12 +145,10 @@ public partial class Enemy : BaseCharacter
 		if (Velocity.X > 0)
 		{
 			AnimatedSprite2D.FlipH = false;
-			_isFacingRight = true;
 		}
 		else if (Velocity.X < 0)
 		{
 			AnimatedSprite2D.FlipH = true;
-			_isFacingRight = false;
 		}
 	}
 	public bool MoveTowardsThePlayer()
@@ -179,7 +168,6 @@ public partial class Enemy : BaseCharacter
 
 				if (otherBody is Player player)
 				{
-					LoggingUtils.Debug($"Hitt player {player.Name}");
 					Velocity = Vector2.Zero;
 					return true;
 				}
@@ -192,31 +180,27 @@ public partial class Enemy : BaseCharacter
 
 	public void StopInPlace()
 	{
-		_isStopping = true;
+		_blackboard.SetValue("bIsStopping", true);
 		Velocity = Vector2.Zero;
 	}
 
 	public virtual void Attack()
 	{
 		// If it hits, do damage
-		if (DetectedPlayer(HitDetectionArea2D, out Player player) && !_dealtDamage)
+		if (DetectedPlayer(HitDetectionArea2D, out Player player) && !_blackboard.GetValue<bool>("bDealtDamage"))
 		{
-			LoggingUtils.Debug("Hit Player");
 			player.DealDamageToCharacter(CharacterStatComponent.GetCompleteStatFromName("Attack").totalValue, DamageTypes.Normal);
-			_dealtDamage = true;
+			_blackboard.SetValue("bDealtDamage", true);
 		}
 	}
 
 	public virtual BTNodeState ResetAttack()
 	{
-		LoggingUtils.Debug("ReSetting Attack");
-
-		_dealtDamage = false;
+		_blackboard.SetValue("bDealtDamage", false);
 		_blackboard.SetValue("bCanAttack", false);
 		_blackboard.SetValue("bFinishedAttackAnimation", false);
 		_blackboard.SetValue("bIsAttacking", false);
-
-		_isStopping = false;
+		_blackboard.SetValue("bIsStopping", false);
 
 		_mainTimer.Start();
 
@@ -228,10 +212,8 @@ public partial class Enemy : BaseCharacter
 	#region EVENT HANDLING
 	private void OnAnimationFinished(StringName anim_name)
 	{
-		LoggingUtils.Error(anim_name);
 		if (anim_name == GetAnimation("attack"))
 		{
-			LoggingUtils.Error("Finished attacking animation");
 			_blackboard.SetValue("bFinishedAttackAnimation", true);
 		}
 	}
