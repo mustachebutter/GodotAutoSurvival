@@ -71,7 +71,8 @@ public partial class MainHUD : CanvasLayer
 		RichTextLabel statFieldLabel = new RichTextLabel();
 		statFieldLabel.BbcodeEnabled = true;
 		statFieldLabel.AddThemeFontSizeOverride("theme_overrides_font_sizes/normal_font_size", 10);
-		statFieldLabel.FitContent = true;
+		statFieldLabel.CustomMinimumSize = new Vector2(250, 50);
+		statFieldLabel.FitContent = false;
 		statFieldLabel.AutowrapMode = TextServer.AutowrapMode.Off;
 		statFieldLabel.SizeFlagsVertical = Control.SizeFlags.ShrinkCenter;
 
