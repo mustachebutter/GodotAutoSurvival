@@ -8,7 +8,6 @@ public partial class BaseCharacter : CharacterBody2D
 	private Godot.Vector2 _textOffset = new Godot.Vector2(0.0f, 0.0f);
 	private Label _healthLabel;
 	private bool _isDead = false;
-	private bool _hasTriggeredOnDead = false;
 	public delegate void OnCharacterDeadHandler();
 	public event OnCharacterDeadHandler OnCharacterDeadEvent;
 	public string AnimationLibraryName = "";
@@ -79,22 +78,12 @@ public partial class BaseCharacter : CharacterBody2D
 
 			DamageNumberComponent.UpdateText(damage.ToString(), damageType);
 		}
-		
-		CharacterBelowZeroHealth();
-	}
-
-	public void CharacterBelowZeroHealth()
-	{
-		if(IsDead && !_hasTriggeredOnDead)
-		{
-			OnCharacterDeadEvent?.Invoke();
-			_hasTriggeredOnDead = true;
-		}
-
 	}
 
 	public void DestroyCharacter()
 	{
+		OnCharacterDeadEvent?.Invoke();
+
 		LoggingUtils.Error("Destroying characters");
 		Random random = new Random();
 

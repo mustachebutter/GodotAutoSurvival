@@ -26,15 +26,13 @@ public partial class MobSpawnerComponent : Node2D
         for (int i = 0; i < 10; i++)
         {
             Vector2 randomSpawnPosition = mainNode.GetRandomOutOfViewportPosition();
-            var enemy = Utils.CreateDummy(randomSpawnPosition, Scenes.Grunt);
-            enemy.OnCharacterDeadEvent += enemy.DestroyCharacter;
+            Utils.CreateDummy(randomSpawnPosition, Scenes.Grunt);
         }
 
         for (int i = 0; i < 2; i++)
         {
             Vector2 randomSpawnPosition = mainNode.GetRandomOutOfViewportPosition();
-            var enemy = Utils.CreateDummy(randomSpawnPosition, Scenes.Tanker);
-            enemy.OnCharacterDeadEvent += enemy.DestroyCharacter;
+            Utils.CreateDummy(randomSpawnPosition, Scenes.Tanker);
         }
 
     }

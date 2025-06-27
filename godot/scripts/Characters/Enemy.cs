@@ -229,6 +229,10 @@ public partial class Enemy : BaseCharacter
 		{
 			_blackboard.SetValue("bFinishedAttackAnimation", true);
 		}
+		if (anim_name == GetAnimation("die"))
+		{
+			DestroyCharacter();
+		}
 	}
 
 	#endregion

@@ -122,31 +122,22 @@ public partial class MainHUD : CanvasLayer
 	public void SpawnDummies()
 	{
 		LoggingUtils.Debug("Spawn some dummies");
-		// foreach (var position in dummyPositions)
-		// {
-		// 	var enemy = Utils.CreateDummy(position, Scenes.Enemy);
-		// 	enemy.OnCharacterDeadEvent += enemy.DestroyCharacter;
-		// 	enemy.CharacterStatComponent.AddStat("Health", 100.0f);
-		// }
-
 		if (GlobalConfigs.EnemySpawnMode.Equals(EnemySpawnMode.Dummy))
 		{
 			Random random = new Random();
 
-			for (int i = 0; i < 0; i++)
+			for (int i = 0; i < 4; i++)
 			{
 				int randomX = random.Next(0, 500);
 				int randomY = random.Next(0, 500);
-				var enemy = Utils.CreateDummy(new Vector2(randomX, randomY), Scenes.Grunt);
-				enemy.OnCharacterDeadEvent += enemy.DestroyCharacter;
+				Utils.CreateDummy(new Vector2(randomX, randomY), Scenes.Grunt);
 			}
 
 			for (int i = 0; i < 2; i++)
 			{
 				int randomX = random.Next(0, 500);
 				int randomY = random.Next(0, 500);
-				var enemy = Utils.CreateDummy(new Vector2(randomX, randomY), Scenes.Tanker);
-				enemy.OnCharacterDeadEvent += enemy.DestroyCharacter;
+				Utils.CreateDummy(new Vector2(randomX, randomY), Scenes.Tanker);
 			}
 
 		}
