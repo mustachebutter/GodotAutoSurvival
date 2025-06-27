@@ -49,6 +49,11 @@ public partial class Tanker : Enemy
 		BTNode castAbility = new SequenceNode(new List<BTNode>
 		{
 			new ConditionalNode(() => DetectedPlayer(ChargeArea2D, out _) && !_isAbilityOnCooldown),
+			new ActionNode((_) => {
+				_blackboard.SetValue("bIsCharging", true);
+				return BTNodeState.Success;
+			}),
+			CreatePlayAnimationNode(AnimationPlayer, "charge"),
 			new ActionNode((float delta) =>
 			{
 				_chargeTimer += delta;
@@ -68,6 +73,10 @@ public partial class Tanker : Enemy
 					return BTNodeState.Failure;
 
 				return BTNodeState.Running;
+			}),
+			new ActionNode((_) => {
+				_blackboard.SetValue("bIsCharging", false);
+				return BTNodeState.Success;
 			}),
 			new ActionNode(Ability_Charge),
 			new ActionNode((float delta) => ResetCharge()),

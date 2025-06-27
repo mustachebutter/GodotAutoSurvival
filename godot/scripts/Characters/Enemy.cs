@@ -44,6 +44,8 @@ public partial class Enemy : BaseCharacter
 		_blackboard.SetValue("bCanAttack", false);
 		_blackboard.SetValue("bFinishedAttackAnimation", false);
 		_blackboard.SetValue("bIsAttacking", false);
+		_blackboard.SetValue("bIsCharging", false);
+
 
 		_mainTimer = Utils.CreateTimer
 		(
@@ -112,6 +114,10 @@ public partial class Enemy : BaseCharacter
 			new SequenceNode(new List<BTNode> {
 				new ConditionalNode(() => _blackboard.GetValue<bool>("bIsAttacking")),
 				// Return success to stop the selector and prevents idle
+				new ActionNode((f) => BTNodeState.Success),
+			}),
+			new SequenceNode(new List<BTNode> {
+				new ConditionalNode(() => _blackboard.GetValue<bool>("bIsCharging")),
 				new ActionNode((f) => BTNodeState.Success),
 			}),
 			new SequenceNode(new List<BTNode>
