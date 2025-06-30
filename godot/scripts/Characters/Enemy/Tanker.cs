@@ -3,7 +3,7 @@ using System.Collections;
 using Godot;
 using System.Collections.Generic;
 
-public partial class Tanker : Enemy
+public partial class Tanker : Grunt
 {
 	public Area2D ChargeArea2D { get; set; }
 	private float _chargeDistance { get; set; } = 0.0f;
@@ -52,7 +52,11 @@ public partial class Tanker : Enemy
 				_blackboard.SetValue("bIsCharging", true);
 				return BTNodeState.Success;
 			}),
-			CreatePlayAnimationNode(AnimationPlayer, "charge"),
+			new WaitNTick(2, Name),
+			CreateDebugNode(
+				CreatePlayAnimationNode(AnimationPlayer, "charge"),
+				"In Animation_charge"
+			),
 			new ActionNode((float delta) =>
 			{
 				_chargeTimer += delta;
@@ -97,11 +101,6 @@ public partial class Tanker : Enemy
 	#endregion
 	
 	#region ACTION
-	public override void Attack()
-	{
-		// Swing and do hit detection
-		// base.Attack();
-	}
 
 	public BTNodeState Ability_Charge(float delta)
 	{

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 public enum BTNodeState
 {
     Success,
@@ -242,6 +243,71 @@ public class SequenceNode : BTNode
         {
             child.Reset();
         }
+    }
+}
+
+public class DoOnceNode : BTNode
+{
+    private bool _done = false;
+    private BTNode _child;
+
+    public DoOnceNode(BTNode child)
+    {
+        _child = child;
+    }
+    public override BTNodeState Execute(float delta)
+    {
+        if (!_done)
+        {
+            _child.Execute(delta);
+            _done = true;
+            Reset();
+        }
+
+        return BTNodeState.Success;
+    }
+
+    public override void Reset()
+    {
+        _done = false;
+    }
+}
+
+public class WaitNTick : BTNode
+{
+    private string _name = "";
+    private int _numberOfTicks = 0;
+    private int _ticksToWait = 0;
+
+    public WaitNTick(int ticksToWait, string name)
+    {
+        _name = name;
+        _ticksToWait = ticksToWait;
+    }
+
+    public override BTNodeState Execute(float delta)
+    {
+        if (_ticksToWait <= 0)
+        {
+            LoggingUtils.Error("No ticks to wait, skipping");
+            return BTNodeState.Success;
+        }
+
+        _numberOfTicks++;
+        LoggingUtils.Debug($"[{_name}]Waiting {_numberOfTicks} tick");
+
+        if (_numberOfTicks >= _ticksToWait)
+        {
+            Reset();
+            return BTNodeState.Success;
+        }
+
+        return BTNodeState.Running;
+    }
+
+    public override void Reset()
+    {
+        _numberOfTicks = 0;
     }
 
 }

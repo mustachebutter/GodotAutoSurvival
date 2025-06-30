@@ -69,12 +69,12 @@ public partial class Enemy : BaseCharacter
 					StopInPlace();
 					return BTNodeState.Success;
 				}),
-				CreatePlayAnimationNode(AnimationPlayer, "attack"),
-				new ActionNode((float delta) =>
-				{
-					Attack();
-					return BTNodeState.Success;
-				}),
+				new WaitNTick(2, Name),
+				CreateDebugNode(
+					CreatePlayAnimationNode(AnimationPlayer, "attack"),
+					"In Animation_attack"
+				),
+				new ActionNode((float delta) => Attack(delta)),
 				new WaitUntilNode(() => _blackboard.GetValue<bool>("bFinishedAttackAnimation")),
 				new ActionNode((float delta) => ResetAttack()),
 			}
@@ -114,15 +114,14 @@ public partial class Enemy : BaseCharacter
 				new ConditionalNode(() => IsDead),
 				CreatePlayAnimationNode(AnimationPlayer, "die"),
 			}),
-
 			new SequenceNode(new List<BTNode> {
 				new ConditionalNode(() => _blackboard.GetValue<bool>("bIsAttacking")),
 				// Return success to stop the selector and prevents idle
-				new ActionNode((f) => BTNodeState.Success),
+				new ActionNode((_) => BTNodeState.Success),
 			}),
 			new SequenceNode(new List<BTNode> {
-				new ConditionalNode(() => _blackboard.GetValue<bool>("bIsCharging")),
-				new ActionNode((f) => BTNodeState.Success),
+				new ConditionalNode(() =>  _blackboard.GetValue<bool>("bIsCharging")),
+				new ActionNode((_) => BTNodeState.Success),
 			}),
 			new SequenceNode(new List<BTNode>
 			{
@@ -197,7 +196,7 @@ public partial class Enemy : BaseCharacter
 		Velocity = Vector2.Zero;
 	}
 
-	public virtual void Attack()
+	public virtual BTNodeState Attack(float delta)
 	{
 		// If it hits, do damage
 		if (DetectedPlayer(HitDetectionArea2D, out Player player) && !_blackboard.GetValue<bool>("bDealtDamage"))
@@ -205,6 +204,8 @@ public partial class Enemy : BaseCharacter
 			player.DealDamageToCharacter(CharacterStatComponent.GetCompleteStatFromName("Attack").totalValue, DamageTypes.Normal);
 			_blackboard.SetValue("bDealtDamage", true);
 		}
+
+		return BTNodeState.Running;
 	}
 
 	public virtual BTNodeState ResetAttack()

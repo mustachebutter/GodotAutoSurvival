@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Godot;
 
 public partial class BaseCharacter : CharacterBody2D
@@ -58,11 +59,26 @@ public partial class BaseCharacter : CharacterBody2D
 
 		return playAnimationNode;
 	}
+	
+	protected BTNode CreateDebugNode(BTNode child, string message)
+	{
+		BTNode debugNode = new SequenceNode(new List<BTNode>()
+		{
+			new ActionNode((_) => {
+				LoggingUtils.Debug(message);
+				return BTNodeState.Success;
+			}),
+			child,
+		});
+
+		return debugNode;
+	}
+
 
 	public override void _Process(double delta)
 	{
 		base._Process(delta);
-		_healthLabel.Text = $"{CharacterStatComponent.GetCompleteStatFromName("Health").totalValue}"; 
+		_healthLabel.Text = $"{CharacterStatComponent.GetCompleteStatFromName("Health").totalValue}";
 	}
 
 	public void DealDamageToCharacter(float damage = 0.0f, DamageTypes damageType = DamageTypes.Normal)

@@ -127,14 +127,14 @@ public partial class MainHUD : CanvasLayer
 		{
 			Random random = new Random();
 
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; i < GlobalConfigs.EnemySpawnAmountDebug["Grunt"]; i++)
 			{
 				int randomX = random.Next(0, 500);
 				int randomY = random.Next(0, 500);
 				Utils.CreateDummy(new Vector2(randomX, randomY), Scenes.Grunt);
 			}
 
-			for (int i = 0; i < 2; i++)
+			for (int i = 0; i < GlobalConfigs.EnemySpawnAmountDebug["Tanker"]; i++)
 			{
 				int randomX = random.Next(0, 500);
 				int randomY = random.Next(0, 500);

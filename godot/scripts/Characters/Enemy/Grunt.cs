@@ -7,8 +7,8 @@ using System.Collections.Generic;
 
 public partial class Grunt : Enemy
 {
-	private float _orbitSpeed = 1.0f;
-	private float _orbitRadius = 50.0f;
+	private float _orbitSpeed = 5.0f;
+	private float _orbitRadius;
 	private float _angle =  -(Mathf.Pi / 2);
 	private readonly Dictionary<string, float> OVERRIDE_STATS = new Dictionary<string, float>
 	{
@@ -25,6 +25,7 @@ public partial class Grunt : Enemy
 	public override void _Ready()
 	{
 		base._Ready();
+		// TODO: Refactor this into Enemy 
 		AssignAnimationLibrary("Enemy_AnimationLibrary", SavedAnimationLibrary.EnemyAnimationLibrary);
 	}
 
@@ -55,25 +56,35 @@ public partial class Grunt : Enemy
 	#endregion
 
 	#region ACTION
-	public override void Attack()
+	public override BTNodeState Attack(float delta)
 	{
 		// Swing and do hit detection
 		// If facing right
 		if (!AnimatedSprite2D.FlipH)
-			_angle += _orbitSpeed * (float)GetProcessDeltaTime();
-		else
-			_angle -= _orbitSpeed * (float)GetProcessDeltaTime();
-
-		if (_angle > (Mathf.Pi / 2))
 		{
-			_angle = -(Mathf.Pi / 2);
+			_angle += _orbitSpeed * delta;
+
+			if (_angle > (Mathf.Pi / 2))
+			{
+				_angle = -(Mathf.Pi / 2);
+				return BTNodeState.Success;
+			}
+		}
+		else
+		{
+			_angle -= _orbitSpeed * delta;
+			if (_angle < -(3 * Mathf.Pi / 2))
+			{
+				_angle = -(Mathf.Pi / 2);
+				return BTNodeState.Success;
+			}
 		}
 
 		float x = GlobalPosition.X + _orbitRadius * Mathf.Cos(_angle);
 		float y = GlobalPosition.Y + _orbitRadius * Mathf.Sin(_angle);
-
 		HitDetectionArea2D.GlobalPosition = new Vector2(x, y);
-		base.Attack();
+		
+		return base.Attack(delta);
 	}
 
 	public override BTNodeState ResetAttack()

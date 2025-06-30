@@ -46,7 +46,7 @@ public partial class WeaponComponent : Node2D
 			StartWeapon();
 			_timer = Utils.CreateTimer(this, OnTimerTimeout, seconds, false);
 			// DISABLE_FEATURE: Start weapon here
-			_timer?.Start();
+			// _timer?.Start();
 
 		}
 	}
