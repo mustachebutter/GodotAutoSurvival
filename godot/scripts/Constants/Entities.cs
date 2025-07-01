@@ -16,12 +16,12 @@ public static class UtilGetter
 	public static Node2D GetCharactersParentNode() { return GetMotherNode().GetNode<Node2D>("CharactersParentNode"); }
 	public static Node2D GetVfxParentNode() { return GetMotherNode().GetNode<Node2D>("VFXParentNode"); }
 	public static Node2D GetProjectileParentNode() { return GetMotherNode().GetNode<Node2D>("ProjectileParentNode"); }
-	public static MainHUD GetMainHUD() { return GetMotherNode().GetNode<MainHUD>("MainHUD"); }
+	public static MainHUD GetMainHUD() { return GetMotherNode().GetNode<HUDController>("Controllers/HUDController").MainHUD; }
+	public static DeadHUD GetDeadHUD() { return GetMotherNode().GetNode<HUDController>("Controllers/HUDController").DeadHUD; }
 
 	public static Player GetMainPlayer()
 	{
 		var player = GetCharactersParentNode().GetNode<CharacterBody2D>("Player");
-		
 		if (player != null)
 		{
 			return (Player) player;

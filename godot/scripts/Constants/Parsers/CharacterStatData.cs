@@ -60,7 +60,7 @@ public class UpgradableObject
 
     public void Downgrade(int levelToDowngrade = 1)
     {
-        if (Level - levelToDowngrade < 0)
+        if (Level - levelToDowngrade <= 0)
         {
             LoggingUtils.Error("#################################");
 			LoggingUtils.Error("Lowest Level reached. Cannot downgrade anymore!");

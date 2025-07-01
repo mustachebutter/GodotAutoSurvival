@@ -1,0 +1,86 @@
+[gd_scene load_steps=2 format=3 uid="uid://bbqwjg3rx1ur5"]
+
+[ext_resource type="Script" path="res://scripts/UI/MainHUD.cs" id="1_a6qqd"]
+
+[node name="CanvasLayer" type="CanvasLayer"]
+follow_viewport_scale = 0.001
+script = ExtResource("1_a6qqd")
+
+[node name="DebugContainer" type="VBoxContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="DebugContainer"]
+visible = false
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="DebugContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+theme_override_font_sizes/italics_font_size = 10
+bbcode_enabled = true
+text = "[b][color=blue]Attack Speed[/color][/b]: 0.0"
+fit_content = true
+autowrap_mode = 0
+
+[node name="Button" type="Button" parent="DebugContainer/HBoxContainer"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+text = "Up"
+
+[node name="Button2" type="Button" parent="DebugContainer/HBoxContainer"]
+layout_mode = 2
+text = "Down"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+custom_minimum_size = Vector2(500, 100)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -170.0
+offset_right = 250.0
+offset_bottom = -70.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+text = "[font_size=50][center][b][color=\"red\"]YOU ARE DEAD :([/color][/b][/center][/font_size]"
+
+[node name="ButtonContainer" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(350, 200)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -84.5
+offset_right = 80.0
+offset_bottom = 84.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="TryAgainButton" type="Button" parent="ButtonContainer"]
+layout_mode = 2
+text = "Try Again"
+
+[node name="SettingButton" type="Button" parent="ButtonContainer"]
+layout_mode = 2
+text = "Settings"
+
+[node name="BackToMainButton" type="Button" parent="ButtonContainer"]
+layout_mode = 2
+text = "Back To Main Menu
+"
+
+[node name="ExitButton" type="Button" parent="ButtonContainer"]
+layout_mode = 2
+text = "Exit"

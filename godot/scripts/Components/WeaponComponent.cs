@@ -12,8 +12,23 @@ public partial class WeaponComponent : Node2D
 	private Dictionary<string, WeaponData> weaponData = new Dictionary<string, WeaponData>();
 	private List<string> weapons = new List<string>();
 	int index = 0;
-	MainHUD MainHUD { get; set; }
-	public event Action<WeaponData> OnWeaponUpgradedRefreshHUD;
+	public Dictionary<string, WeaponData> WeaponData
+	{
+		get => weaponData;
+		private set
+		{
+			weaponData = value;
+		}
+	}
+	public List<string> Weapons
+	{
+		get => weapons;
+		private set
+		{
+			weapons = value;
+		}
+	}
+	public event Action<int> OnChangingWeaponUpdateHUD;
 
 	public override void _Ready()
 	{
@@ -29,13 +44,13 @@ public partial class WeaponComponent : Node2D
 			}
 		}
 		weapons = weaponData.Keys.Where(x => x != "Weapon_Default").ToList();
-
-		MainHUD = UtilGetter.GetMainHUD();
-		MainHUD.SetDebugWeapon(weaponData[weapons[index]]);
 		
 		foreach (var item in weaponData)
 		{
-			item.Value.WeaponDamageData.OnWeaponLevelUpgraded += () => MainHUD.SetDebugWeapon(weaponData[weapons[index]]);
+			item.Value.WeaponDamageData.OnWeaponLevelUpgraded += () =>
+			{
+				OnChangingWeaponUpdateHUD?.Invoke(index);
+			};
 		}
 	}
 
@@ -102,7 +117,7 @@ public partial class WeaponComponent : Node2D
 			index = 0;
 		}
 
-		MainHUD.SetDebugWeapon(weaponData[weapons[index]]);
+		OnChangingWeaponUpdateHUD?.Invoke(index);
 	}
 	private void OnTimerTimeout()
 	{

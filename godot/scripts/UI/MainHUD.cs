@@ -15,10 +15,10 @@ public partial class MainHUD : CanvasLayer
 	public MobSpawnerComponent MobSpawner;
 	public ProgressBar ExpBar;
 	public Label LevelLabel;
-	private List<Vector2> dummyPositions = new List<Vector2> 
-	{ 
-		new Vector2(371, 329), 
-		new Vector2(435, 264), 
+	private List<Vector2> dummyPositions = new List<Vector2>
+	{
+		new Vector2(371, 329),
+		new Vector2(435, 264),
 		new Vector2(455, 396),
 		new Vector2(504, 312)
 	};

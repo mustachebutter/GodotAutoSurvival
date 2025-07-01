@@ -21,8 +21,6 @@ public partial class Player : BaseCharacter
 		// _circle.Radius = CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 2;
 		WeaponComponent.StartTimer(1 / CharacterStatComponent.GetCompleteStatFromName("AttackSpeed").totalValue);
 
-		var MainHUD = UtilGetter.GetMainHUD();
-		MainHUD.SetDebugStats(CharacterStatComponent);
 	}
 
 	private void HandleStatUpgraded(UpgradableObject @object, float baseValue, float modifierValue, float totalValue)
