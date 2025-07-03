@@ -112,7 +112,7 @@ public partial class Grunt : Enemy
 
 		var hitDetectionCircle = (CircleShape2D) HitDetectionArea2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
 		hitDetectionCircle.ResourceLocalToScene = true;
-		hitDetectionCircle.Radius = 5.0f;
+		hitDetectionCircle.Radius = CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 10;
 		HitDetectionArea2D.Position = new Vector2(0.0f, -(_circle.Radius));
 		_orbitRadius = _circle.Radius;
 

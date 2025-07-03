@@ -8,7 +8,7 @@ public static class UtilGetter
 	public static Node2D GetMotherNode()
 	{
 		var sceneTree = (SceneTree) Engine.GetMainLoop() ?? throw new InvalidOperationException($"ERROR [{nameof(UtilGetter)}] Could not get the Scene Tree");
-		var motherNode = sceneTree.Root.GetNode<Node2D>("MotherNode");
+		var motherNode = sceneTree.Root.GetNode<Node2D>("SubViewportContainer/SubViewport/MotherNode");
 
 		return motherNode;
 	}

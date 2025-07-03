@@ -7,6 +7,7 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_lh6rp"]
 
 [node name="Enemy" instance=ExtResource("1_su55c")]
+visibility_layer = 2
 collision_layer = 4
 collision_mask = 23
 motion_mode = 1

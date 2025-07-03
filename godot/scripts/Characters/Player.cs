@@ -120,6 +120,7 @@ public partial class Player : BaseCharacter
 	{
 		UtilGetter.GetHUDController().ActivateDeadHUD();
 		AnimationPlayer.Play(GetAnimation("camera_zoom_in"));
-		CollisionLayer &= ~0u;
+		SetCollisionLayerValue(1, false);
+		(UtilGetter.GetMotherNode() as Main).CullEnemyRender();
 	}
 }
