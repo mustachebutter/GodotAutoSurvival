@@ -12,6 +12,7 @@ public partial class BaseCharacter : CharacterBody2D
 	public delegate void OnCharacterDeadHandler();
 	public event OnCharacterDeadHandler OnCharacterDeadEvent;
 	public string AnimationLibraryName = "";
+	public AnimationPlayer AnimationPlayer { get; set; }
 
 	public CharacterStatComponent CharacterStatComponent { get; private set; }
 	public DamageNumberComponent DamageNumberComponent { get; private set; }
@@ -38,17 +39,31 @@ public partial class BaseCharacter : CharacterBody2D
 		VisualEffectComponent = GetNode<VisualEffectComponent>("VisualEffectComponent");
 		CharacterStatComponent = GetNode<CharacterStatComponent>("CharacterStatComponent");
 		Area2D = GetNode<Area2D>("Area2D");
-		_circle = (CircleShape2D) Area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
+		_circle = (CircleShape2D)Area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
 		_circle.ResourceLocalToScene = true;
 		_circle.Radius = CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 2;
 
 		_healthLabel = GetNode<Label>("HealthLabel");
+		
+		AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+		AnimationPlayer.AnimationFinished += OnAnimationFinished;
 	}
 
 	public string GetAnimation(string name)
 	{
 		return $"{AnimationLibraryName}/{name}";
 	}
+
+	public void AssignAnimationLibrary(string name, AnimationLibrary animationLibrary)
+	{
+		AnimationLibraryName = name;
+		var animationList = AnimationPlayer.GetAnimationLibraryList();
+		if (animationList.Count == 0)
+		{
+			AnimationPlayer.AddAnimationLibrary(name, animationLibrary);
+		}
+	}
+
 	protected BTNode CreatePlayAnimationNode(AnimationPlayer animationPlayer, string name)
 	{
 		BTNode playAnimationNode = new ActionNode((float delta) =>
@@ -96,19 +111,18 @@ public partial class BaseCharacter : CharacterBody2D
 		}
 	}
 
-	public void DestroyCharacter()
+	protected virtual void OnAnimationFinished(StringName anim_name)
 	{
+		if (anim_name == GetAnimation("die"))
+		{
+			Perish();
+		}
+	}
+
+	public virtual void Perish()
+	{
+		LoggingUtils.Error("Character dying :(");
 		OnCharacterDeadEvent?.Invoke();
-
-		LoggingUtils.Error("Destroying characters");
-		Random random = new Random();
-
-		var orb = (ExperienceOrb) Scenes.ExperienceOrb.Instantiate();
-		orb.Position = Position + new Vector2(random.Next(1, 20), random.Next(1, 20));
-		orb.Scale = new Vector2(0.1f, 0.1f);
-		UtilGetter.GetMotherNode().AddChild(orb);
-
-		QueueFree();
 	}
 
 }

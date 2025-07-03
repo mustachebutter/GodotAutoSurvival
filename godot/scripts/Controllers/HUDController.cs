@@ -51,10 +51,19 @@ public partial class HUDController : Node
         {
             _mainHUD.SetDebugWeapon(weaponComponent.WeaponData[weaponComponent.Weapons[index]]);
         };
+
+        DeadHUD.Visible = false;
     }
 
     public override void _Process(double delta)
     {
         base._Process(delta);
+    }
+
+    public void ActivateDeadHUD()
+    {
+
+        MainHUD.Visible = false;
+        DeadHUD.Activate();
     }
 }

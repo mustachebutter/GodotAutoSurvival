@@ -12,15 +12,15 @@ public partial class Main : Node2D
 		// !!!!!! DEBUG ONLY
 		GetTree().DebugCollisionsHint = true;
 		// !!!!!! DEBUG ONLY
-		
-		_player = (Player) _playerScene.Instantiate();
+
+		_player = (Player)_playerScene.Instantiate();
 		GetNode<Node2D>("CharactersParentNode").AddChild(_player);
 		GetRandomOutOfViewportPosition();
 	}
 
 	public override void _Process(double delta)
 	{
-		
+
 	}
 	
 	public void SpawnNode(Node2D node)

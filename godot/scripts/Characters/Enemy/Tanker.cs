@@ -31,7 +31,7 @@ public partial class Tanker : Grunt
 
 		base._Ready();
 
-		AssignAnimationLibrary("Enemy_Tanker_AnimationLibrary", SavedAnimationLibrary.EnemyAnimationLibrary);
+		AssignAnimationLibrary("Enemy_Tanker_AnimationLibrary", SavedAnimationLibrary.TankerAnimationLibrary);
 		_blackboard.SetValue("bIsAbilityOnCooldown", false);
 		_chargeCooldownTimer = Utils.CreateTimer
 		(

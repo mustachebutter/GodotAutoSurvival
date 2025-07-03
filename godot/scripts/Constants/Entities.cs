@@ -18,6 +18,7 @@ public static class UtilGetter
 	public static Node2D GetProjectileParentNode() { return GetMotherNode().GetNode<Node2D>("ProjectileParentNode"); }
 	public static MainHUD GetMainHUD() { return GetMotherNode().GetNode<HUDController>("Controllers/HUDController").MainHUD; }
 	public static DeadHUD GetDeadHUD() { return GetMotherNode().GetNode<HUDController>("Controllers/HUDController").DeadHUD; }
+	public static HUDController GetHUDController() { return GetMotherNode().GetNode<HUDController>("Controllers/HUDController"); }
 
 	public static Player GetMainPlayer()
 	{
@@ -77,6 +78,8 @@ public static class Scenes
 
 public static class SavedAnimationLibrary
 {
-	public static AnimationLibrary EnemyAnimationLibrary = GD.Load<AnimationLibrary>("res://assets/sprite_frames/animation_library/Enemy_Tanker_AnimationLibrary.res");
+	public static AnimationLibrary PlayerAnimationLibrary = GD.Load<AnimationLibrary>("res://assets/sprite_frames/animation_library/Player_v2_AnimationLibrary.res");
+	public static AnimationLibrary GruntAnimationLibrary = GD.Load<AnimationLibrary>("res://assets/sprite_frames/animation_library/Enemy_AnimationLibrary_new.res");
+	public static AnimationLibrary TankerAnimationLibrary = GD.Load<AnimationLibrary>("res://assets/sprite_frames/animation_library/Enemy_Tanker_AnimationLibrary.res");
 
 }

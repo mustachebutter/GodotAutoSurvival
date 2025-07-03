@@ -5,14 +5,14 @@ using System.Collections.Generic;
 public partial class Enemy : BaseCharacter
 {
 	private Label _label;
-	private Player _player;
+	private Player _player { get; set; }
+	private Vector2 _randomPointToWanderTo { get; set; } = Vector2.Zero;
 	protected Blackboard _blackboard { get; set; } = new Blackboard();
 	protected BTNode _behaviorTree { get; set; }
 	protected List<BTNode> _rootNodes { get; set; }
 	protected Timer _mainTimer { get; set; }
 	protected Dictionary<string, float> _overrideStats = new Dictionary<string, float>();
 	public AnimatedSprite2D AnimatedSprite2D { get; set; }
-	public AnimationPlayer AnimationPlayer { get; set; }
 	public Area2D HitDetectionArea2D { get; set; }
 	public RichTextLabel StatusEffectHUD { get; set; }
 
@@ -20,15 +20,15 @@ public partial class Enemy : BaseCharacter
 	public override void _Ready()
 	{
 		base._Ready();
+		_player = UtilGetter.GetMainPlayer();
+		var mainNode = (Main) UtilGetter.GetMotherNode();
+		_randomPointToWanderTo = mainNode.GetRandomOutOfViewportPosition();
+
 		_label = GetNode<Label>("Label2");
 		_label.Text = Name;
-		_player = UtilGetter.GetMainPlayer();
 
 		AnimatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		HitDetectionArea2D = GetNode<Area2D>("HitArea2D");
-
-		AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-		AnimationPlayer.AnimationFinished += OnAnimationFinished;
 
 		StatusEffectHUD = GetNode<RichTextLabel>("StatusEffectHUD");
 		StatusEffectHUD.Visible = false;
@@ -165,7 +165,17 @@ public partial class Enemy : BaseCharacter
 	}
 	public bool MoveTowardsThePlayer()
 	{
-		Vector2 direction = _player.GlobalPosition - GlobalPosition;
+		Vector2 direction;
+
+		if (_player.IsDead)
+		{
+			direction = _randomPointToWanderTo - GlobalPosition;
+		}
+		else
+		{
+			direction = _player.GlobalPosition - GlobalPosition;
+		}
+
 		direction = direction.Normalized();
 		var speed = CharacterStatComponent.GetStatFromName("Speed").Value;
 
@@ -224,15 +234,12 @@ public partial class Enemy : BaseCharacter
 	#endregion
 
 	#region EVENT HANDLING
-	private void OnAnimationFinished(StringName anim_name)
+	protected override void OnAnimationFinished(StringName anim_name)
 	{
+		base.OnAnimationFinished(anim_name);
 		if (anim_name == GetAnimation("attack"))
 		{
 			_blackboard.SetValue("bFinishedAttackAnimation", true);
-		}
-		if (anim_name == GetAnimation("die"))
-		{
-			DestroyCharacter();
 		}
 	}
 
@@ -253,9 +260,9 @@ public partial class Enemy : BaseCharacter
 		{
 			if (bd is Player)
 			{
-				player = (Player) bd;
+				player = (Player)bd;
 				return true;
-			} 
+			}
 		}
 
 		return false;
@@ -275,19 +282,22 @@ public partial class Enemy : BaseCharacter
 		_circle.Radius = CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 2;
 		LoggingUtils.Debug($"Range {_circle.Radius}");
 	}
-
-	public void AssignAnimationLibrary(string name, AnimationLibrary animationLibrary)
-	{
-		AnimationLibraryName = name;
-		var animationList = AnimationPlayer.GetAnimationLibraryList();
-		if (animationList.Count == 0)
-		{
-			AnimationPlayer.AddAnimationLibrary(name, animationLibrary);
-		}
-	}
-	
 	#endregion
 
 	#region CLEANUP
+	public override void Perish()
+	{
+		base.Perish();
+
+		Random random = new Random();
+
+		var orb = (ExperienceOrb)Scenes.ExperienceOrb.Instantiate();
+		orb.Position = Position + new Vector2(random.Next(1, 20), random.Next(1, 20));
+		orb.Scale = new Vector2(0.1f, 0.1f);
+		UtilGetter.GetMotherNode().AddChild(orb);
+
+		QueueFree();
+	}
+
 	#endregion
 }

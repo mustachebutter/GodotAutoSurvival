@@ -26,7 +26,7 @@ public partial class Grunt : Enemy
 	{
 		base._Ready();
 		// TODO: Refactor this into Enemy 
-		AssignAnimationLibrary("Enemy_AnimationLibrary", SavedAnimationLibrary.EnemyAnimationLibrary);
+		AssignAnimationLibrary("Enemy_AnimationLibrary", SavedAnimationLibrary.GruntAnimationLibrary);
 	}
 
 	public override void _Process(double delta)
