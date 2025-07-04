@@ -22,15 +22,18 @@ public partial class MobSpawnerComponent : Node2D
 
     public void SpawnEnemies()
     {
-        Main mainNode = (Main) GetParent();
-        for (int i = 0; i < 4; i++)
+        Main mainNode = (Main) UtilGetter.GetMotherNode();
+        for (int i = 0; i < 10; i++)
         {
             Vector2 randomSpawnPosition = mainNode.GetRandomOutOfViewportPosition();
-            LoggingUtils.Info($"{randomSpawnPosition}");
-            var enemy = Utils.CreateDummy(randomSpawnPosition, Scenes.Enemy);
-            enemy.OnCharacterDeadEvent += enemy.DestroyCharacter;
-
-            enemy.CharacterStatComponent.AddStat("Health", 100.0f);
+            Utils.CreateDummy(randomSpawnPosition, Scenes.Grunt);
         }
+
+        for (int i = 0; i < 2; i++)
+        {
+            Vector2 randomSpawnPosition = mainNode.GetRandomOutOfViewportPosition();
+            Utils.CreateDummy(randomSpawnPosition, Scenes.Tanker);
+        }
+
     }
 }

@@ -70,15 +70,7 @@ public partial class Projectile : Weapon
 		var mainNode = (Main) GetParent();
 		mainNode.SpawnNode(node);
 	}
-
-	// This shouldn't take precedent of StatusEffect
-	public override void OnTargetDied(BaseCharacter target)
-	{
-		base.OnTargetDied(target);
-
-		target.DestroyCharacter();
-	}
-
+	
 	public override void _ExitTree()
 	{
 		base._ExitTree();

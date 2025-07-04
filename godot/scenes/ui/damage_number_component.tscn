@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://c2btlgj17b5md"]
 
 [ext_resource type="Script" path="res://scripts/Components/DamageNumberComponent.cs" id="1_ism25"]
-[ext_resource type="AnimationLibrary" uid="uid://cmhn4p0b4qpai" path="res://assets/sprite_frames/UI_AnimationLibrary.res" id="3_otfqa"]
+[ext_resource type="AnimationLibrary" uid="uid://cmhn4p0b4qpai" path="res://assets/sprite_frames/animation_library/UI_AnimationLibrary.res" id="2_a2fhe"]
 
 [sub_resource type="Animation" id="Animation_yf3ny"]
 length = 0.001
@@ -41,7 +41,7 @@ script = ExtResource("1_ism25")
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_rt3ng"),
-"UI_AnimationLibrary": ExtResource("3_otfqa")
+"UI_AnimationLibrary": ExtResource("2_a2fhe")
 }
 
 [node name="Label" type="Label" parent="."]

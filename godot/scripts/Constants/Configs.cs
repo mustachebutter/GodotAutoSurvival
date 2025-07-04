@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 public enum EnemySpawnMode
 {
@@ -12,6 +13,11 @@ public static class GlobalConfigs
     public static int MAX_WEAPON_LEVEL = 12;
     
     public static EnemySpawnMode EnemySpawnMode { get; set; } = EnemySpawnMode.Dummy;
+    public static Dictionary<string, int> EnemySpawnAmountDebug { get; set; } = new Dictionary<string, int>()
+    {
+        { "Grunt", 2 },
+        { "Tanker", 2 },
+    };
     private static bool _isGamePaused = false;
     public static bool IsGamePaused 
     { 

@@ -68,10 +68,14 @@ public partial class Beam : Weapon
 		}
 	}
 
+	// NOTE: The reason this is only being done here in Beam is because
+	// Beam kill enemies based on the weapon's damage itself. The other weapons
+	// kill based on status effects and we don't want the Weapon's
+	// OnTargetDied to take precedence over status effects'
 	public override void OnTargetDied(BaseCharacter target)
 	{
 		base.OnTargetDied(target);
 
-		target.DestroyCharacter();
+		target.Perish();
 	}
 }

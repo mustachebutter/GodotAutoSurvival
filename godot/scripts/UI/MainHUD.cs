@@ -15,10 +15,10 @@ public partial class MainHUD : CanvasLayer
 	public MobSpawnerComponent MobSpawner;
 	public ProgressBar ExpBar;
 	public Label LevelLabel;
-	private List<Vector2> dummyPositions = new List<Vector2> 
-	{ 
-		new Vector2(371, 329), 
-		new Vector2(435, 264), 
+	private List<Vector2> dummyPositions = new List<Vector2>
+	{
+		new Vector2(371, 329),
+		new Vector2(435, 264),
 		new Vector2(455, 396),
 		new Vector2(504, 312)
 	};
@@ -71,7 +71,8 @@ public partial class MainHUD : CanvasLayer
 		RichTextLabel statFieldLabel = new RichTextLabel();
 		statFieldLabel.BbcodeEnabled = true;
 		statFieldLabel.AddThemeFontSizeOverride("theme_overrides_font_sizes/normal_font_size", 10);
-		statFieldLabel.FitContent = true;
+		statFieldLabel.CustomMinimumSize = new Vector2(250, 50);
+		statFieldLabel.FitContent = false;
 		statFieldLabel.AutowrapMode = TextServer.AutowrapMode.Off;
 		statFieldLabel.SizeFlagsVertical = Control.SizeFlags.ShrinkCenter;
 
@@ -122,25 +123,24 @@ public partial class MainHUD : CanvasLayer
 	public void SpawnDummies()
 	{
 		LoggingUtils.Debug("Spawn some dummies");
-		// foreach (var position in dummyPositions)
-		// {
-		// 	var enemy = Utils.CreateDummy(position, Scenes.Enemy);
-		// 	enemy.OnCharacterDeadEvent += enemy.DestroyCharacter;
-		// 	enemy.CharacterStatComponent.AddStat("Health", 100.0f);
-		// }
-
 		if (GlobalConfigs.EnemySpawnMode.Equals(EnemySpawnMode.Dummy))
 		{
 			Random random = new Random();
 
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; i < GlobalConfigs.EnemySpawnAmountDebug["Grunt"]; i++)
 			{
 				int randomX = random.Next(0, 500);
 				int randomY = random.Next(0, 500);
-				var enemy = Utils.CreateDummy(new Vector2(randomX, randomY), Scenes.Enemy);
-				enemy.OnCharacterDeadEvent += enemy.DestroyCharacter;
-				enemy.CharacterStatComponent.AddStat("Health", 100.0f);
+				Utils.CreateDummy(new Vector2(randomX, randomY), Scenes.Grunt);
 			}
+
+			for (int i = 0; i < GlobalConfigs.EnemySpawnAmountDebug["Tanker"]; i++)
+			{
+				int randomX = random.Next(0, 500);
+				int randomY = random.Next(0, 500);
+				Utils.CreateDummy(new Vector2(randomX, randomY), Scenes.Tanker);
+			}
+
 		}
 		else
 		{

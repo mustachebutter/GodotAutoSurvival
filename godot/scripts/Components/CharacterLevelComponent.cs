@@ -13,10 +13,6 @@ public partial class CharacterLevelComponent : Node2D
         var firstCharacterLevel = DataParser.GetCharacterLevelDatabase()[0].DeepCopy();
         CurrentCharacterLevel = firstCharacterLevel;
         
-        var mainHUD = UtilGetter.GetMainHUD();
-        mainHUD.SetExperience(Experience, PreviousLevelMax, CurrentCharacterLevel.ExperienceToLevelUp);
-        mainHUD.SetLevel(CurrentCharacterLevel.Level);
-
         ExpSuctionArea2D = GetNode<Area2D>("ExpSuctionArea2D");
         var circle = (CircleShape2D) GetNode<CollisionShape2D>("ExpSuctionArea2D/CollisionShape2D").Shape;
         circle.Radius = 150.0f;
