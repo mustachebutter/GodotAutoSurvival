@@ -7,6 +7,10 @@ public partial class Enemy : BaseCharacter
 	private Label _label;
 	private Player _player { get; set; }
 	private Vector2 _randomPointToWanderTo { get; set; } = Vector2.Zero;
+	protected float _orbitSpeed = 5.0f;
+	protected float _orbitRadius;
+	protected float _angle = -(Mathf.Pi / 2);
+	protected Vector2 _hitDetectionAreaOffset = Vector2.Zero;
 	protected Blackboard _blackboard { get; set; } = new Blackboard();
 	protected BTNode _behaviorTree { get; set; }
 	protected List<BTNode> _rootNodes { get; set; }
@@ -14,6 +18,7 @@ public partial class Enemy : BaseCharacter
 	protected Dictionary<string, float> _overrideStats = new Dictionary<string, float>();
 	public AnimatedSprite2D AnimatedSprite2D { get; set; }
 	public Area2D HitDetectionArea2D { get; set; }
+	protected Shape2D Shape2D { get; set; }
 	public RichTextLabel StatusEffectHUD { get; set; }
 
 	#region GODOT
@@ -163,6 +168,15 @@ public partial class Enemy : BaseCharacter
 			AnimatedSprite2D.FlipH = true;
 		}
 	}
+	public void SetHitDetectionAreaPosition()
+	{
+		_hitDetectionAreaOffset.X *= AnimatedSprite2D.FlipH ? 1 : -1;
+		LoggingUtils.Debug($"{AnimatedSprite2D.FlipH} && {_hitDetectionAreaOffset.X}");
+		HitDetectionArea2D.Position = new Vector2(
+			0.0f + _hitDetectionAreaOffset.X,
+			-(CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 2));
+	}
+	
 	public bool MoveTowardsThePlayer()
 	{
 		Vector2 direction;
@@ -208,6 +222,36 @@ public partial class Enemy : BaseCharacter
 
 	public virtual BTNodeState Attack(float delta)
 	{
+		// Swing and do hit detection
+		// If facing right
+		if (!AnimatedSprite2D.FlipH)
+		{
+			_angle += _orbitSpeed * delta;
+
+			if (_angle > (Mathf.Pi / 2))
+			{
+				_angle = -(Mathf.Pi / 2);
+				return BTNodeState.Success;
+			}
+		}
+		else
+		{
+			_angle -= _orbitSpeed * delta;
+			if (_angle < -(3 * Mathf.Pi / 2))
+			{
+				_angle = -(Mathf.Pi / 2);
+				return BTNodeState.Success;
+			}
+		}
+
+		// Reset the position everytime it tries to attack to reflect where it is facing
+		// For enemies who have offset
+		SetHitDetectionAreaPosition();
+
+		float x = GlobalPosition.X + _orbitRadius * Mathf.Cos(_angle);
+		float y = GlobalPosition.Y + _orbitRadius * Mathf.Sin(_angle);
+		HitDetectionArea2D.GlobalPosition = new Vector2(x, y);
+
 		// If it hits, do damage
 		if (DetectedPlayer(HitDetectionArea2D, out Player player) && !_blackboard.GetValue<bool>("bDealtDamage"))
 		{
@@ -228,7 +272,9 @@ public partial class Enemy : BaseCharacter
 
 		_mainTimer.Start();
 
-		return BTNodeState.Success;
+		SetHitDetectionAreaPosition();
+		_angle = -(Mathf.Pi / 2);
+		return BTNodeState.Success ;
 	}
 
 	#endregion
@@ -279,8 +325,13 @@ public partial class Enemy : BaseCharacter
 			}
 		}
 
-		_circle.Radius = CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 2;
-		LoggingUtils.Debug($"Range {_circle.Radius}");
+		//NOTE: This is done specifically for Enemies because call base._Ready()
+		// at the top and BaseCharacter are trying to set attackCircleRadius before
+		// stats are ready by then.
+		_attackRangeCircle.Radius = CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 2;
+		LoggingUtils.Debug($"{Name} range {_attackRangeCircle.Radius}");
+
+		SetHitDetectionAreaPosition();
 	}
 	#endregion
 

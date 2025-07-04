@@ -5,7 +5,7 @@ using Godot;
 public partial class BaseCharacter : CharacterBody2D
 {
 	public Area2D Area2D;
-	protected CircleShape2D _circle;
+	protected CircleShape2D _attackRangeCircle;
 	private Godot.Vector2 _textOffset = new Godot.Vector2(0.0f, 0.0f);
 	private Label _healthLabel;
 	private bool _isDead = false;
@@ -39,9 +39,12 @@ public partial class BaseCharacter : CharacterBody2D
 		VisualEffectComponent = GetNode<VisualEffectComponent>("VisualEffectComponent");
 		CharacterStatComponent = GetNode<CharacterStatComponent>("CharacterStatComponent");
 		Area2D = GetNode<Area2D>("Area2D");
-		_circle = (CircleShape2D)Area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
-		_circle.ResourceLocalToScene = true;
-		_circle.Radius = CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 2;
+
+		//NOTE: This is done here for all characters but Enemies have overriden stats 
+		// so it needs to be set again in SetUpEnemy()
+		_attackRangeCircle = (CircleShape2D)Area2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
+		_attackRangeCircle.ResourceLocalToScene = true;
+		_attackRangeCircle.Radius = CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 2;
 
 		_healthLabel = GetNode<Label>("HealthLabel");
 		

@@ -21,7 +21,6 @@ public partial class Player : BaseCharacter
 		// This use of AttackRange is used for determining the Area2D that detects the closest enemy
 		// Essentially, what this means is that it would detect targets further away as AttackRange increases
 		CharacterStatComponent.OnAnyStatUpgraded += HandleStatUpgraded;
-		// _circle.Radius = CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 2;
 		WeaponComponent.StartTimer(1 / CharacterStatComponent.GetCompleteStatFromName("AttackSpeed").totalValue);
 
 		AssignAnimationLibrary("Player_v2_AnimationLibrary", SavedAnimationLibrary.PlayerAnimationLibrary);
@@ -32,7 +31,7 @@ public partial class Player : BaseCharacter
 		switch (@object.Name)
 		{
 			case "AttackRange":
-				_circle.Radius = CharacterStatComponent.GetCompleteStatFromName(@object.Name).totalValue / 2;
+				_attackRangeCircle.Radius = CharacterStatComponent.GetCompleteStatFromName(@object.Name).totalValue / 2;
 				break;
 			case "AttackSpeed":
 				WeaponComponent.OverrideTimer(1 / CharacterStatComponent.GetCompleteStatFromName(@object.Name).totalValue);

@@ -6,10 +6,7 @@ using System.Collections.Generic;
 
 
 public partial class Grunt : Enemy
-{
-	private float _orbitSpeed = 5.0f;
-	private float _orbitRadius;
-	private float _angle =  -(Mathf.Pi / 2);
+{	
 	private readonly Dictionary<string, float> OVERRIDE_STATS = new Dictionary<string, float>
 	{
 		{ "AttackRange", 50.0f },
@@ -21,11 +18,11 @@ public partial class Grunt : Enemy
 	public Grunt()
 	{
 		_overrideStats = OVERRIDE_STATS;
+		Shape2D = new CircleShape2D();
 	}
 	public override void _Ready()
 	{
 		base._Ready();
-		// TODO: Refactor this into Enemy 
 		AssignAnimationLibrary("Enemy_AnimationLibrary", SavedAnimationLibrary.GruntAnimationLibrary);
 	}
 
@@ -56,50 +53,6 @@ public partial class Grunt : Enemy
 	#endregion
 
 	#region ACTION
-	public override BTNodeState Attack(float delta)
-	{
-		// Swing and do hit detection
-		// If facing right
-		if (!AnimatedSprite2D.FlipH)
-		{
-			_angle += _orbitSpeed * delta;
-
-			if (_angle > (Mathf.Pi / 2))
-			{
-				_angle = -(Mathf.Pi / 2);
-				return BTNodeState.Success;
-			}
-		}
-		else
-		{
-			_angle -= _orbitSpeed * delta;
-			if (_angle < -(3 * Mathf.Pi / 2))
-			{
-				_angle = -(Mathf.Pi / 2);
-				return BTNodeState.Success;
-			}
-		}
-
-		float x = GlobalPosition.X + _orbitRadius * Mathf.Cos(_angle);
-		float y = GlobalPosition.Y + _orbitRadius * Mathf.Sin(_angle);
-		HitDetectionArea2D.GlobalPosition = new Vector2(x, y);
-		
-		return base.Attack(delta);
-	}
-
-	public override BTNodeState ResetAttack()
-	{
-		BTNodeState status = base.ResetAttack();
-		if (status == BTNodeState.Success)
-		{
-			HitDetectionArea2D.Position = new Vector2(0.0f, -(CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 2));
-			_angle = -(Mathf.Pi / 2);
-			return BTNodeState.Success ;
-		}
-
-		LoggingUtils.Error("Grunt: Failed to Reset Attack");
-		return BTNodeState.Failure;
-	}
 	#endregion
 
 	#region EVENT HANDLING
@@ -110,12 +63,11 @@ public partial class Grunt : Enemy
 	{
 		base.SetUpEnemy();
 
-		var hitDetectionCircle = (CircleShape2D) HitDetectionArea2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
-		hitDetectionCircle.ResourceLocalToScene = true;
-		hitDetectionCircle.Radius = CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 10;
-		HitDetectionArea2D.Position = new Vector2(0.0f, -(_circle.Radius));
-		_orbitRadius = _circle.Radius;
+		Shape2D.ResourceLocalToScene = true;
+		(Shape2D as CircleShape2D).Radius = CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 10;
+		_orbitRadius = _attackRangeCircle.Radius;
 
+		HitDetectionArea2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape = Shape2D;
 	}
 	#endregion
 

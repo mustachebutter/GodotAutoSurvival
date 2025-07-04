@@ -3,7 +3,7 @@ using System.Collections;
 using Godot;
 using System.Collections.Generic;
 
-public partial class Tanker : Grunt
+public partial class Tanker : Enemy
 {
 	public Area2D ChargeArea2D { get; set; }
 	private float _chargeDistance { get; set; } = 0.0f;
@@ -19,10 +19,12 @@ public partial class Tanker : Grunt
 		{ "Speed", 40.0f },
 		{ "Health", 200.0f },
 	};
-	
+
 	public Tanker()
 	{
 		_overrideStats = OVERRIDE_STATS;
+		Shape2D = new RectangleShape2D();
+		_hitDetectionAreaOffset = new Vector2(50, 0);
 	}
 	#region GODOT
 	public override void _Ready()
@@ -142,10 +144,15 @@ public partial class Tanker : Grunt
 	public override void SetUpEnemy()
 	{
 		base.SetUpEnemy();
-		
 		var chargeRangeCircle = (CircleShape2D) ChargeArea2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape;
 		chargeRangeCircle.ResourceLocalToScene = true;
 		chargeRangeCircle.Radius = 300.0f;
+		
+		Shape2D.ResourceLocalToScene = true;
+		(Shape2D as RectangleShape2D).Size = new Vector2(45.0f, 20.0f);
+		_orbitRadius = _attackRangeCircle.Radius;
+
+		HitDetectionArea2D.GetNode<CollisionShape2D>("CollisionShape2D").Shape = Shape2D;
 	}
 	#endregion
 
