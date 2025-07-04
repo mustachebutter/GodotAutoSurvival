@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://cafmbppvdl3c2"]
 
 [ext_resource type="PackedScene" uid="uid://dgwblviegvs7j" path="res://scenes/characters/enemy.tscn" id="1_ijxy2"]
-[ext_resource type="Script" path="res://scripts/Characters/Enemy/Grunt.cs" id="2_3ppnl"]
+[ext_resource type="Script" uid="uid://bb8bmx505d1n" path="res://scripts/Characters/Enemy/Grunt.cs" id="2_3ppnl"]
 [ext_resource type="Texture2D" uid="uid://b8oxj6ih3iarm" path="res://assets/Enemy_Grunt_Base.png" id="3_vxtq4"]
 [ext_resource type="SpriteFrames" uid="uid://cvykc2va34ku3" path="res://assets/sprite_frames/grunt.tres" id="4_a003m"]
 [ext_resource type="AnimationLibrary" uid="uid://bvr7oyj3gbxlm" path="res://assets/sprite_frames/animation_library/Enemy_AnimationLibrary_new.res" id="4_ug085"]
@@ -23,5 +23,5 @@ animation = &"attack"
 
 [node name="AnimationPlayer" parent="." index="12"]
 libraries = {
-"Enemy_AnimationLibrary": ExtResource("4_ug085")
+&"Enemy_AnimationLibrary": ExtResource("4_ug085")
 }

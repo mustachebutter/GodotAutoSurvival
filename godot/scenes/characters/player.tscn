@@ -1,10 +1,10 @@
 [gd_scene load_steps=25 format=3 uid="uid://dbdnns350c6vs"]
 
 [ext_resource type="PackedScene" uid="uid://jlhhk6jfrg8f" path="res://scenes/characters/base_character.tscn" id="1_748nw"]
-[ext_resource type="Script" path="res://scripts/Characters/Player.cs" id="2_5kg0v"]
+[ext_resource type="Script" uid="uid://bolwoen6nbdnv" path="res://scripts/Characters/Player.cs" id="2_5kg0v"]
 [ext_resource type="Texture2D" uid="uid://cfnvjrswr7ebl" path="res://assets/Player_Idle.png" id="3_kekfb"]
-[ext_resource type="Script" path="res://scripts/Components/CharacterLevelComponent.cs" id="4_h2ko4"]
-[ext_resource type="Script" path="res://scripts/Components/WeaponComponent.cs" id="4_stmua"]
+[ext_resource type="Script" uid="uid://bnd6kgj3hsod" path="res://scripts/Components/CharacterLevelComponent.cs" id="4_h2ko4"]
+[ext_resource type="Script" uid="uid://t65kti7av7b6" path="res://scripts/Components/WeaponComponent.cs" id="4_stmua"]
 [ext_resource type="AnimationLibrary" uid="uid://c2cxdao0q0sm3" path="res://assets/sprite_frames/animation_library/Player_v2_AnimationLibrary.res" id="6_p2q5s"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_0qp7w"]
@@ -74,7 +74,7 @@ tracks/4/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_c1ps4"]
 _data = {
-"RESET": SubResource("Animation_uioee")
+&"RESET": SubResource("Animation_uioee")
 }
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_1mphu"]
@@ -172,14 +172,14 @@ script = ExtResource("4_stmua")
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." index="8"]
 root_node = NodePath("../Sprite2D (Preview)")
 libraries = {
-"": SubResource("AnimationLibrary_c1ps4"),
-"Player_v2_AnimationLibrary": ExtResource("6_p2q5s")
+&"": SubResource("AnimationLibrary_c1ps4"),
+&"Player_v2_AnimationLibrary": ExtResource("6_p2q5s")
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="." index="9"]
+root_node = NodePath("../Sprite2D (Preview)")
 tree_root = SubResource("AnimationNodeStateMachine_w7mxk")
 anim_player = NodePath("../AnimationPlayer")
-active = true
 parameters/conditions/idle = false
 parameters/conditions/isWalking = false
 parameters/Idle/blend_position = Vector2(-0.704238, -0.102222)

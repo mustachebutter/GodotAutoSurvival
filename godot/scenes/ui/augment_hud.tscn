@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://chlr6ks5sc5j"]
 
 [ext_resource type="PackedScene" uid="uid://cntkd1i20elbm" path="res://scenes/ui/augment_card.tscn" id="1_ka6un"]
-[ext_resource type="Script" path="res://scripts/UI/AugmentHUD.cs" id="1_upwou"]
+[ext_resource type="Script" uid="uid://dcg6wiear5wqk" path="res://scripts/UI/AugmentHUD.cs" id="1_upwou"]
 
 [node name="CanvasLayer" type="CanvasLayer"]
 layer = 2

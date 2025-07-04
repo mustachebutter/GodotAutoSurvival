@@ -1,11 +1,11 @@
 [gd_scene load_steps=11 format=3 uid="uid://cqafwyf6svfis"]
 
-[ext_resource type="Script" path="res://scripts/Characters/Enemy.cs" id="1_5rjk2"]
+[ext_resource type="Script" uid="uid://c8p5oitqgm86h" path="res://scripts/Characters/Enemy.cs" id="1_5rjk2"]
 [ext_resource type="Texture2D" uid="uid://cwr5vawlkhwbv" path="res://assets/Char_Base.png" id="1_dqapf"]
-[ext_resource type="Script" path="res://scripts/Components/DamageNumberComponent.cs" id="3_377bk"]
-[ext_resource type="Animation" uid="uid://dtgdfkwcfxre3" path="res://assets/animations/text_start.res" id="4_wav0v"]
+[ext_resource type="Script" uid="uid://bgks8c2nnhu82" path="res://scripts/Components/DamageNumberComponent.cs" id="3_377bk"]
+[ext_resource type="Animation" uid="uid://dtgdfkwcfxre3" path="res://assets/sprite_frames/animations/ui/text_start.res" id="4_wav0v"]
 [ext_resource type="SpriteFrames" uid="uid://c7yenip1an2se" path="res://assets/sprite_frames/Effects.tres" id="5_pu6l4"]
-[ext_resource type="AnimationLibrary" uid="uid://cmhn4p0b4qpai" path="res://assets/sprite_frames/UI_AnimationLibrary.res" id="5_ymkk3"]
+[ext_resource type="AnimationLibrary" uid="uid://cmhn4p0b4qpai" path="res://assets/sprite_frames/animation_library/UI_AnimationLibrary.res" id="5_ymkk3"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_q78gm"]
 radius = 13.0
@@ -43,8 +43,8 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6x52y"]
 _data = {
-"RESET": SubResource("Animation_wqtft"),
-"text_start": ExtResource("4_wav0v")
+&"RESET": SubResource("Animation_wqtft"),
+&"text_start": ExtResource("4_wav0v")
 }
 
 [node name="Enemy" type="CharacterBody2D"]

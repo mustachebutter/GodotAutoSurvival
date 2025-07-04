@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bxswmkfhnml0w"]
 
-[ext_resource type="Script" path="res://scripts/UI/MainHUD.cs" id="1_p6omv"]
+[ext_resource type="Script" uid="uid://b07cqvieopif0" path="res://scripts/UI/MainHUD.cs" id="1_p6omv"]
 [ext_resource type="FontFile" uid="uid://dubhyoykvvioh" path="res://assets/fonts/VCR_OSD_MONO_1.001.ttf" id="1_rihvd"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ccpsi"]
@@ -28,9 +28,9 @@ vertical_alignment = 1
 
 [node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/italics_font_size = 25
 theme_override_font_sizes/normal_font_size = 25
 theme_override_font_sizes/bold_font_size = 25
-theme_override_font_sizes/italics_font_size = 25
 bbcode_enabled = true
 text = "[b][color=red]Damage[/color][/b]: 0
 [b][color=blue]Attack Speed[/color][/b]: 0.0
@@ -50,9 +50,9 @@ layout_mode = 2
 [node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer2/HBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 4
+theme_override_font_sizes/italics_font_size = 10
 theme_override_font_sizes/normal_font_size = 10
 theme_override_font_sizes/bold_font_size = 10
-theme_override_font_sizes/italics_font_size = 10
 bbcode_enabled = true
 text = "[b][color=blue]Attack Speed[/color][/b]: 0.0"
 fit_content = true

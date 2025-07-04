@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://b0ow8axdv8rbb"]
 
-[ext_resource type="Script" path="res://scripts/Vfx/VfxChainLightning.cs" id="1_urumk"]
+[ext_resource type="Script" uid="uid://csh2g33vq0thk" path="res://scripts/Vfx/VfxChainLightning.cs" id="1_urumk"]
 [ext_resource type="SpriteFrames" uid="uid://c7yenip1an2se" path="res://assets/sprite_frames/Effects.tres" id="2_vafbs"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sobpj"]

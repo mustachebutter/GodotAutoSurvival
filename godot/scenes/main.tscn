@@ -1,12 +1,12 @@
 [gd_scene load_steps=8 format=3 uid="uid://cr752cyhod5wg"]
 
-[ext_resource type="Script" path="res://scripts/Main.cs" id="1_byp4v"]
+[ext_resource type="Script" uid="uid://ci4mvqs8vha4f" path="res://scripts/Main.cs" id="1_byp4v"]
 [ext_resource type="PackedScene" uid="uid://bxswmkfhnml0w" path="res://scenes/ui/main_hud.tscn" id="2_qc52h"]
-[ext_resource type="Script" path="res://scripts/Components/MobSpawnerComponent.cs" id="3_nhxpr"]
-[ext_resource type="Script" path="res://scripts/Systems/Augment.cs" id="4_6737p"]
-[ext_resource type="Script" path="res://scripts/Controllers/HUDController.cs" id="4_ww3xy"]
+[ext_resource type="Script" uid="uid://bgmp0t7xbx3lh" path="res://scripts/Components/MobSpawnerComponent.cs" id="3_nhxpr"]
+[ext_resource type="Script" uid="uid://b7mf5uauo2lpm" path="res://scripts/Systems/Augment.cs" id="4_6737p"]
+[ext_resource type="Script" uid="uid://b5tu72jgjmie6" path="res://scripts/Controllers/HUDController.cs" id="4_ww3xy"]
 [ext_resource type="PackedScene" uid="uid://bbqwjg3rx1ur5" path="res://scenes/ui/dead_hud.tscn" id="6_yog33"]
-[ext_resource type="Script" path="res://scripts/UI/DeadHUD.cs" id="7_kj2ct"]
+[ext_resource type="Script" uid="uid://dj48d3yj4862x" path="res://scripts/UI/DeadHUD.cs" id="7_kj2ct"]
 
 [node name="SubViewportContainer" type="SubViewportContainer"]
 anchors_preset = 15

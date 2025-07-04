@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cbigttm4m6c36"]
 
 [ext_resource type="PackedScene" uid="uid://dndk734dkrbd" path="res://scenes/projectiles/projectile.tscn" id="1_jivve"]
-[ext_resource type="Script" path="res://scripts/Weapons/Zap.cs" id="2_h771y"]
+[ext_resource type="Script" uid="uid://bieugseitdp3a" path="res://scripts/Weapons/Zap.cs" id="2_h771y"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rh2ms"]
 height = 46.0

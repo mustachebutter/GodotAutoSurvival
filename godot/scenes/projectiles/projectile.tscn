@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dndk734dkrbd"]
 
-[ext_resource type="Script" path="res://scripts/Weapons/Projectile.cs" id="1_4n05f"]
+[ext_resource type="Script" uid="uid://c0tu0dv8xvf0o" path="res://scripts/Weapons/Projectile.cs" id="1_4n05f"]
 [ext_resource type="SpriteFrames" uid="uid://d3aufqsmxp4er" path="res://assets/sprite_frames/Projectiles.tres" id="1_slh5x"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1oc1p"]

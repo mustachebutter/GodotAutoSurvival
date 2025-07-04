@@ -170,10 +170,9 @@ public partial class Enemy : BaseCharacter
 	}
 	public void SetHitDetectionAreaPosition()
 	{
-		_hitDetectionAreaOffset.X *= AnimatedSprite2D.FlipH ? 1 : -1;
-		LoggingUtils.Debug($"{AnimatedSprite2D.FlipH} && {_hitDetectionAreaOffset.X}");
+		var offset = _hitDetectionAreaOffset.X * (AnimatedSprite2D.FlipH ? -1 : 1);
 		HitDetectionArea2D.Position = new Vector2(
-			0.0f + _hitDetectionAreaOffset.X,
+			0.0f + offset,
 			-(CharacterStatComponent.GetCompleteStatFromName("AttackRange").totalValue / 2));
 	}
 	

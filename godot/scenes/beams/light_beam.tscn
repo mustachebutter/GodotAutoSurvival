@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cmhdc8c0vc1dk"]
 
 [ext_resource type="PackedScene" uid="uid://cm1uou65cpx5e" path="res://scenes/beams/beam.tscn" id="1_hd4er"]
-[ext_resource type="Script" path="res://scripts/Weapons/Lazerbeam.cs" id="2_xivqw"]
+[ext_resource type="Script" uid="uid://cf8jp2jpodthh" path="res://scripts/Weapons/Lazerbeam.cs" id="2_xivqw"]
 
 [node name="beam" instance=ExtResource("1_hd4er")]
 script = ExtResource("2_xivqw")

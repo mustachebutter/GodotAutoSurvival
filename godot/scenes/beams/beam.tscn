@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://cm1uou65cpx5e"]
 
-[ext_resource type="Script" path="res://scripts/Weapons/Beam.cs" id="1_igmbx"]
+[ext_resource type="Script" uid="uid://ci6sib8xb604b" path="res://scripts/Weapons/Beam.cs" id="1_igmbx"]
 [ext_resource type="AnimationLibrary" uid="uid://bl7c6b6n7fbmn" path="res://assets/sprite_frames/animation_library/VFX_AnimationLibrary.res" id="3_vh6c1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f72bx"]
@@ -35,7 +35,7 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_714fs"]
 _data = {
-"RESET": SubResource("Animation_rfmjp")
+&"RESET": SubResource("Animation_rfmjp")
 }
 
 [node name="beam" type="CharacterBody2D"]

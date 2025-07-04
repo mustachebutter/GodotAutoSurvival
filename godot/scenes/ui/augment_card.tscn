@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cntkd1i20elbm"]
 
 [ext_resource type="Texture2D" uid="uid://ble4dxmxuvsde" path="res://icon.svg" id="1_45shp"]
-[ext_resource type="Script" path="res://scripts/UI/AugmentCard.cs" id="1_bnwq8"]
+[ext_resource type="Script" uid="uid://ceikrb7iveco0" path="res://scripts/UI/AugmentCard.cs" id="1_bnwq8"]
 
 [node name="MarginContainer" type="MarginContainer"]
 z_index = 2

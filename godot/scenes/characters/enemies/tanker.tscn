@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://nbb3v15k8tu3"]
 
 [ext_resource type="PackedScene" uid="uid://dgwblviegvs7j" path="res://scenes/characters/enemy.tscn" id="1_o34qx"]
-[ext_resource type="Script" path="res://scripts/Characters/Enemy/Tanker.cs" id="2_d470p"]
+[ext_resource type="Script" uid="uid://6qqbgwkhfail" path="res://scripts/Characters/Enemy/Tanker.cs" id="2_d470p"]
 [ext_resource type="SpriteFrames" uid="uid://ckwkot1s0i168" path="res://assets/sprite_frames/tanker.tres" id="3_ht3lc"]
 [ext_resource type="AnimationLibrary" uid="uid://cnjtr43awygub" path="res://assets/sprite_frames/animation_library/Enemy_Tanker_AnimationLibrary.res" id="5_tuwke"]
 
@@ -38,7 +38,7 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_mqbon"]
 _data = {
-"RESET": SubResource("Animation_l27po")
+&"RESET": SubResource("Animation_l27po")
 }
 
 [node name="Tanker" instance=ExtResource("1_o34qx")]
@@ -63,6 +63,6 @@ debug_color = Color(1, 1, 0.00784314, 0.0470588)
 
 [node name="AnimationPlayer" parent="." index="13"]
 libraries = {
-"": SubResource("AnimationLibrary_mqbon"),
-"Enemy_Tanker_AnimationLibrary": ExtResource("5_tuwke")
+&"": SubResource("AnimationLibrary_mqbon"),
+&"Enemy_Tanker_AnimationLibrary": ExtResource("5_tuwke")
 }
